@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/text.dart';
+import 'package:regiment8112_project/custom_text.dart';
 
 class GradientContainer extends StatelessWidget {
   const GradientContainer({super.key});
