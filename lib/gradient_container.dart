@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/custom_text.dart';
+import 'package:regiment8112_project/top_section.dart';
 
 const topAlignment = Alignment.topLeft;
 const bottomAlignment = Alignment.bottomRight;
@@ -12,13 +12,15 @@ class GradientContainer extends StatelessWidget {
   @override
   Widget build(context) {
     return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        colors: colors,
-        begin: topAlignment,
-        end: bottomAlignment,
-      )),
-      child: const Center(child: CustomText("Hello World!")),
-    );
+        decoration: BoxDecoration(
+            gradient: RadialGradient(
+          center: Alignment.center,
+          radius: 0.9,
+          colors: colors,
+        )),
+        padding: const EdgeInsets.all(40),
+        child: const Center(
+          child: TopSection(),
+        ));
   }
 }

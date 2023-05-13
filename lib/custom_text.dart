@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
-  const CustomText(this.text, {super.key});
+  const CustomText( this.text, {super.key});
 
   final String text;
 
@@ -10,7 +10,7 @@ class CustomText extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-          color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900),
+          color: Color.fromRGBO(86, 154, 82, 1), fontSize: 16),
     );
   }
 }
