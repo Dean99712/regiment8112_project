@@ -27,49 +27,59 @@ class TopSection extends StatelessWidget {
             TextButton(onPressed: () {}, child: const CustomText("רשימת קשר")),
           ],
         ),
-        Container(
-          height: 85,
-          decoration: BoxDecoration(
-              image: const DecorationImage(
-                  opacity: 0.1,
-                  image: AssetImage("assets/svg/Group 126.png"),
-                  fit: BoxFit.cover
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              height: 85,
+              decoration: BoxDecoration(
+                  image: const DecorationImage(
+                      opacity: 0.1,
+                      image: AssetImage("assets/svg/Group 126.png"),
+                      fit: BoxFit.cover),
+                  color: const Color.fromRGBO(167, 93, 53, 1),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.16),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Positioned(
+                        top: -20,
+                        child: Text(
+                          "הזימון הבא",
+                          style: GoogleFonts.heebo(color: Colors.white),
+                        ),
+                      ),
+                      Text(
+                        "18.09 - 25.09",
+                        style: GoogleFonts.rubikDirt(
+                            color: Colors.white, fontSize: 24),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              color: const Color.fromRGBO(167, 93, 53, 1),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.16),
-                  spreadRadius: 2,
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
+            ),
+            Positioned(
+              top: -17,
+              left: -10,
+              child: SvgPicture.asset(
                 'assets/svg/Artwork 3.svg',
                 width: 60,
                 height: 65,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "הזימון הבא",
-                    style: GoogleFonts.heebo(color: Colors.white),
-                  ),
-                  Text(
-                    "18.09 - 25.09",
-                    style: GoogleFonts.rubikDirt(
-                        color: Colors.white, fontSize: 24),
-                  )
-                ],
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ],
     );

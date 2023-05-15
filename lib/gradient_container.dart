@@ -25,11 +25,11 @@ class GradientContainer extends StatelessWidget {
               colors: colors,
             )),
         padding: const EdgeInsets.all(40),
-        child: Center(
+        child: const Center(
           widthFactor: Checkbox.width,
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            children: const [TopSection(), SwipeableTab()],
+            children: [TopSection(), SwipeableTab()],
           ),
         ),
 
