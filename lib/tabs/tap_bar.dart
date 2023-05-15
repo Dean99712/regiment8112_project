@@ -16,17 +16,20 @@ class TabBars extends StatelessWidget {
       labelColor: const Color.fromRGBO(251, 174, 27, 1),
       tabs: [
         Tab(
+          height: 50,
           child: Text(
             "תמונות",
             style: GoogleFonts.heebo(),
           ),
         ),
         Tab(
+            height: 50,
             child: Text(
               "עדכוני פלוגה",
               style: GoogleFonts.heebo(),
             )),
         Tab(
+          height: 50,
           child: Text(
             "עדכונים",
             style: GoogleFonts.heebo(),
