@@ -16,7 +16,7 @@ class GradientContainer extends StatelessWidget {
 
         decoration: BoxDecoration(
             image: const DecorationImage(
-                opacity: 0.15,
+                opacity: 0.12,
                 image: AssetImage("assets/svg/Group 126.png"),
                 fit: BoxFit.cover),
             gradient: RadialGradient(
