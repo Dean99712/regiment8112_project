@@ -6,6 +6,8 @@ import 'package:regiment8112_project/custom_text.dart';
 class TopSection extends StatelessWidget {
   const TopSection({super.key});
 
+   void onPress() {}
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -14,10 +16,9 @@ class TopSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: onPress,
               child: const CustomText("עדכונים וחדשות"),
             ),
-            // const CustomText("עדכונים וחדשות"),
             Image.asset(
               'assets/svg/logo.png',
               width: 97,
@@ -29,9 +30,14 @@ class TopSection extends StatelessWidget {
         Container(
           height: 85,
           decoration: BoxDecoration(
+              image: const DecorationImage(
+                  opacity: 0.1,
+                  image: AssetImage("assets/svg/Group 126.png"),
+                  fit: BoxFit.cover),
               color: const Color.fromRGBO(167, 93, 53, 1),
               borderRadius: BorderRadius.circular(10)),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
                 'assets/svg/Artwork 3.svg',
