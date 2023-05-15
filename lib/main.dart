@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:regiment8112_project/login_screen.dart';
 import 'gradient_container.dart';
 
 final colors = [
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
           child: SvgPicture.asset("assets/svg/add_image.svg",
               alignment: Alignment.center),
         ),
-        body: GradientContainer(colors),
+        // body: GradientContainer(colors),
+        body: const LoginPage(),
       ),
     );
   }

@@ -10,11 +10,9 @@ class TabBars extends StatelessWidget {
       unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
       padding: const EdgeInsets.only(top: 20),
-      // isScrollable: true,
       unselectedLabelColor: const Color.fromRGBO(86, 154, 82, 1),
       indicatorColor: const Color.fromRGBO(251, 174, 27, 1),
       labelColor: const Color.fromRGBO(251, 174, 27, 1),
-      // labelPadding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
       tabs: [
         Tab(
           child: Text(
