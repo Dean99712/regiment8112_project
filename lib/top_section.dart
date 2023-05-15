@@ -34,8 +34,9 @@ class TopSection extends StatelessWidget {
               height: 85,
               decoration: BoxDecoration(
                   image: const DecorationImage(
-                      opacity: 0.1,
-                      image: AssetImage("assets/svg/Group 126.png"),
+                      opacity: 0.20,
+                      colorFilter: ColorFilter.mode(Color.fromRGBO(0, 0, 0, 0.10), BlendMode.multiply),
+                      image: AssetImage("assets/images/Group 126.png"),
                       fit: BoxFit.cover),
                   color: const Color.fromRGBO(167, 93, 53, 1),
                   borderRadius: BorderRadius.circular(10),

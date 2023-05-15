@@ -10,28 +10,26 @@ class TabBars extends StatelessWidget {
       unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
       padding: const EdgeInsets.only(top: 20),
+      // isScrollable: true,
       unselectedLabelColor: const Color.fromRGBO(86, 154, 82, 1),
       indicatorColor: const Color.fromRGBO(251, 174, 27, 1),
-      indicatorSize: TabBarIndicatorSize.tab,
       labelColor: const Color.fromRGBO(251, 174, 27, 1),
+      // labelPadding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
       tabs: [
         Tab(
-          height: 50,
           child: Text(
             "תמונות",
             style: GoogleFonts.heebo(),
           ),
         ),
         Tab(
-            height: 50,
             child: Text(
-              "עדכוני פלוגה",
-              style: GoogleFonts.heebo(),
-            )),
+          "עדכוני פלוגה",
+          style: GoogleFonts.heebo(textStyle: const TextStyle(wordSpacing: 2)),
+        )),
         Tab(
-          height: 50,
           child: Text(
-            "עדכונים",
+            "חדשות",
             style: GoogleFonts.heebo(),
           ),
         ),

@@ -13,20 +13,18 @@ class GradientContainer extends StatelessWidget {
   @override
   Widget build(context) {
     return Container(
-
         decoration: BoxDecoration(
             image: const DecorationImage(
                 opacity: 0.12,
-                image: AssetImage("assets/svg/Group 126.png"),
+                image: AssetImage("assets/images/Group 126.png"),
                 fit: BoxFit.cover),
             gradient: RadialGradient(
               center: Alignment.center,
               radius: 0.1,
               colors: colors,
             )),
-        padding: const EdgeInsets.all(40),
+        padding: const EdgeInsets.all(20),
         child: const Center(
-          widthFactor: Checkbox.width,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [TopSection(), SwipeableTab()],

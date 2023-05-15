@@ -10,11 +10,7 @@ class SwipeableTab extends StatelessWidget {
       length: 3,
       child: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TabBars()
-          ],
+          children: [TabBars()],
         ),
       ),
     );
