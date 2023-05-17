@@ -7,6 +7,7 @@ class TabBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBar(
+      
       unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
       labelStyle: const TextStyle(fontWeight: FontWeight.bold),
       padding: const EdgeInsets.only(top: 20),

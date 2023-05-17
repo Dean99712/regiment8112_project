@@ -11,11 +11,11 @@ class SwipeableTab extends StatefulWidget {
 class _SwipeableTabState extends State<SwipeableTab> {
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
+    return DefaultTabController(
       length: 3,
       child: Center(
         child: Column(
-          children: [
+          children: const [
             TabBars(),
           ],
         ),
