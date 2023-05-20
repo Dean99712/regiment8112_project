@@ -63,14 +63,10 @@ class TopSection extends StatelessWidget {
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Positioned(
-                        top: -20,
-                        child: Text(
+                    children: [Text(
                           "הזימון הבא",
                           style: GoogleFonts.heebo(color: Colors.white),
                         ),
-                      ),
                       Text(
                         "18.09 - 25.09",
                         style: GoogleFonts.rubikDirt(

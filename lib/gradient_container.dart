@@ -25,10 +25,10 @@ class GradientContainer extends StatelessWidget {
             colors: colors,
           )),
       padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          children: [TopSection(), Expanded(child: SwipeableTab())],
+          children: const [TopSection(), Expanded(child: SwipeableTab())],
         ),
       ),
     );
