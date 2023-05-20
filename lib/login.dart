@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/gradient_container.dart';
-import 'package:regiment8112_project/login_screen.dart';
+import 'gradient_container.dart';
+import 'login_screen.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'חרמ"ש מסייעת 8112',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(

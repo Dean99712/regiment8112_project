@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomText extends StatelessWidget {
-  const CustomText( this.text, {super.key});
+  const CustomText(this.fontSize, this.color,this.text, {super.key});
 
+  final Color color;
   final String text;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-          color: Color.fromRGBO(86, 154, 82, 1), fontSize: 16),
+      textDirection: TextDirection.rtl,
+      style: GoogleFonts.heebo(color: color, fontSize: fontSize),
     );
   }
 }

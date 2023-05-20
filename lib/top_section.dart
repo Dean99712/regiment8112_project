@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regiment8112_project/custom_text.dart';
+
+import 'custom_text.dart';
 
 class TopSection extends StatelessWidget {
   const TopSection({super.key});
@@ -17,14 +18,22 @@ class TopSection extends StatelessWidget {
           children: [
             TextButton(
               onPressed: onPress,
-              child: const CustomText("עדכונים וחדשות"),
+              child: const CustomText(
+                16,
+                Color.fromRGBO(86, 154, 82, 1),
+                "עדכונים וחדשות",
+              ),
             ),
             Image.asset(
               'assets/svg/logo.png',
               width: 97,
               height: 97,
             ),
-            TextButton(onPressed: () {}, child: const CustomText("רשימת קשר")),
+            TextButton(
+              onPressed: () {},
+              child: const CustomText(
+                  16, Color.fromRGBO(86, 154, 82, 1), "רשימת קשר"),
+            ),
           ],
         ),
         Stack(
@@ -35,7 +44,8 @@ class TopSection extends StatelessWidget {
               decoration: BoxDecoration(
                   image: const DecorationImage(
                       opacity: 0.20,
-                      colorFilter: ColorFilter.mode(Color.fromRGBO(0, 0, 0, 0.10), BlendMode.multiply),
+                      colorFilter: ColorFilter.mode(
+                          Color.fromRGBO(0, 0, 0, 0.10), BlendMode.multiply),
                       image: AssetImage("assets/images/Group 126.png"),
                       fit: BoxFit.cover),
                   color: const Color.fromRGBO(167, 93, 53, 1),
