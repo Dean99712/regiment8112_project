@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
                   style: GoogleFonts.rubikDirt(
                       fontSize: 90, color: const Color.fromRGBO(86, 154, 82, 1)),
                 ),
-                const Directionality(
+                 Directionality(
                   textDirection: TextDirection.rtl,
                   child:  TextField(
                     enableSuggestions: false,
@@ -50,11 +50,12 @@ class LoginPage extends StatelessWidget {
                     autofocus: true,
                     decoration: InputDecoration(
                       filled: true,
-                      label: Text("מספר טלפון", textDirection: TextDirection.ltr),
+                      label: Text("מספר טלפון", textDirection: TextDirection.ltr, style:
+                        GoogleFonts.heebo(color: Colors.green),),
                       focusedBorder:
-                          OutlineInputBorder(borderSide: BorderSide.none),
+                          const OutlineInputBorder(borderSide: BorderSide.none),
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
                   ),
