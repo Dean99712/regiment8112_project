@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../custom_text.dart';
+import 'package:regiment8112_project/bubble.dart';
 import '../../data/news.dart';
 import '../../models/news.dart';
 
@@ -8,17 +8,30 @@ class NewsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    News currentQuestion = news[0];
+    List<News> currentQuestion = news;
 
     return Container(
-      width: double.infinity,
       height: double.infinity,
-      child: Column(
+      width: double.infinity,
+      child: Stack(
         children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: currentQuestion.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Bubble(
+                    date: '04/05/2023',
+                    text: currentQuestion[index].news,
+                  ),
+                );
+              },
+            ),
+          ),
           SizedBox(
             height: 34,
-            width: 390,
+            // width: double.infinity,
             child: Container(
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -30,23 +43,6 @@ class NewsTab extends StatelessWidget {
                   ])),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CustomText(12, Color.fromRGBO(190, 190, 190, 1), "04/05/2025"),
-              Container(
-                padding: const EdgeInsets.all(20),
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(121, 121, 121, 1),
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-                child: CustomText(16, Colors.white ,currentQuestion.news),
-              )
-            ],
-          )
         ],
       ),
     );
