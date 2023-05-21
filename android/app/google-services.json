@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "241677351610",
+    "project_id": "regiment8112-8abfe",
+    "storage_bucket": "regiment8112-8abfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241677351610:android:3607fc8bbb57eafbcb6083",
+        "android_client_info": {
+          "package_name": "com.example.regiment8112_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241677351610-vq8tn9vr8ch1ingelrqf46n5s20md8hn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4kyIFfqeukJdN1yRJC5aFoc9ZFZ839F4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241677351610-vq8tn9vr8ch1ingelrqf46n5s20md8hn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "241677351610-omsqfs1ablsq7jl5oci89a8a2sig1lnl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.regiment8112Project"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
