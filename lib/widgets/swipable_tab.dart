@@ -37,10 +37,10 @@ class _SwipeableTabState extends State<SwipeableTab> {
                   indicatorColor: const Color.fromRGBO(251, 174, 27, 1),
                   labelColor: const Color.fromRGBO(251, 174, 27, 1),
                   tabs: myTabs),
-              const Expanded(
+              Expanded(
                 child: TabBarView(children: [
-                  NewsTab(),
-                  UpdatesTab(),
+                  const NewsTab(),
+                  const UpdatesTab(),
                   ImagesTab(),
                 ]),
               ),

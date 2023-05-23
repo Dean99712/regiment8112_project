@@ -1,15 +1,23 @@
 const express = require('express');
 const app = express();
 const PORT = 3001;
+const database = 'mongodb+srv://dean2910997:Enm0vMjJaLLErKgW@cluster0.oriz8e4.mongodb.net/?retryWrites=true&w=majority';
 const {google} = require("googleapis");
 const request = require("request");
 const cors = require("cors");
 const urlParse = require("url-parse");
+const mongo = require("mongoose")
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const querystring = require("querystring");
 const url = require("url");
 
+mongo.connect(database)
+    .then(() => {
+        console.log('Connected successfully!')
+    }).catch(e => {
+    console.log(e)
+})
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json());
@@ -49,21 +57,21 @@ app.get('/photos', async (req, res) => {
         "http://localhost:3001/photos"
     );
     const token = await oauth2Client.getToken(code);
-    console.log(token)
     let photos = [];
 
     try {
-        const result = await axios.get('https://photoslibrary.googleapis.com/v1/mediaItems', {
+        const result = await axios.get(`https://photoslibrary.googleapis.com/v1/mediaItems`, {
             headers: {
                 "Authorization": `Bearer ${token.tokens.access_token}`,
                 "Content-Type": "application/json",
             },
         })
         photos = result.data;
-        console.log(photos)
+
     } catch (e) {
         console.log(e);
     }
+    // return photos;
 });
 
 
