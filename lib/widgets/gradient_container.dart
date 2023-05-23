@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/swipable_tab.dart';
-import 'package:regiment8112_project/top_section.dart';
+import 'package:regiment8112_project/widgets/swipable_tab.dart';
+import 'package:regiment8112_project/widgets/top_section.dart';
 
 
 const topAlignment = Alignment.topLeft;
@@ -24,10 +24,11 @@ class GradientContainer extends StatelessWidget {
             radius: 0.1,
             colors: colors,
           )),
-      child: Center(
+      child: const Center(
         child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
-          children: const [Padding(
+          children: [Padding(
             padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
             child: TopSection(),
           ), Expanded(child: SwipeableTab())],

@@ -16,12 +16,16 @@ class TopSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton(
-              onPressed: onPress,
-              child: const CustomText(
-                16,
-                Color.fromRGBO(86, 154, 82, 1),
-                "עדכונים וחדשות",
+            SizedBox(
+              width: 95,
+              child: TextButton(
+
+                onPressed: onPress,
+                child: const CustomText(
+                  16,
+                  Color.fromRGBO(251, 174, 27, 1),
+                  "עדכונים וחדשות",
+                ),
               ),
             ),
             Image.asset(
