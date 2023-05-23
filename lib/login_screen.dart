@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
                   opacity: 0.12,
                   image: AssetImage("assets/images/Group 126.png"),
                   fit: BoxFit.cover),
-              gradient: RadialGradient(radius: 0.9, colors: [
+              gradient: RadialGradient(radius: 0.91, colors: [
                 Color.fromRGBO(121, 121, 121, 1),
                 Color.fromRGBO(60, 58, 59, 1),
               ])),
