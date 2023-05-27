@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/services/google_authentication.dart';
+import 'package:regiment8112_project/services/firebase_storage_service.dart';
 
 class ImagesTab extends StatefulWidget {
   const ImagesTab({Key? key}) : super(key: key);
@@ -9,17 +9,32 @@ class ImagesTab extends StatefulWidget {
 }
 
 class _ImagesTabState extends State<ImagesTab> {
+  late Future<Iterable> _data;
+
+  @override
+  void initState() {
+    super.initState();
+    _data = StorageService().getPhotos();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-         MaterialButton(
-            onPressed: GoogleAuthentication().listOfPhotos, child: const Text("Press me")),
-        Image.network(
-            height: 150,
-            width: 150,
-            "https://phantom-marca.unidadeditorial.es/398a931cd2cfabea69c75746e9785c87/resize/1320/f/jpg/assets/multimedia/imagenes/2022/12/22/16717250934792.jpg")
-      ],
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FutureBuilder(
+              future: _data,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return SizedBox(child: Image(image: NetworkImage(snapshot.data.toString().replaceAll("(", "").replaceAll(")", ""))),);
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              })
+        ],
+      ),
     );
   }
 }

@@ -1,7 +1,9 @@
-export const GOOGLE_CLIENT_ID = "643664871038-5cp52r443dticduhhba1ng1lj925ttij.apps.googleusercontent.com"
-export const GOOGLE_CLIENT_SECRET = "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"
-// export const SERVER_ROOT_URI = "http://localhost:3103"
-// export const JWT_SECRET = "Google API"
-//
-//
-//
+exports.firebaseConfig = {
+        apiKey: "AIzaSyDktmKHJn8mx_nRpNwvohtZZW1b8agpdHs",
+        authDomain: "regiment8112-8abfe.firebaseapp.com",
+        projectId: "regiment8112-8abfe",
+        storageBucket: "regiment8112-8abfe.appspot.com",
+        messagingSenderId: "241677351610",
+        appId: "1:241677351610:web:b13f4ff6ed22465ecb6083",
+        measurementId: "G-2DVKSZQTSC"
+};

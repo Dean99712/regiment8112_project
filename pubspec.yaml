@@ -50,6 +50,8 @@ dependencies:
   oauth2_client: ^3.2.1
   web_socket_channel: ^2.4.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.9
+  firebase_storage: ^11.2.1
+  cloud_firestore: ^4.7.1
 
 dev_dependencies:
   flutter_test:
