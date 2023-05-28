@@ -123,7 +123,7 @@ app.get('/photos', async (req, res) => {
 
 
 const uploadPhotos = async (photo, albumName) => {
-    const storageRef = ref(storage, `images/albums/${albumName}/${photo}`);
+    const storageRef = ref(storage, `images/albums/${albumName}/`);
     uploadString(storageRef, photo)
         .then((url) => {
             console.log(url)

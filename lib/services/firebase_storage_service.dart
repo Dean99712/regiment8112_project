@@ -8,30 +8,31 @@ class StorageService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List> getPhotosDownloadUrl(String childName) async {
-
     Reference ref = _storage.ref('/images/albums/$childName');
     final listResult = await ref.listAll();
     var itemList = [];
-    for(var item in listResult.items) {
-    final url = await item.getDownloadURL();
+    for (var item in listResult.items) {
+      final url = await item.getDownloadURL();
       itemList.add(url);
+      addPhotos(childName, url);
     }
     return itemList;
   }
 
-  Future<Iterable> getPhotos() async {
+  Future<Iterable> getPhotos(String childName) async {
     var collection = await _firestore
         .collection("photos")
         .get()
         .then((snapshot) => snapshot.docs.map((document) {
-         return document.get("photoId");
+              return document.get("photoId");
             }));
     return collection;
   }
 
-  Future addPhotos(String childName) async {
-    var collection = await _firestore
-        .collection("photos");
-
+  Future addPhotos(String childName, String url) async {
+    var collection = _firestore.collection("photos").doc(childName);
+    await collection.update({
+      "photoId" : FieldValue.arrayUnion([url])
+    });
   }
 }

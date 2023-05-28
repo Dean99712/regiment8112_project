@@ -15,7 +15,7 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
-    _data = StorageService().getPhotos();
+    _data = StorageService().getPhotos("קו אביטל 23");
   }
 
   void function() {
@@ -27,30 +27,29 @@ class _ImagesTabState extends State<ImagesTab> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton(onPressed: function, child: Text(_auth.currentUser!.uid)),
-          FutureBuilder(
-              future: _data,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Image(
-                      image: NetworkImage(snapshot.data
-                          .toString()
-                          .replaceAll("(", "")
-                          .replaceAll(")", "")),
-                    ),
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              })
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(onPressed: function, child: Text(_auth.currentUser!.uid)),
+            FutureBuilder(
+                future: _data,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    snapshot.data!.map((image) => Image(
+                          image: NetworkImage(image
+                              .toString()
+                              .replaceAll("(", "")
+                              .replaceAll(")", "")),
+                        ));
+                    return Text(snapshot.data!.toString());
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                })
+          ],
+        ),
       ),
     );
   }
