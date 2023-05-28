@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:regiment8112_project/services/firebase_authentication.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage(this.start, {Key? key}) : super(key: key);
@@ -9,6 +10,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _auth = AuthService();
+
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -33,24 +36,29 @@ class LoginPage extends StatelessWidget {
                 Text(
                   'חרמ"ש מסייעת',
                   style: GoogleFonts.rubikDirt(
-                      fontSize: 32, color: const Color.fromRGBO(86, 154, 82, 1)),
+                      fontSize: 32,
+                      color: const Color.fromRGBO(86, 154, 82, 1)),
                 ),
                 Text(
                   "8112",
                   style: GoogleFonts.rubikDirt(
-                      fontSize: 90, color: const Color.fromRGBO(86, 154, 82, 1)),
+                      fontSize: 90,
+                      color: const Color.fromRGBO(86, 154, 82, 1)),
                 ),
-                 Directionality(
+                Directionality(
                   textDirection: TextDirection.rtl,
-                  child:  TextField(
+                  child: TextField(
                     enableSuggestions: false,
                     keyboardType: TextInputType.phone,
                     maxLength: 10,
                     autofocus: true,
                     decoration: InputDecoration(
                       filled: true,
-                      label: Text("מספר טלפון", textDirection: TextDirection.ltr, style:
-                        GoogleFonts.heebo(color: Colors.green),),
+                      label: Text(
+                        "מספר טלפון",
+                        textDirection: TextDirection.ltr,
+                        style: GoogleFonts.heebo(color: Colors.green),
+                      ),
                       focusedBorder:
                           const OutlineInputBorder(borderSide: BorderSide.none),
                       fillColor: Colors.white,
@@ -60,9 +68,19 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 MaterialButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     color: const Color.fromRGBO(86, 154, 82, 1),
-                    onPressed: start,
+                    // onPressed: start,
+                    onPressed: () async {
+                      dynamic result = await _auth.signInAnon();
+                      if (result != null) {
+                        print("Success");
+                        start();
+                      } else {
+                        print("Error");
+                      }
+                    },
                     child: Text(
                       "לקבלת קוד חד פעמי",
                       style: GoogleFonts.heebo(color: Colors.white),
@@ -72,7 +90,7 @@ class LoginPage extends StatelessWidget {
                   child: SizedBox(
                     height: 70,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
