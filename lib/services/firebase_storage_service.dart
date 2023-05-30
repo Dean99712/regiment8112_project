@@ -19,20 +19,14 @@ class StorageService {
     return itemList;
   }
 
-  Future<Iterable> getPhotos(String childName) async {
-    var collection = await _firestore
-        .collection("photos")
-        .get()
-        .then((snapshot) => snapshot.docs.map((document) {
-              return document.get("photoId");
-            }));
-    return collection;
+  Future<DocumentSnapshot<Map<String, dynamic>>> getPhotos(String childName) async {
+    return await _firestore.collection("photos").doc(childName).get();
   }
 
   Future addPhotos(String childName, String url) async {
     var collection = _firestore.collection("photos").doc(childName);
     await collection.update({
-      "photoId" : FieldValue.arrayUnion([url])
+      "photoId": FieldValue.arrayUnion([url])
     });
   }
 }

@@ -1,5 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 
 class ImagesTab extends StatefulWidget {
@@ -10,7 +12,7 @@ class ImagesTab extends StatefulWidget {
 }
 
 class _ImagesTabState extends State<ImagesTab> {
-  late Future<Iterable> _data;
+  late Future<DocumentSnapshot<Map<String, dynamic>>> _data;
 
   @override
   void initState() {
@@ -18,38 +20,38 @@ class _ImagesTabState extends State<ImagesTab> {
     _data = StorageService().getPhotos("קו אביטל 23");
   }
 
-  void function() {
-    StorageService().getPhotosDownloadUrl("קו אביטל 23");
-  }
-
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(onPressed: function, child: Text(_auth.currentUser!.uid)),
-            FutureBuilder(
-                future: _data,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    snapshot.data!.map((image) => Image(
-                          image: NetworkImage(image
-                              .toString()
-                              .replaceAll("(", "")
-                              .replaceAll(")", "")),
-                        ));
-                    return Text(snapshot.data!.toString());
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                })
-          ],
-        ),
+      child: FutureBuilder(
+        future: _data,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            List<dynamic> data = snapshot.data!.get("photoId");
+            return MasonryGridView.builder(
+                itemCount: data.length,
+                gridDelegate:
+                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4),
+                itemBuilder: (context, index) {
+                  return CachedNetworkImage(
+                    imageUrl: data[index],
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.fill),
+                        ),
+                      );
+                    },
+                  );
+                });
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
       ),
     );
   }
