@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/colors.dart';
 import 'custom_text.dart';
 
 class Bubble extends StatelessWidget {
@@ -15,7 +16,7 @@ class Bubble extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
-        CustomText(12, const Color.fromRGBO(190, 190, 190, 1), date),
+        CustomText(fontSize: 12,color:  const Color.fromRGBO(190, 190, 190, 1),text: date),
         Container(
           padding: const EdgeInsets.all(20),
           width: double.infinity,
@@ -23,7 +24,7 @@ class Bubble extends StatelessWidget {
               color: Color.fromRGBO(121, 121, 121, 1),
               borderRadius: BorderRadius.all(Radius.circular(10))
           ),
-          child: CustomText(16, Colors.white ,text),
+          child: CustomText(fontSize: 16, color: white ,text: text),
         )
       ],
     );

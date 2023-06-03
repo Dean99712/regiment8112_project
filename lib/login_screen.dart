@@ -3,16 +3,35 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage(this.start, {Key? key}) : super(key: key);
 
   final void Function() start;
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+final controller = TextEditingController();
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
@@ -48,6 +67,7 @@ class LoginPage extends StatelessWidget {
                 Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextField(
+                    controller: controller,
                     enableSuggestions: false,
                     keyboardType: TextInputType.phone,
                     maxLength: 10,
@@ -76,7 +96,7 @@ class LoginPage extends StatelessWidget {
                       dynamic result = await _auth.signInAnon();
                       if (result != null) {
                         print("Success");
-                        start();
+                        widget.start();
                       } else {
                         print("Error");
                       }

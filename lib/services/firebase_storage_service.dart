@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -11,16 +14,28 @@ class StorageService {
     Reference ref = _storage.ref('/images/albums/$childName');
     final listResult = await ref.listAll();
     var itemList = [];
-    for (var item in listResult.items) {
-      final url = await item.getDownloadURL();
-      itemList.add(url);
-      addPhotos(childName, url);
-    }
+    listResult.items.forEach((element) async {
+      var data = await element.getData();
+      createFileFromBytes(data!);
+      itemList.add(data);
+    });
     return itemList;
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getPhotos(String childName) async {
+  File createFileFromBytes(Uint8List bytes) {
+    var file = File.fromRawPath(bytes);
+    print(file);
+   return file;
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getPhotos(
+      String childName) async {
     return await _firestore.collection("photos").doc(childName).get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllPhotos() async {
+    var collection = await _firestore.collection("photos").get();
+    return collection;
   }
 
   Future addPhotos(String childName, String url) async {

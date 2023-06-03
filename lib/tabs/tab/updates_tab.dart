@@ -9,29 +9,26 @@ class UpdatesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Updates> currentQuestion = updates;
+    List<Updates> data = updates;
 
     return Stack(
       children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: currentQuestion.length,
-            itemBuilder: (context, index) {
-              var currentItem = currentQuestion[index];
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Bubble(
-                  date: DateTime(
-                          currentItem.dateTime.year,
-                          currentItem.dateTime.month,
-                          currentItem.dateTime.day)
-                      .toString().replaceAll('00:00:00.000', ''),
-                  text: currentItem.updates,
-                ),
-              );
-            },
-          ),
+        Flex(
+          direction: Axis.horizontal,
+          children: [Expanded(
+            child: ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Bubble(
+                    date: '04/05/2023',
+                    text: data[index].updates,
+                  ),
+                );
+              },
+            ),
+          )],
         ),
         SizedBox(
           height: 34,
@@ -42,9 +39,9 @@ class UpdatesTab extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                  Color.fromRGBO(60, 58, 59, 1),
-                  Color.fromRGBO(60, 58, 59, 0),
-                ])),
+                      Color.fromRGBO(60, 58, 59, 1),
+                      Color.fromRGBO(60, 58, 59, 0),
+                    ])),
           ),
         ),
       ],

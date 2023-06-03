@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:regiment8112_project/services/firebase_storage_service.dart';
+import 'package:regiment8112_project/widgets/images_preview.dart';
 
 class ImagesTab extends StatefulWidget {
   const ImagesTab({Key? key}) : super(key: key);
@@ -11,48 +8,41 @@ class ImagesTab extends StatefulWidget {
   State<ImagesTab> createState() => _ImagesTabState();
 }
 
+
 class _ImagesTabState extends State<ImagesTab> {
-  late Future<DocumentSnapshot<Map<String, dynamic>>> _data;
+  late Future<List> _data;
 
   @override
   void initState() {
     super.initState();
-    _data = StorageService().getPhotos("קו אביטל 23");
+    // _data = StorageService().getPhotosDownloadUrl("קו אביטל 23");
   }
+
+  // void function() {
+  //   StorageService().getAllPhotos();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder(
-        future: _data,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            List<dynamic> data = snapshot.data!.get("photoId");
-            return MasonryGridView.builder(
-                itemCount: data.length,
-                gridDelegate:
-                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4),
-                itemBuilder: (context, index) {
-                  return CachedNetworkImage(
-                    imageUrl: data[index],
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.fill),
-                        ),
-                      );
-                    },
-                  );
-                });
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
+
+    // final controller =
+    // function();
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.width,
+
+      // child: FutureBuilder(
+      //   future: _data,
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.done) {
+            // final data = snapshot.data!.docs;
+            child: const ImagesPreview("קו אביטל")
+            // return GroupedListView<String, String>(elements: _data, groupBy: _data['group']);
+          // } else {
+          //   return const CircularProgressIndicator();
+          // }
+        // },
+      // ),
     );
   }
 }

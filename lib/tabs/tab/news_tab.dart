@@ -8,23 +8,26 @@ class NewsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<News> currentQuestion = news;
+    List<News> data = news;
 
     return Stack(
       children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: currentQuestion.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Bubble(
-                  date: '04/05/2023',
-                  text: currentQuestion[index].news,
-                ),
-              );
-            },
-          ),
+        Flex(
+          direction: Axis.horizontal,
+          children: [Expanded(
+            child: ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Bubble(
+                    date: '04/05/2023',
+                    text: data[index].news,
+                  ),
+                );
+              },
+            ),
+          )],
         ),
         SizedBox(
           height: 34,

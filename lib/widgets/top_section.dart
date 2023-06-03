@@ -19,13 +19,9 @@ class TopSection extends StatelessWidget {
             SizedBox(
               width: 95,
               child: TextButton(
-
                 onPressed: onPress,
-                child: const CustomText(
-                  16,
-                  Color.fromRGBO(251, 174, 27, 1),
-                  "עדכונים וחדשות",
-                ),
+                child: const CustomText(fontSize: 16,color: Color.fromRGBO(251, 174, 27, 1),
+                    text: "עדכונים וחדשות"),
               ),
             ),
             Image.asset(
@@ -35,8 +31,8 @@ class TopSection extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {},
-              child: const CustomText(
-                  16, Color.fromRGBO(86, 154, 82, 1), "רשימת קשר"),
+              child: const CustomText(fontSize: 16, color: Color.fromRGBO(86, 154, 82, 1),
+                  text: "רשימת קשר"),
             ),
           ],
         ),
@@ -67,10 +63,11 @@ class TopSection extends StatelessWidget {
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Text(
-                          "הזימון הבא",
-                          style: GoogleFonts.heebo(color: Colors.white),
-                        ),
+                    children: [
+                      Text(
+                        "הזימון הבא",
+                        style: GoogleFonts.heebo(color: Colors.white),
+                      ),
                       Text(
                         "18.09 - 25.09",
                         style: GoogleFonts.rubikDirt(

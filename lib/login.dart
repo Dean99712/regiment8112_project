@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'חרמ"ש מסייעת 8112',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       home: Scaffold(
         body: Container(
           child: activeScreen == 'start-screen'
