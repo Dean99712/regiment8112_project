@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
+    final AuthService auth = AuthService();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: const Color.fromRGBO(86, 154, 82, 1),
                     // onPressed: start,
                     onPressed: () async {
-                      dynamic result = await _auth.signInAnon();
+                      dynamic result = await auth.signInAnon();
                       if (result != null) {
                         print("Success");
                         widget.start();
