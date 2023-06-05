@@ -5,20 +5,27 @@ import 'package:regiment8112_project/widgets/search_bar.dart';
 import 'custom_text.dart';
 
 class TopSection extends StatefulWidget {
-  const TopSection({super.key});
+  TopSection(this.currentTab, this.updateActiveTab, {super.key});
+  final String currentTab;
+
+  Function(String value) updateActiveTab;
 
   @override
   State<TopSection> createState() => _TopSectionState();
 }
 
-
 class _TopSectionState extends State<TopSection> {
-  var activeTab = '';
+
+  var activeTab = 'news';
 
   @override
   void initState() {
-    activeTab = 'news';
     super.initState();
+  }
+
+  void function(BuildContext context, String route, Widget widget) {
+    Navigator.push(context,
+        MaterialPageRoute(maintainState: true, builder: (context) => widget));
   }
 
   @override
@@ -35,8 +42,11 @@ class _TopSectionState extends State<TopSection> {
                   setState(() {
                     activeTab = 'news';
                   });
+                  widget.updateActiveTab(activeTab);
                 },
-                child: CustomText(fontSize: 16,color: activeTab == 'news' ? secondaryColor : primaryColor,
+                child: CustomText(
+                    fontSize: 16,
+                    color: activeTab == 'news' ? secondaryColor : primaryColor,
                     text: "עדכונים וחדשות"),
               ),
             ),
@@ -50,13 +60,18 @@ class _TopSectionState extends State<TopSection> {
                 setState(() {
                   activeTab = 'contactsList';
                 });
+                widget.updateActiveTab('contactsList');
               },
-              child: CustomText(fontSize: 16, color: activeTab == 'contactsList' ? secondaryColor : primaryColor,
+              child: CustomText(
+                  fontSize: 16,
+                  color: activeTab == 'contactsList'
+                      ? secondaryColor
+                      : primaryColor,
                   text: "רשימת קשר"),
             ),
           ],
         ),
-       activeTab == 'news' ? const NextSummon() : const CustomSearchBar()
+        activeTab == 'news' ? const NextSummon() : const CustomSearchBar()
       ],
     );
   }
