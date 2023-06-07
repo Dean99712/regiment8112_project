@@ -31,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
     final AuthService auth = AuthService();
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(

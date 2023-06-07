@@ -16,6 +16,7 @@ class NewsTab extends StatelessWidget {
           direction: Axis.horizontal,
           children: [Expanded(
             child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
               itemCount: data.length,
               itemBuilder: (context, index) {
                 return Padding(

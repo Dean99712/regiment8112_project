@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'widgets/gradient_container.dart';
+import 'widgets/main_screen.dart';
 import 'login_screen.dart';
 
 
@@ -23,12 +23,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'חרמ"ש מסייעת 8112',
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
           child: activeScreen == 'start-screen'
               ? LoginPage(switchScreen)
-              : const GradientContainer([
+              : const MainScreen([
                   Color.fromRGBO(60, 58, 59, 1),
                   Color.fromRGBO(60, 58, 59, 1)
                 ]),

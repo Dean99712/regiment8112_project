@@ -13,15 +13,16 @@ class StorageService {
     var itemList = [];
 
     for(var item in listResult.items) {
-      String data = await item.getDownloadURL();
-      itemList.add(data);
+      String url = await item.getDownloadURL();
+      itemList.add(url);
+      addPhotos(childName, url);
     }
     return itemList;
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getPhotos(
-      String childName) async {
-    return await _firestore.collection("photos").doc(childName).get();
+  CollectionReference<Map<String, dynamic>> getPhotos(
+      String childName) {
+    return _firestore.collection(childName);
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAllPhotos() async {
@@ -30,9 +31,13 @@ class StorageService {
   }
 
   Future addPhotos(String childName, String url) async {
-    var collection = _firestore.collection("photos").doc(childName);
-    await collection.update({
-      "photoId": FieldValue.arrayUnion([url])
+    var collection = _firestore.collection(childName).doc();
+    collection.set({
+        "photoId": url
     });
+    // var collection = _firestore.collection("photos").doc(childName);
+    // await collection.update({
+    //   "photoId": FieldValue.arrayUnion([url])
+    // });
   }
 }

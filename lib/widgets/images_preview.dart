@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:regiment8112_project/tabs/tab/all_images_tab.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 
@@ -9,7 +10,14 @@ class ImagesPreview extends StatelessWidget {
 
   final String text;
 
-  void function() {}
+  void function(BuildContext context, Widget route) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => route,
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,7 @@ class ImagesPreview extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             textDirection: TextDirection.rtl,
             children: [
               CustomText(
@@ -55,33 +63,35 @@ class ImagesPreview extends StatelessWidget {
                 ]),
             childrenDelegate: SliverChildBuilderDelegate((context, index) {
               return Image.asset(
-                  "assets/images/IMG_0830.HEIC",
-                  fit: BoxFit.fill,
+                "assets/images/IMG_0830.HEIC",
+                fit: BoxFit.fill,
               );
             }),
           ),
         ),
-         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-           child: Row(
-             mainAxisAlignment: MainAxisAlignment.end,
-             children: [
-               const Icon(
-                 FontAwesomeIcons.anglesLeft,
-                 color: primaryColor,
-               ),
-               TextButton(
-                 onPressed: function,
-                 child: const CustomText(
-                   fontSize: 16,
-                   color: primaryColor,
-                   text: "לכל התמונות",
-                   fontWeight: FontWeight.w400,
-                 ),
-               ),
-             ],
-           ),
-         )
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Icon(
+                FontAwesomeIcons.anglesLeft,
+                color: primaryColor,
+              ),
+              TextButton(
+                onPressed: () {
+                  function(context, const ImagesTab());
+                },
+                child: const CustomText(
+                  fontSize: 16,
+                  color: primaryColor,
+                  text: "לכל התמונות",
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }

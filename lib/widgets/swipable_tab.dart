@@ -5,7 +5,9 @@ import 'package:regiment8112_project/tabs/tab/news_tab.dart';
 import 'package:regiment8112_project/tabs/tab/updates_tab.dart';
 
 class SwipeableTab extends StatefulWidget {
-  const SwipeableTab({Key? key}) : super(key: key);
+  const SwipeableTab(this.scrollController,{Key? key}) : super(key: key);
+
+  final ScrollController scrollController;
 
   @override
   State<SwipeableTab> createState() => _SwipeableTabState();
@@ -37,10 +39,10 @@ class _SwipeableTabState extends State<SwipeableTab> {
                   indicatorColor: const Color.fromRGBO(251, 174, 27, 1),
                   labelColor: const Color.fromRGBO(251, 174, 27, 1),
                   tabs: myTabs),
-              Expanded(
+              const Expanded(
                 child: TabBarView(children: [
-                  const NewsTab(),
-                  const UpdatesTab(),
+                  NewsTab(),
+                  UpdatesTab(),
                   ImagesTab(),
                 ]),
               ),
