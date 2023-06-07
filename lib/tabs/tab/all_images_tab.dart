@@ -17,7 +17,7 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
-    _data = StorageService().getPhotos("קו אביטל 23");
+    _data = StorageService().getPhotos("קו אביטל 23", 5);
   }
 
   @override

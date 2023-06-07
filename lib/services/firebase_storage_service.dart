@@ -21,7 +21,8 @@ class StorageService {
   }
 
   CollectionReference<Map<String, dynamic>> getPhotos(
-      String childName) {
+      String childName,
+      int limit) {
     return _firestore.collection(childName);
   }
 
