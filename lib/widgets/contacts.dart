@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../data/contacts.dart';
 
@@ -29,8 +32,8 @@ class Contacts extends StatelessWidget {
           groupBy: (element) => element["cls"],
           itemComparator: (item1, item2) =>
               item1['name'].compareTo(item2['name']),
-          stickyHeaderBackgroundColor: const Color.fromRGBO(74, 72, 73, 1),
-          useStickyGroupSeparators: true,
+          // stickyHeaderBackgroundColor: const Color.fromRGBO(74, 72, 73, 1),
+          // useStickyGroupSeparators: true,
           order: GroupedListOrder.ASC,
           groupSeparatorBuilder: (value) => Container(
               width: double.infinity,
@@ -65,8 +68,10 @@ class Contacts extends StatelessWidget {
                         color: const Color.fromRGBO(215, 215, 215, 1.0),
                         text: element['phoneNumber']),
                     GestureDetector(
-                      onTap: () {
-                        print('Tap on : ${element['phoneNumber']}');
+                      onTap: () async{
+                        var phoneNumber = '+972${element['phoneNumber'].toString().substring(1)}';
+                        // print(phoneNumber);
+                        await FlutterPhoneDirectCaller.callNumber(phoneNumber);
                       },
                       child: Container(
                           width: 30,

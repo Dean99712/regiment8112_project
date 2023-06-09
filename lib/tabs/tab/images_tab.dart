@@ -17,35 +17,11 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
-    // _data = StorageService().getPhotosDownloadUrl("קו אביטל 23");
-
+    _data = StorageService().getPhotosDownloadUrl("קו אביטל 23");
   }
-
-  // void function() {
-  //   StorageService().getAllPhotos();
-  // }
 
   @override
   Widget build(BuildContext context) {
-
-    // final controller =
-    // function();
-
-    return SizedBox(
-      height: MediaQuery.of(context).size.width,
-
-      // child: FutureBuilder(
-      //   future: _data,
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.done) {
-            // final data = snapshot.data!.docs;
-            child: const ImagesPreview("קו אביטל")
-            // return GroupedListView<String, String>(elements: _data, groupBy: _data['group']);
-          // } else {
-          //   return const CircularProgressIndicator();
-          // }
-        // },
-      // ),
-    );
+    return const ImagesPreview("קו אביטל");
   }
 }

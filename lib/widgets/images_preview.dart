@@ -1,14 +1,28 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:regiment8112_project/tabs/tab/all_images_tab.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/widgets/custom_text.dart';
+import 'package:intl/intl.dart' as intel;
+import '../services/firebase_storage_service.dart';
+import '../tabs/tab/all_images_tab.dart';
+import '../utils/colors.dart';
+import 'custom_text.dart';
 
-class ImagesPreview extends StatelessWidget {
+class ImagesPreview extends StatefulWidget {
   const ImagesPreview(this.text, {super.key});
 
   final String text;
+
+  @override
+  State<ImagesPreview> createState() => _ImagesPreviewState();
+}
+
+class _ImagesPreviewState extends State<ImagesPreview> {
+  final StorageService _storageService = StorageService();
+  // List<String> _dataList = [];
 
   void function(BuildContext context, Widget route) {
     Navigator.push(
@@ -19,13 +33,32 @@ class ImagesPreview extends StatelessWidget {
         ));
   }
 
+  // Future<void> fetchImagesData() async {
+  //   List<String> dataList =
+  //       await _storageService.getAllPhotos();
+  //   setState(() {
+  //     _dataList = dataList;
+  //   });
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    // fetchImagesData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // print('dataList : $_dataList');
+
+    var date = DateTime.now();
+    var formatDate = intel.DateFormat('yMMMM').format(date);
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             textDirection: TextDirection.rtl,
@@ -33,14 +66,15 @@ class ImagesPreview extends StatelessWidget {
               CustomText(
                 fontSize: 16,
                 color: white,
-                text: text,
+                text: widget.text,
                 fontWeight: FontWeight.w500,
                 textAlign: TextAlign.left,
               ),
-              const CustomText(
+              CustomText(
                 fontSize: 16,
                 color: white,
-                text: "אפריל 2023",
+                text: formatDate,
+                // text: "אפריל 2023",
                 fontWeight: FontWeight.w500,
                 textAlign: TextAlign.left,
               ),
@@ -48,8 +82,8 @@ class ImagesPreview extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 260,
-          width: 350,
+          height: 250,
+          width: 370,
           child: GridView.custom(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverQuiltedGridDelegate(
@@ -64,7 +98,7 @@ class ImagesPreview extends StatelessWidget {
             childrenDelegate: SliverChildBuilderDelegate((context, index) {
               return Image.asset(
                 "assets/images/IMG_0830.HEIC",
-                fit: BoxFit.fill,
+                fit: BoxFit.fitHeight,
               );
             }),
           ),

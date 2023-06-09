@@ -17,29 +17,36 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
-    _data = StorageService().getPhotos("קו אביטל 23", 5);
+    _data = StorageService().getPhotos("קו אביטל 23");
   }
 
   @override
   Widget build(BuildContext context) {
+    var limit = _data.limit(70);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-          body: FirestoreListView<Map<String, dynamic>>(
-              query: _data,
-              pageSize: 50,
-              itemBuilder: (context, snapshot) {
-                var photo = snapshot.data()['photoId'];
+          body: FirestoreQueryBuilder<Map<String, dynamic>>(
+        query: limit,
+        pageSize: 5,
+        builder: (context, snapshot, child) {
+          return GridView.builder(
+            physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4),
+              itemCount: snapshot.docs.length,
+              itemBuilder: (context, index) {
+                if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                  snapshot.fetchMore();
+                }
                 return GestureDetector(
                   onTap: () {
-                    print(photo);
+                    print(snapshot.docs[index]['photoId']);
                   },
-                  child: CachedNetworkImage(
-                    imageUrl: snapshot.data()['photoId'],
-                    fit: BoxFit.fill,
-                  ),
-                );
-              })),
+                    child: CachedNetworkImage(fit: BoxFit.fill, imageUrl: snapshot.docs[index]["photoId"]));
+              });
+        },
+      )),
     );
   }
 }

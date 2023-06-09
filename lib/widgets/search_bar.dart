@@ -12,28 +12,34 @@ class CustomSearchBar extends StatefulWidget {
 class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: 320,
-          child: SearchBar(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: [
+          SearchBar(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width / 1.3,
+            ),
             elevation: MaterialStateProperty.all(0),
             textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
             hintText: 'חפש...',
-            shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)))),
+            shape: MaterialStateProperty.all(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+            ),
           ),
-        ),
-        IconButton(
-          color: primaryColor,
-          enableFeedback: true,
-          icon: const Icon(Icons.filter_list_outlined),
-          onPressed: () {
-
-          },
-        )
-      ],
+          IconButton(
+            color: primaryColor,
+            enableFeedback: true,
+            icon: const Icon(Icons.filter_list_outlined),
+            onPressed: () {},
+          )
+        ],
+      ),
     );
   }
 }
