@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:regiment8112_project/utils/colors.dart';
+import 'package:regiment8112_project/widgets/add_contact.dart';
 import 'package:regiment8112_project/widgets/contacts.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 import 'package:regiment8112_project/widgets/swipable_tab.dart';
@@ -40,45 +41,31 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  Widget renderFab() {
-    return FloatingActionButton(
-      elevation: 0.0,
-        backgroundColor: primaryColor,
-        child: activeTab == "news"
-            ? const Icon(Icons.add_a_photo)
-            : const Icon(Icons.person, size: 35),
-        onPressed: () {});
-  }
-
-  Widget renderExtendedFab() {
-    return FloatingActionButton.extended(
-      backgroundColor: primaryColor,
-      elevation: 0.0,
-      isExtended: true,
-      icon: activeTab == "news"
-          ? const Icon(Icons.add_a_photo)
-          : const Icon(Icons.person, size: 35),
-      onPressed: () {},
-      label: activeTab == "news"
-          ? const CustomText(
-              fontSize: 16,
-              color: white,
-              text: "הוסף תמונות",
-            )
-          : const CustomText(
-              fontSize: 16,
-              color: white,
-              text: "הוסף איש קשר",
-            ),
-    );
-  }
-
   @override
   Widget build(context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        floatingActionButton: isFab ? renderFab() : renderExtendedFab(),
+        floatingActionButton: activeTab != 'news' ? ScrollingFabAnimated(
+          width: 165,
+          icon: activeTab == 'news'
+              ? const Icon(Icons.add_a_photo, color: white)
+              : const Icon(Icons.person, color: white, size: 30),
+          text: CustomText(
+              fontSize: 16,
+              color: white,
+              text: activeTab != 'news' ? 'הוסף איש קשר' : null),
+          onPress: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddContact(),));
+          },
+          scrollController: scrollController,
+          animateIcon: false,
+          color: primaryColor,
+          duration: const Duration(milliseconds: 150),
+          elevation: 0.0,
+          radius: 50.0,
+        )
+        : null,
         body: Container(
           decoration: BoxDecoration(
               image: const DecorationImage(

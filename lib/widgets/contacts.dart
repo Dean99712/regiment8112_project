@@ -4,8 +4,6 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../data/contacts.dart';
 
@@ -29,7 +27,7 @@ class Contacts extends StatelessWidget {
           controller: scrollController,
           physics: const BouncingScrollPhysics(),
           elements: contactsList,
-          groupBy: (element) => element["cls"],
+          groupBy: (element) => element['cls'],
           itemComparator: (item1, item2) =>
               item1['name'].compareTo(item2['name']),
           // stickyHeaderBackgroundColor: const Color.fromRGBO(74, 72, 73, 1),

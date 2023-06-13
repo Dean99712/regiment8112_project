@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
+import 'package:regiment8112_project/widgets/custom_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage(this.start, {Key? key}) : super(key: key);
@@ -86,12 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    color: const Color.fromRGBO(86, 154, 82, 1),
-                    // onPressed: start,
-                    onPressed: () async {
+                CustomButton(text: "לקבלת קוד חד פעמי", function: () async {
                       dynamic result = await auth.signInAnon();
                       if (result != null) {
                         print("Success");
@@ -99,11 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         print("Error");
                       }
-                    },
-                    child: Text(
-                      "לקבלת קוד חד פעמי",
-                      style: GoogleFonts.heebo(color: Colors.white),
-                    )),
+                    }),
                 Container(
                   padding: const EdgeInsets.only(top: 24),
                   child: SizedBox(

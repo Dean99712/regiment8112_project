@@ -5,10 +5,10 @@ import 'package:regiment8112_project/widgets/search_bar.dart';
 import 'custom_text.dart';
 
 class TopSection extends StatefulWidget {
-  TopSection(this.currentTab, this.updateActiveTab, {super.key});
+  const TopSection(this.currentTab, this.updateActiveTab, {super.key});
   final String currentTab;
 
-  Function(String value) updateActiveTab;
+  final Function(String value) updateActiveTab;
 
   @override
   State<TopSection> createState() => _TopSectionState();
@@ -30,6 +30,8 @@ class _TopSectionState extends State<TopSection> {
 
   @override
   Widget build(BuildContext context) {
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
     return Column(
       children: [
         Row(

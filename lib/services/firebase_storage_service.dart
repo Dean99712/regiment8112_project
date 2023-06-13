@@ -31,8 +31,8 @@ class StorageService {
     return _firestore.collection(childName);
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getAllPhotos() async {
-    return await _firestore.collectionGroup('').get();
+  Query<Map<String, dynamic>> getAllPhotos() {
+    return _firestore.collectionGroup('');
   }
 
   Future addPhotosByAlbumName(String childName, String url) async {
