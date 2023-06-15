@@ -15,28 +15,34 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 1.3,
-        child: const CupertinoSearchTextField(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          backgroundColor: white,
-          placeholder: "חפש...",
-        ),
-      );
-    } else {
-        return SearchBar(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width / 1.3,
-        ),
-        elevation: MaterialStateProperty.all(0),
-        textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
-        hintText: 'חפש...',
-        shape: MaterialStateProperty.all(
-          const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
+        child: const Directionality(
+          textDirection: TextDirection.rtl,
+          child: CupertinoSearchTextField(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            backgroundColor: white,
+            placeholder: "חפש...",
           ),
         ),
       );
+    } else {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: SearchBar(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width / 1.3,
+          ),
+          elevation: MaterialStateProperty.all(0),
+          textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
+          hintText: 'חפש...',
+          shape: MaterialStateProperty.all(
+            const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+          ),
+      ),
+        );
     }
   }
 

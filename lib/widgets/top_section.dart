@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/next_summon.dart';
 import 'package:regiment8112_project/widgets/search_bar.dart';
@@ -6,6 +7,7 @@ import 'custom_text.dart';
 
 class TopSection extends StatefulWidget {
   const TopSection(this.currentTab, this.updateActiveTab, {super.key});
+
   final String currentTab;
 
   final Function(String value) updateActiveTab;
@@ -15,7 +17,6 @@ class TopSection extends StatefulWidget {
 }
 
 class _TopSectionState extends State<TopSection> {
-
   var activeTab = 'news';
 
   @override
@@ -30,8 +31,6 @@ class _TopSectionState extends State<TopSection> {
 
   @override
   Widget build(BuildContext context) {
-    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-
     return Column(
       children: [
         Row(
@@ -39,13 +38,26 @@ class _TopSectionState extends State<TopSection> {
           children: [
             SizedBox(
               width: 95,
-              child: TextButton(
-                onPressed: () {
+              child: PlatformTextButton(
+                material: (_, __) => MaterialTextButtonData(
+                  onPressed: () {
+                    setState(() {
+                      activeTab = 'news';
+                    });
+                    widget.updateActiveTab(activeTab);
+                  },
+                  child: CustomText(
+                      fontSize: 16,
+                      color:
+                          activeTab == 'news' ? secondaryColor : primaryColor,
+                      text: "עדכונים וחדשות"),
+                ),
+                cupertino: (_, __) => CupertinoTextButtonData(onPressed: () {
                   setState(() {
                     activeTab = 'news';
                   });
                   widget.updateActiveTab(activeTab);
-                },
+                }),
                 child: CustomText(
                     fontSize: 16,
                     color: activeTab == 'news' ? secondaryColor : primaryColor,

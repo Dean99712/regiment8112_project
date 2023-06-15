@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 final controller = TextEditingController();
 
 class _LoginPageState extends State<LoginPage> {
+
   @override
   void dispose() {
     controller.dispose();
@@ -25,14 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final AuthService auth = AuthService();
-
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: true,

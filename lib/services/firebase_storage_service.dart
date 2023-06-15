@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List> getPhotosDownloadUrl(String childName) async {
@@ -22,15 +22,16 @@ class StorageService {
         final customMetaData = SettableMetadata(contentType: "image/jpeg");
         item.updateMetadata(customMetaData);
       }
-      // addPhotosByAlbumName(childName, url);
+      // addPhotosToAlbum(childName, url);
     }
     return itemList;
   }
 
   void addPhotosToAlbum(String childName, String url) async {
+    var uuid = _auth.currentUser!.uid;
     var collection =
         _firestore.collection("albums")
-            .doc()
+            .doc(uuid)
             .collection(childName);
 
     return collection.doc().set({"albumName": childName, "imageUrl": url});

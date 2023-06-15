@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
 import 'package:regiment8112_project/widgets/images_preview.dart';
 
-import '../../services/firebase_storage_service.dart';
-
 class ImagesTab extends StatefulWidget {
   const ImagesTab(this.tabController, {super.key});
 
@@ -30,28 +28,24 @@ class _ImagesTabState extends State<ImagesTab> {
     }
   }
 
-  late Future<List> _data;
-
   @override
   void initState() {
     super.initState();
-    _data = StorageService().getPhotosDownloadUrl("קו אביטל 23");
   }
 
   @override
   Widget build(BuildContext context) {
-    return ImagesPreview(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AllImages(
-            () {
-              return;
-            },
+    return SizedBox(
+      height: 250,
+      child: ImagesPreview(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AllImages(),
           ),
-        ),
-      );
-    }, "קו אביטל");
+        );
+      }, "קו אביטל 23"),
+    );
     // return activeScreen == 'images-preview'
     //     ? ImagesPreview(switchScreen, "קו אביטל")
     //     : AllImagesTab(switchScreen);
