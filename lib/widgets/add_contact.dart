@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 
@@ -47,6 +48,8 @@ class AddContact extends StatelessWidget {
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'בן אנוש',
+                                disabledBorder: InputBorder.none,
+                                filled: true,
                                 fillColor: white),
                           ),
                           TextField(
@@ -54,6 +57,7 @@ class AddContact extends StatelessWidget {
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'בן אנוש',
+                                filled: true,
                                 fillColor: white),
                           ),
                           TextField(
@@ -61,12 +65,14 @@ class AddContact extends StatelessWidget {
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'בן אנוש',
+                                filled: true,
                                 fillColor: white),
                           ),
                           TextField(
                             controller: controller,
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
+                                filled: true,
                                 labelText: 'בן אנוש',
                                 fillColor: white),
                           ),
@@ -77,9 +83,9 @@ class AddContact extends StatelessWidget {
                   SizedBox(
                     width: size.width / 2,
                     child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(primaryColor)
-                      ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(primaryColor)),
                         onPressed: () {},
                         child: const CustomText(
                           fontSize: 16,
@@ -93,7 +99,18 @@ class AddContact extends StatelessWidget {
           ),
         ),
       ),
-      cupertino: (_, __) => CupertinoAppData(home: Container()),
+      cupertino: (_, __) => CupertinoAppData(
+        home: PlatformScaffold(
+          cupertino: (_, __) => CupertinoPageScaffoldData(
+            body: Container(
+              child: CupertinoTextField(
+                placeholder: "חפש בן אדם",
+                placeholderStyle: GoogleFonts.heebo()
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

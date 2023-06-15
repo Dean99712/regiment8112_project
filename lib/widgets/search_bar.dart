@@ -13,8 +13,13 @@ class CustomSearchBar extends StatefulWidget {
 class _CustomSearchBarState extends State<CustomSearchBar> {
   Widget renderSearchBar(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return const CupertinoSearchTextField(
-        placeholder: "חפש...",
+      return SizedBox(
+        width: MediaQuery.of(context).size.width / 1.3,
+        child: const CupertinoSearchTextField(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          backgroundColor: white,
+          placeholder: "חפש...",
+        ),
       );
     } else {
         return SearchBar(

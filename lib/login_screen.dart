@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
+import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage(this.start, {Key? key}) : super(key: key);
@@ -63,29 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   style:
                       GoogleFonts.rubikDirt(fontSize: 90, color: primaryColor),
                 ),
-                Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: TextField(
-                    controller: controller,
-                    enableSuggestions: false,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 10,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      label: Text(
-                        "מספר טלפון",
-                        textDirection: TextDirection.ltr,
-                        style: GoogleFonts.heebo(color: Colors.green),
-                      ),
-                      focusedBorder:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      fillColor: Colors.white,
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                    ),
-                  ),
-                ),
+                CustomTextField(controller: controller, text: "מספר טלפון"),
                 CustomButton(
                     text: "לקבלת קוד חד פעמי",
                     function: () async {

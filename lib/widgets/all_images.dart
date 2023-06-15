@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/services/images_manager.dart';
@@ -53,8 +55,8 @@ class _AllImagesState extends State<AllImages> {
                     return GridView.builder(
                         physics: const BouncingScrollPhysics(),
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4),
                         itemCount: snapshot.docs.length,
                         itemBuilder: (context, index) {
                           String photo = snapshot.docs[index]['photoId'];
@@ -69,17 +71,17 @@ class _AllImagesState extends State<AllImages> {
                                 //   MaterialPageRoute(builder: (context) => ,);
                               },
                               child: photo.contains("jpg") ||
-                                  photo.contains("jpeg")
+                                      photo.contains("jpeg")
                                   ? CachedNetworkImage(
-                                maxHeightDiskCache: 150,
-                                fit: BoxFit.fill,
-                                imageUrl: snapshot.docs[index]["photoId"],
-                                fadeInDuration:
-                                const Duration(milliseconds: 100),
-                              )
+                                      maxHeightDiskCache: 150,
+                                      fit: BoxFit.fill,
+                                      imageUrl: snapshot.docs[index]["photoId"],
+                                      fadeInDuration:
+                                          const Duration(milliseconds: 100),
+                                    )
                                   : photo.contains("HEIC")
-                                  ? Container()
-                                  : Container());
+                                      ? Container()
+                                      : Container());
                         });
                   },
                 ),
@@ -89,23 +91,21 @@ class _AllImagesState extends State<AllImages> {
               top: 0.0,
               left: 0.0,
               right: 0.0,
-              child: AppBar(
-                toolbarHeight: 30.0,
-                backgroundColor: const Color.fromRGBO(60, 58, 59, 0.5),
+              child: PlatformAppBar(
+                cupertino: (_, __) => CupertinoNavigationBarData(
+                  backgroundColor: const Color.fromRGBO(60, 58, 59, 0.5),
+                  title: const CustomText(
+                      fontSize: 16, color: white, text: "חזרה"),
+                ),
                 leading: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
                   },
                   // onTap: widget.switchScreen,
-                  child: const Icon(
-                    Icons.arrow_back,
+                  child: Icon(
+                    Icons.adaptive.arrow_back,
                     color: white,
                   ),
-                ),
-                title: const CustomText(
-                  fontSize: 16,
-                  color: white,
-                  text: "חזרה",
                 ),
               ),
             )
