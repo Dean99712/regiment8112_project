@@ -17,7 +17,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         placeholder: "חפש...",
       );
     } else {
-      return SearchBar(
+        return SearchBar(
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width / 1.3,
         ),
@@ -40,6 +40,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: Wrap(
+        direction: Axis.horizontal,
+        crossAxisAlignment: WrapCrossAlignment.start,
         alignment: WrapAlignment.spaceBetween,
         children: [
           renderSearchBar(context),

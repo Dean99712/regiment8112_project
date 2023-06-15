@@ -14,20 +14,29 @@ class CustomButton extends StatelessWidget {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     return isIos
-        ? CupertinoButton(
-            color: primaryColor,
-            onPressed: function,
-            child: CustomText(
-              fontSize: 16,
-              color: white,
-              text: text,
-            ))
-        : MaterialButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            color: primaryColor,
-            onPressed: function,
-            child: CustomText(fontSize: 16, color: white, text: text),
-          );
+        ? Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CupertinoButton(
+              color: primaryColor,
+              onPressed: function,
+              child: CustomText(
+                fontSize: 16,
+                color: white,
+                text: text,
+              )),
+        )
+        : Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MaterialButton(
+              shape:
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              color: primaryColor,
+              onPressed: function,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CustomText(fontSize: 16, color: white, text: text),
+              ),
+            ),
+        );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/tabs/tab/all_images_tab.dart';
+import 'package:regiment8112_project/widgets/all_images.dart';
 import 'package:regiment8112_project/widgets/images_preview.dart';
 
 import '../../services/firebase_storage_service.dart';
@@ -44,7 +44,7 @@ class _ImagesTabState extends State<ImagesTab> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AllImagesTab(
+          builder: (context) => AllImages(
             () {
               return;
             },

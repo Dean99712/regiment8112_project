@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -54,15 +55,13 @@ class _LoginPageState extends State<LoginPage> {
                 Image.asset("assets/svg/logo.png", height: 210, width: 210),
                 Text(
                   'חרמ"ש מסייעת',
-                  style: GoogleFonts.rubikDirt(
-                      fontSize: 32,
-                      color: const Color.fromRGBO(86, 154, 82, 1)),
+                  style:
+                      GoogleFonts.rubikDirt(fontSize: 32, color: primaryColor),
                 ),
                 Text(
                   "8112",
-                  style: GoogleFonts.rubikDirt(
-                      fontSize: 90,
-                      color: const Color.fromRGBO(86, 154, 82, 1)),
+                  style:
+                      GoogleFonts.rubikDirt(fontSize: 90, color: primaryColor),
                 ),
                 Directionality(
                   textDirection: TextDirection.rtl,
@@ -87,7 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                CustomButton(text: "לקבלת קוד חד פעמי", function: () async {
+                CustomButton(
+                    text: "לקבלת קוד חד פעמי",
+                    function: () async {
                       dynamic result = await auth.signInAnon();
                       if (result != null) {
                         print("Success");

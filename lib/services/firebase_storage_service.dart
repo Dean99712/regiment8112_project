@@ -27,6 +27,15 @@ class StorageService {
     return itemList;
   }
 
+  void addPhotosToAlbum(String childName, String url) async {
+    var collection =
+        _firestore.collection("albums")
+            .doc()
+            .collection(childName);
+
+    return collection.doc().set({"albumName": childName, "imageUrl": url});
+  }
+
   CollectionReference<Map<String, dynamic>> getPhotos(String childName) {
     return _firestore.collection(childName);
   }
@@ -35,8 +44,7 @@ class StorageService {
     return _firestore.collectionGroup('');
   }
 
-  Future addPhotosByAlbumName(String childName, String url) async {
-    var collection = _firestore.collection(childName).doc();
-    collection.set({"photoId": url});
+  Query<Map<String, dynamic>> getAlbumByName(String childName) {
+    return _firestore.collectionGroup(childName);
   }
 }

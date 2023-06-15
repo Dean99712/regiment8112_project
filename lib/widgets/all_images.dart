@@ -6,19 +6,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/services/images_manager.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
+import '../utils/colors.dart';
 
-import '../../utils/colors.dart';
-
-class AllImagesTab extends StatefulWidget {
-  const AllImagesTab(this.switchScreen, {super.key});
+class AllImages extends StatefulWidget {
+  const AllImages(this.switchScreen, {super.key});
 
   final void Function() switchScreen;
 
   @override
-  State<AllImagesTab> createState() => _AllImagesTabState();
+  State<AllImages> createState() => _AllImagesState();
 }
 
-class _AllImagesTabState extends State<AllImagesTab> {
+class _AllImagesState extends State<AllImages> {
   late CollectionReference<Map<String, dynamic>> _data;
 
   @override
@@ -54,8 +53,8 @@ class _AllImagesTabState extends State<AllImagesTab> {
                     return GridView.builder(
                         physics: const BouncingScrollPhysics(),
                         gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4),
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4),
                         itemCount: snapshot.docs.length,
                         itemBuilder: (context, index) {
                           String photo = snapshot.docs[index]['photoId'];
@@ -66,19 +65,21 @@ class _AllImagesTabState extends State<AllImagesTab> {
                           return GestureDetector(
                               onLongPress: () {},
                               onTap: () {
+                                // Navigator.push(context,
+                                //   MaterialPageRoute(builder: (context) => ,);
                               },
                               child: photo.contains("jpg") ||
-                                      photo.contains("jpeg")
+                                  photo.contains("jpeg")
                                   ? CachedNetworkImage(
-                                      maxHeightDiskCache: 150,
-                                      fit: BoxFit.fill,
-                                      imageUrl: snapshot.docs[index]["photoId"],
-                                      fadeInDuration:
-                                          const Duration(milliseconds: 100),
-                                    )
+                                maxHeightDiskCache: 150,
+                                fit: BoxFit.fill,
+                                imageUrl: snapshot.docs[index]["photoId"],
+                                fadeInDuration:
+                                const Duration(milliseconds: 100),
+                              )
                                   : photo.contains("HEIC")
-                                      ? Container()
-                                      : Container());
+                                  ? Container()
+                                  : Container());
                         });
                   },
                 ),
