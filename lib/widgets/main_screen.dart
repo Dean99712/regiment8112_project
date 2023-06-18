@@ -91,9 +91,11 @@ class _MainScreenState extends State<MainScreen> {
                   }),
                 ),
                 Expanded(
-                    child: activeTab == 'news'
-                        ? SwipeableTab(scrollController)
-                        : Contacts(scrollController))
+
+                  child: activeTab == 'news'
+                      ? SwipeableTab(scrollController)
+                      : Contacts(scrollController),
+                )
               ],
             ),
           ),

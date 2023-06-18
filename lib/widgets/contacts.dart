@@ -17,6 +17,8 @@ class Contacts extends StatelessWidget {
 
     final contactsJson = jsonEncode(contacts);
     final contactsList = jsonDecode(contactsJson);
+
+    var size = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -38,33 +40,46 @@ class Contacts extends StatelessWidget {
               color: const Color.fromRGBO(74, 72, 73, 1),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: CustomText(
-                  color: white,
-                  fontSize: 16,
-                  text: 'מחלקה - $value',
-                  fontWeight: FontWeight.w600,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomText(
+                      color: white,
+                      fontSize: 16,
+                      text: 'מחלקה  $value',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
                 ),
               )),
           itemBuilder: (context, element) => Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   textDirection: TextDirection.rtl,
                   children: [
-                    CustomText(
-                        fontSize: 16,
-                        color: const Color.fromRGBO(215, 215, 215, 1.0),
-                        text: element['name']),
-                    CustomText(
-                        fontSize: 16,
-                        color: const Color.fromRGBO(215, 215, 215, 1.0),
-                        text: element['lastName']),
-                    CustomText(
-                        fontSize: 16,
-                        color: const Color.fromRGBO(215, 215, 215, 1.0),
-                        text: element['phoneNumber']),
+                    SizedBox(
+                      width: size.width / 8,
+                      child: CustomText(
+                          fontSize: 16,
+                          color: const Color.fromRGBO(215, 215, 215, 1.0),
+                          text: element['name']),
+                    ),
+                    SizedBox(
+                      width: size.width / 4,
+                      child: CustomText(
+                          fontSize: 16,
+                          color: const Color.fromRGBO(215, 215, 215, 1.0),
+                          text: element['lastName']),
+                    ),
+                    SizedBox(
+                      width: size.width / 4,
+                      child: CustomText(
+                          fontSize: 16,
+                          color: const Color.fromRGBO(215, 215, 215, 1.0),
+                          text: element['city']),
+                    ),
                     GestureDetector(
                       onTap: () async{
                         var phoneNumber = '+972${element['phoneNumber'].toString().substring(1)}';

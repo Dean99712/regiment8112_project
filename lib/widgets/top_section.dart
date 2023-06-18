@@ -69,20 +69,37 @@ class _TopSectionState extends State<TopSection> {
               width: 97,
               height: 97,
             ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  activeTab = 'contactsList';
-                });
-                widget.updateActiveTab('contactsList');
-              },
-              child: CustomText(
-                  fontSize: 16,
-                  color: activeTab == 'contactsList'
-                      ? secondaryColor
-                      : primaryColor,
-                  text: "רשימת קשר"),
-            ),
+            PlatformTextButton(
+              material: (_, __) => MaterialTextButtonData(
+                onPressed: () {
+                  setState(() {
+                    activeTab = 'contactsList';
+                  });
+                  widget.updateActiveTab('contactsList');
+                },
+                child: CustomText(
+                    fontSize: 16,
+                    color: activeTab == 'contactsList'
+                        ? secondaryColor
+                        : primaryColor,
+                    text: "רשימת קשר"),
+                // )
+              ),
+              cupertino: (_, __) => CupertinoTextButtonData(
+                onPressed: () {
+                  setState(() {
+                    activeTab = 'contactsList';
+                  });
+                  widget.updateActiveTab('contactsList');
+                },
+                child: CustomText(
+                    fontSize: 16,
+                    color: activeTab == 'contactsList'
+                        ? secondaryColor
+                        : primaryColor,
+                    text: "רשימת קשר"),
+              ),
+            )
           ],
         ),
         activeTab == 'news' ? const NextSummon() : const CustomSearchBar()

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText(
-      {required this.fontSize,
-      required this.color,
-      this.text,
+      {required this.text,
+      required this.fontSize,
+      this.color = primaryColor,
       this.fontWeight = FontWeight.normal,
       this.textAlign = TextAlign.center,
       super.key});

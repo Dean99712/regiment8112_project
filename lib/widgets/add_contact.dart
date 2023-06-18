@@ -22,78 +22,81 @@ class AddContact extends StatelessWidget {
             height: double.infinity,
             color: backgroundColor,
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/svg/logo.png',
-                        width: 97,
-                        height: 97,
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: SizedBox(
-                      height: size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          TextField(
-                            style: const TextStyle(color: white),
-                            controller: controller,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'בן אנוש',
-                                disabledBorder: InputBorder.none,
-                                filled: true,
-                                fillColor: white),
-                          ),
-                          TextField(
-                            controller: controller,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'בן אנוש',
-                                filled: true,
-                                fillColor: white),
-                          ),
-                          TextField(
-                            controller: controller,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'בן אנוש',
-                                filled: true,
-                                fillColor: white),
-                          ),
-                          TextField(
-                            controller: controller,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                filled: true,
-                                labelText: 'בן אנוש',
-                                fillColor: white),
-                          ),
-                        ],
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/svg/logo.png',
+                          width: 97,
+                          height: 97,
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: SizedBox(
+                        height: size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextField(
+                              style: const TextStyle(color: white),
+                              controller: controller,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'בן אנוש',
+                                  disabledBorder: InputBorder.none,
+                                  filled: true,
+                                  fillColor: white),
+                            ),
+                            TextField(
+                              controller: controller,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'בן אנוש',
+                                  filled: true,
+                                  fillColor: white),
+                            ),
+                            TextField(
+                              controller: controller,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'בן אנוש',
+                                  filled: true,
+                                  fillColor: white),
+                            ),
+                            TextField(
+                              controller: controller,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  filled: true,
+                                  labelText: 'בן אנוש',
+                                  fillColor: white),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: size.width / 2,
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(primaryColor)),
-                        onPressed: () {},
-                        child: const CustomText(
-                          fontSize: 16,
-                          color: white,
-                          text: "הוסף איש קשר",
-                        )),
-                  )
-                ],
+                    SizedBox(
+                      width: size.width / 2,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(primaryColor)),
+                          onPressed: () {},
+                          child: const CustomText(
+                            fontSize: 16,
+                            color: white,
+                            text: "הוסף איש קשר",
+                          )),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -102,10 +105,18 @@ class AddContact extends StatelessWidget {
       cupertino: (_, __) => CupertinoAppData(
         home: PlatformScaffold(
           cupertino: (_, __) => CupertinoPageScaffoldData(
-            body: Container(
-              child: CupertinoTextField(
-                placeholder: "חפש בן אדם",
-                placeholderStyle: GoogleFonts.heebo()
+            body: Center(
+              child: Container(
+                color: backgroundColor,
+                child: CupertinoFormSection(
+                  children: [
+                    CupertinoTextField(
+                        textDirection: TextDirection.rtl,
+                        placeholder: "חפש בן אדם",
+                        placeholderStyle:
+                            GoogleFonts.heebo(color: primaryColor))
+                  ],
+                ),
               ),
             ),
           ),

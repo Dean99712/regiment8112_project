@@ -25,24 +25,25 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         ),
       );
     } else {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: SearchBar(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width / 1.3,
-          ),
-          elevation: MaterialStateProperty.all(0),
-          textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
-          hintText: 'חפש...',
-          shape: MaterialStateProperty.all(
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-            ),
-          ),
-      ),
-        );
+      return Container();
+      // return Directionality(
+      //   textDirection: TextDirection.rtl,
+      //   child: SearchBar(
+      //     constraints: BoxConstraints(
+      //       maxWidth: MediaQuery.of(context).size.width / 1.3,
+      //     ),
+      //     elevation: MaterialStateProperty.all(0),
+      //     textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
+      //     hintText: 'חפש...',
+      //     shape: MaterialStateProperty.all(
+      //       const RoundedRectangleBorder(
+      //         borderRadius: BorderRadius.all(
+      //           Radius.circular(10.0),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // );
     }
   }
 

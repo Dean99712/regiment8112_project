@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
-import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
@@ -51,26 +50,29 @@ class _LoginPageState extends State<LoginPage> {
                 Image.asset("assets/svg/logo.png", height: 210, width: 210),
                 Text(
                   'חרמ"ש מסייעת',
-                  style:
-                      GoogleFonts.rubikDirt(fontSize: 32, color: primaryColor),
+                  style: GoogleFonts.rubikDirt(
+                      fontSize: 32,
+                      color: const Color.fromRGBO(86, 154, 82, 1)),
                 ),
                 Text(
                   "8112",
-                  style:
-                      GoogleFonts.rubikDirt(fontSize: 90, color: primaryColor),
+                  style: GoogleFonts.rubikDirt(
+                      fontSize: 90,
+                      color: const Color.fromRGBO(86, 154, 82, 1)),
                 ),
                 CustomTextField(controller: controller, text: "מספר טלפון"),
-                CustomButton(
-                    text: "לקבלת קוד חד פעמי",
-                    function: () async {
-                      dynamic result = await auth.signInAnon();
-                      if (result != null) {
-                        print("Success");
-                        widget.start();
-                      } else {
-                        print("Error");
-                      }
-                    }),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: CustomButton(text: "לקבלת קוד חד פעמי", function: () async {
+                        dynamic result = await auth.signInAnon();
+                        if (result != null) {
+                          print("Success");
+                          widget.start();
+                        } else {
+                          print("Error");
+                        }
+                      }),
+                ),
                 Container(
                   padding: const EdgeInsets.only(top: 24),
                   child: SizedBox(

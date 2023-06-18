@@ -45,6 +45,8 @@ class _AllImagesState extends State<AllImages> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -130,9 +132,8 @@ class _AllImagesState extends State<AllImages> {
               child: PlatformAppBar(
                 cupertino: (_, __) => CupertinoNavigationBarData(
                   transitionBetweenRoutes: true,
-                  backgroundColor: const Color.fromRGBO(60, 58, 59, 0.5),
                   title: const CustomText(
-                      fontSize: 16, color: white, text: "חזרה"),
+                      fontSize: 18,color: primaryColor, text: "כל התמונות", fontWeight: FontWeight.w500,),
                 ),
                 material: (_, __) => MaterialAppBarData(
                     backgroundColor: primaryColor,
@@ -153,7 +154,8 @@ class _AllImagesState extends State<AllImages> {
                   // onTap: widget.switchScreen,
                   child: Icon(
                     Icons.adaptive.arrow_back,
-                    color: white,
+                    color: isIos ? primaryColor : white,
+                    size: 18,
                   ),
                 ),
               ),

@@ -24,14 +24,26 @@ class ImagesPreview extends StatefulWidget {
   State<ImagesPreview> createState() => _ImagesPreviewState();
 }
 
-// late Query<Map<String, dynamic>> _photos;
 StorageService _storageService = StorageService();
+
+List<Album> imagesList = [];
 
 class _ImagesPreviewState extends State<ImagesPreview> {
   @override
   void initState() {
-    // _photos = ;
+    getPhotosFromAlbum("קו אביטל 23");
     super.initState();
+  }
+
+  Future<List<Album>> getPhotosFromAlbum(String childName) async {
+    var photos = await _storageService.getPhotos(childName).limit(70).get();
+
+    final albums = photos.docs.map((doc) => Album.fromSnapshot(doc)).toList();
+
+    setState(() {
+      imagesList = albums;
+    });
+    return albums;
   }
 
   @override
@@ -89,7 +101,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
 
                           return InkWell(
                             onTap: () {
-                              print(photo);
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ImageGallery(images: imagesList,index: index,)));
                             },
                             child: CachedNetworkImage(
                               imageUrl: photo,
@@ -130,11 +142,11 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                           builder: (context) => const AllImages(title: ""),
                         ));
                   },
-                  child: const Row(
+                  child:Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.arrow_back_ios_new,
                         color: primaryColor,
