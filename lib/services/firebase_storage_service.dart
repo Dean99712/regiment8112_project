@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:regiment8112_project/models/album.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -22,30 +23,31 @@ class StorageService {
         final customMetaData = SettableMetadata(contentType: "image/jpeg");
         item.updateMetadata(customMetaData);
       }
-      // addPhotosToAlbum(childName, url);
+      addPhotosToAlbum(childName, url);
     }
     return itemList;
   }
 
   void addPhotosToAlbum(String childName, String url) async {
-    var uuid = _auth.currentUser!.uid;
     var collection =
-        _firestore.collection("albums")
-            .doc(uuid)
-            .collection(childName);
+        _firestore.collection("albums").doc(childName).collection(childName);
 
-    return collection.doc().set({"albumName": childName, "imageUrl": url});
+    var album = Album(title: childName, imageUrl: url).toJson();
+
+    return collection.doc().set(album);
   }
 
-  CollectionReference<Map<String, dynamic>> getPhotos(String childName) {
-    return _firestore.collection(childName);
-  }
-
-  Query<Map<String, dynamic>> getAllPhotos() {
-    return _firestore.collectionGroup('');
-  }
-
-  Query<Map<String, dynamic>> getAlbumByName(String childName) {
+  Query<Map<String, dynamic>> getPhotos(String childName) {
     return _firestore.collectionGroup(childName);
+  }
+
+  void getAllAlbums(String childName) async {
+    final parentCollection = _firestore.collection("albums").snapshots();
+    parentCollection.forEach((element) {
+      final docs = element.docs;
+      docs.forEach((item) {
+        print(item.reference.path);
+      });
+    });
   }
 }

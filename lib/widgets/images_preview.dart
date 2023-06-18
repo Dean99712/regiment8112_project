@@ -7,7 +7,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' as intel;
+import 'package:regiment8112_project/models/album.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
+import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../services/firebase_storage_service.dart';
 import '../utils/colors.dart';
 import 'custom_text.dart';
@@ -22,20 +24,18 @@ class ImagesPreview extends StatefulWidget {
   State<ImagesPreview> createState() => _ImagesPreviewState();
 }
 
-// late CollectionReference<Map<String, dynamic>> _data;
-late Query<Map<String, dynamic>> _photos;
+// late Query<Map<String, dynamic>> _photos;
 StorageService _storageService = StorageService();
 
 class _ImagesPreviewState extends State<ImagesPreview> {
   @override
   void initState() {
-    _photos = _storageService.getAlbumByName(widget.text);
+    // _photos = ;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var photos = _photos;
     var formatDate = initializeDateFormatting('he', '').then((_) {
       var date = DateTime.now();
       return intel.DateFormat('yMMMM', 'he').format(date);
@@ -66,9 +66,9 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                 ],
               ),
               FirestoreQueryBuilder<Map<String, dynamic>>(
-                query: photos,
+                query: _storageService.getPhotos(widget.text),
+                pageSize: 70,
                 builder: (context, snapshot, child) {
-                  print(snapshot.docs.length);
                   var docs = snapshot.docs;
                   if (snapshot.hasData) {
                     return Expanded(
@@ -87,11 +87,17 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                         itemBuilder: (BuildContext context, int index) {
                           String photo = docs[index]["imageUrl"];
 
-                          return CachedNetworkImage(
-                            imageUrl: photo,
-                            maxHeightDiskCache: 275,
-                            fadeInDuration: const Duration(milliseconds: 150),
-                            fit: BoxFit.fill,
+                          return InkWell(
+                            onTap: () {
+                              print(photo);
+                            },
+                            child: CachedNetworkImage(
+                              imageUrl: photo,
+                              maxHeightDiskCache: 275,
+                              fadeInDuration:
+                                  const Duration(milliseconds: 150),
+                              fit: BoxFit.fill,
+                            ),
                           );
                         },
                       ),
@@ -116,12 +122,12 @@ class _ImagesPreviewState extends State<ImagesPreview> {
               ),
               SizedBox(
                 width: double.infinity,
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AllImages(),
+                          builder: (context) => const AllImages(title: ""),
                         ));
                   },
                   child: const Row(

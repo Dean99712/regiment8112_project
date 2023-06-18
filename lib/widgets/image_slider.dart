@@ -1,21 +1,52 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:googleapis/admob/v1.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class ImageGallery extends StatelessWidget {
-  const ImageGallery({required this.imagesList, super.key});
+import '../models/album.dart';
 
-  final List<String> imagesList;
+class ImageGallery extends StatelessWidget {
+  const ImageGallery({required this.images, required this.index, super.key});
+
+  final int index;
+  final List<Album> images;
 
   @override
   Widget build(BuildContext context) {
-    return PhotoViewGallery.builder(
-        itemCount: imagesList.length,
-        builder: (context, index) {
-          final imageUrl = imagesList[index];
-
-          return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(imageUrl),
-          );
-        });
+    return Scaffold(
+      backgroundColor: Colors.black,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
+      body: Center(
+        child: SizedBox(
+            width: double.infinity,
+            height: 450,
+            child: Hero(
+              tag: images[index].imageUrl,
+              child: PhotoViewGallery.builder(
+                itemCount: images.length,
+                builder: (context, index) =>
+                    PhotoViewGalleryPageOptions.customChild(
+                  child: CachedNetworkImage(
+                    imageUrl: images[index].imageUrl,
+                    maxHeightDiskCache: 750,
+                    fadeInDuration: const Duration(milliseconds: 100),
+                    fit: BoxFit.fill,
+                  ),
+                  minScale: PhotoViewComputedScale.covered,
+                  // heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
+                ),
+                pageController: PageController(initialPage: index),
+                enableRotation: true,
+              ),
+            )),
+      ),
+    );
   }
 }

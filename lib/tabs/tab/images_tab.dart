@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
 import 'package:regiment8112_project/widgets/images_preview.dart';
 
@@ -12,6 +13,9 @@ class ImagesTab extends StatefulWidget {
 }
 
 class _ImagesTabState extends State<ImagesTab> {
+
+  // final StorageService _storageService = StorageService();
+
   var activeScreen = 'images-preview';
 
   void switchScreen() {
@@ -31,7 +35,12 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
+    // printData("folder");
   }
+
+  // Future<List> printData(String childName) async {
+  //   // return await _storageService.get(childName);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +50,10 @@ class _ImagesTabState extends State<ImagesTab> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const AllImages(),
+            builder: (context) => const AllImages(title: "קו אביטל 23"),
           ),
         );
       }, "קו אביטל 23"),
     );
-    // return activeScreen == 'images-preview'
-    //     ? ImagesPreview(switchScreen, "קו אביטל")
-    //     : AllImagesTab(switchScreen);
   }
 }
