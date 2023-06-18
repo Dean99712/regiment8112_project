@@ -1,13 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:regiment8112_project/data/images.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
-import 'package:regiment8112_project/services/images_manager.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../models/album.dart';
@@ -43,9 +38,16 @@ class _AllImagesState extends State<AllImages> {
     return albums;
   }
 
+  Stream<List<Album>> photosSnapshot(String childName) {
+    var photos = _storageService.getPhotos(childName).snapshots();
+
+    final albums = photos.map((snapshot) =>
+        snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
+    return albums;
+  }
+
   @override
   Widget build(BuildContext context) {
-
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -61,33 +63,60 @@ class _AllImagesState extends State<AllImages> {
         ),
         body: Stack(
           children: [
-            GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: 2, mainAxisSpacing: 2, crossAxisCount: 4),
-                itemCount: 30,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ImageGallery(images: imagesList, index: index),
-                        ),
-                      );
-                    },
-                    child: Hero(
-                      tag: imagesList[index].imageUrl,
-                      child: CachedNetworkImage(
-                        maxHeightDiskCache: 250,
-                        fit: BoxFit.fill,
-                        imageUrl: imagesList[index].imageUrl,
-                        fadeInDuration: const Duration(milliseconds: 150),
+            StreamBuilder(
+              stream: photosSnapshot("קו אביטל 23"),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2,
+                              crossAxisCount: 4),
+                      itemCount: 50,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ImageGallery(
+                                    images: imagesList, index: index),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: imagesList[index].imageUrl,
+                            child: CachedNetworkImage(
+                              maxHeightDiskCache: 150,
+                              fit: BoxFit.fill,
+                              imageUrl: imagesList[index].imageUrl,
+                              fadeInDuration: const Duration(milliseconds: 150),
+                            ),
+                          ),
+                        );
+                      });
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: PlatformCircularProgressIndicator(
+                      material: (_, __) => MaterialProgressIndicatorData(
+                        color: secondaryColor,
+                      ),
+                      cupertino: (_, __) => CupertinoProgressIndicatorData(
+                        animating: true
                       ),
                     ),
                   );
-                }),
+                }
+                return Center(
+                  child: Container(
+                    child: const Text("No results"),
+                  ),
+                );
+              },
+            ),
 
             // FirestoreQueryBuilder<Map<String, dynamic>>(
             //   query: _storageService.getPhotos("קו אביטל 23"),
@@ -133,7 +162,11 @@ class _AllImagesState extends State<AllImages> {
                 cupertino: (_, __) => CupertinoNavigationBarData(
                   transitionBetweenRoutes: true,
                   title: const CustomText(
-                      fontSize: 18,color: primaryColor, text: "כל התמונות", fontWeight: FontWeight.w500,),
+                    fontSize: 18,
+                    color: primaryColor,
+                    text: "כל התמונות",
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 material: (_, __) => MaterialAppBarData(
                     backgroundColor: primaryColor,

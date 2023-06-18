@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -26,7 +25,7 @@ class ImageGallery extends StatelessWidget {
       body: Center(
         child: SizedBox(
             width: double.infinity,
-            height: 450,
+            height: 400,
             child: Hero(
               tag: images[index].imageUrl,
               child: PhotoViewGallery.builder(
@@ -37,10 +36,9 @@ class ImageGallery extends StatelessWidget {
                     imageUrl: images[index].imageUrl,
                     maxHeightDiskCache: 750,
                     fadeInDuration: const Duration(milliseconds: 100),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitWidth,
                   ),
                   minScale: PhotoViewComputedScale.covered,
-                  // heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
                 ),
                 pageController: PageController(initialPage: index),
                 enableRotation: true,
