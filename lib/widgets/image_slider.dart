@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -34,13 +33,16 @@ class ImageGallery extends StatelessWidget {
                     PhotoViewGalleryPageOptions.customChild(
                   child: CachedNetworkImage(
                     imageUrl: images[index].imageUrl,
-                    maxHeightDiskCache: 750,
+                    maxHeightDiskCache: 1200,
                     fadeInDuration: const Duration(milliseconds: 100),
                     fit: BoxFit.fitWidth,
                   ),
                   minScale: PhotoViewComputedScale.covered,
                 ),
                 pageController: PageController(initialPage: index),
+                loadingBuilder: (context, event) => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
                 enableRotation: true,
               ),
             )),

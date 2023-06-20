@@ -32,7 +32,7 @@ class StorageService {
     var collection =
         _firestore.collection("albums").doc(childName).collection(childName);
 
-    var album = Album(title: childName, imageUrl: url).toJson();
+    var album = Album(title: childName, imageUrl: url, createdAt: DateTime.now().toString()).toJson();
 
     return collection.doc().set(album);
   }
