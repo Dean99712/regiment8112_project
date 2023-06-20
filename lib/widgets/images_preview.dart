@@ -27,8 +27,10 @@ class ImagesPreview extends StatefulWidget {
 StorageService _storageService = StorageService();
 
 List<Album> imagesList = [];
+// Query<Map<String, dynamic>> photosList;
 
 class _ImagesPreviewState extends State<ImagesPreview> {
+
   @override
   void initState() {
     getPhotosFromAlbum("קו אביטל 23");
@@ -36,11 +38,12 @@ class _ImagesPreviewState extends State<ImagesPreview> {
   }
 
   Future<List<Album>> getPhotosFromAlbum(String childName) async {
-    var photos = await _storageService.getPhotos(childName).limit(70).get();
-
+    final limit = _storageService.getPhotos(childName);
+    final photos = await _storageService.getPhotos(childName).limit(3).orderBy("createdAt", descending: true).get();
     final albums = photos.docs.map((doc) => Album.fromSnapshot(doc)).toList();
 
     setState(() {
+      // photosList = limit;
       imagesList = albums;
     });
     return albums;
@@ -63,12 +66,12 @@ class _ImagesPreviewState extends State<ImagesPreview> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(
-                    fontSize: 16,
-                    color: white,
-                    text: localData.data,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  // CustomText(
+                  //   fontSize: 16,
+                  //   color: white,
+                  //   text: localData.data,
+                  //   fontWeight: FontWeight.w600,
+                  // ),
                   CustomText(
                     fontSize: 16,
                     color: white,
@@ -78,58 +81,86 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                 ],
               ),
               FirestoreQueryBuilder<Map<String, dynamic>>(
-                query: _storageService.getPhotos(widget.text),
-                pageSize: 70,
+                // query: photosList,
+                query: _storageService.getPhotos("קו אביטל 23"),
+                pageSize: 3,
                 builder: (context, snapshot, child) {
                   var docs = snapshot.docs;
-                  if (snapshot.hasData) {
-                    return Expanded(
-                      child: GridView.builder(
-                        itemCount: 3,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverQuiltedGridDelegate(
-                            mainAxisSpacing: 5,
-                            crossAxisSpacing: 5,
-                            crossAxisCount: 3,
-                            pattern: const [
-                              QuiltedGridTile(2, 2),
-                              QuiltedGridTile(1, 1),
-                              QuiltedGridTile(1, 1),
-                            ]),
-                        itemBuilder: (BuildContext context, int index) {
-                          String photo = docs[index]["imageUrl"];
-
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ImageGallery(images: imagesList,index: index,)));
-                            },
-                            child: CachedNetworkImage(
-                              imageUrl: photo,
-                              maxHeightDiskCache: 275,
-                              fadeInDuration:
-                                  const Duration(milliseconds: 150),
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        },
+                  if (snapshot.hasError) {
+                    return const Padding(
+                      padding: EdgeInsets.all(75.0),
+                      child: Center(
+                        child: CustomText(
+                          fontSize: 18,
+                          color: Colors.black,
+                          text: "מצטערים... ישנה שגיאה. אנא נסו מאוחר יותר ",
+                        ),
                       ),
                     );
                   }
-                  return Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      PlatformCircularProgressIndicator(
-                        material: (_, __) => MaterialProgressIndicatorData(
-                          color: secondaryColor,
+                  if (snapshot.hasData) {
+                    return Wrap(
+                      children: [
+                        // CustomText(text: snapshot.docs.first.data()["title"], fontSize: 16),
+                        SizedBox(
+                          height: 290,
+                          child: GridView.builder(
+                            itemCount: 3,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverQuiltedGridDelegate(
+                                mainAxisSpacing: 5,
+                                crossAxisSpacing: 5,
+                                crossAxisCount: 3,
+                                pattern: const [
+                                  QuiltedGridTile(2, 2),
+                                  QuiltedGridTile(1, 1),
+                                  QuiltedGridTile(1, 1),
+                                ]),
+                            itemBuilder: (BuildContext context, int index) {
+                              String photo = docs[index]["imageUrl"];
+
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ImageGallery(
+                                                images: imagesList,
+                                                index: index,
+                                              )));
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: photo,
+                                  maxHeightDiskCache: 275,
+                                  fadeInDuration:
+                                      const Duration(milliseconds: 150),
+                                  fit: BoxFit.fill,
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                        cupertino: (_, __) => CupertinoProgressIndicatorData(
-                          animating: true,
-                        ),
-                      )
-                    ],
-                  ));
+                      ],
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 75.0),
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        PlatformCircularProgressIndicator(
+                          material: (_, __) => MaterialProgressIndicatorData(
+                            color: secondaryColor,
+                          ),
+                          cupertino: (_, __) => CupertinoProgressIndicatorData(
+                            animating: true,
+                          ),
+                        )
+                      ],
+                    )),
+                  );
                 },
               ),
               SizedBox(
@@ -142,11 +173,10 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                           builder: (context) => const AllImages(title: ""),
                         ));
                   },
-                  child:Row(
-                    mainAxisSize: MainAxisSize.min,
+                  child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.arrow_back_ios_new,
                         color: primaryColor,

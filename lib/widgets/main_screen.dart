@@ -27,17 +27,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     activeTab = 'news';
-    scrollController.addListener(() {
-      if (scrollController.offset < 50) {
-        setState(() {
-          isFab = true;
-        });
-      } else {
-        setState(() {
-          isFab = false;
-        });
-      }
-    });
     super.initState();
   }
 
@@ -47,9 +36,9 @@ class _MainScreenState extends State<MainScreen> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         floatingActionButton: activeTab != 'news' ? ScrollingFabAnimated(
-          width: 165,
+          width: 175,
           icon: activeTab == 'news'
-              ? const Icon(Icons.add_a_photo, color: white)
+              ? null
               : const Icon(Icons.person, color: white, size: 30),
           text: CustomText(
               fontSize: 16,
@@ -63,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
           color: primaryColor,
           duration: const Duration(milliseconds: 150),
           elevation: 0.0,
-          radius: 50.0,
+          radius: 40.0,
         )
         : null,
         body: Container(

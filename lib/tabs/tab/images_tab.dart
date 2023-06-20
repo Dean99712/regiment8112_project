@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
@@ -13,8 +14,7 @@ class ImagesTab extends StatefulWidget {
 }
 
 class _ImagesTabState extends State<ImagesTab> {
-
-  // final StorageService _storageService = StorageService();
+  // final StorageService _storage = StorageService();
 
   var activeScreen = 'images-preview';
 
@@ -35,25 +35,20 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
-    // printData("folder");
+    // initializeData();
+    // data = getAlbumsName();
   }
-
-  // Future<List> printData(String childName) async {
-  //   // return await _storageService.get(childName);
-  // }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 250,
-      child: ImagesPreview(() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AllImages(title: "קו אביטל 23"),
-          ),
-        );
-      }, "קו אביטל 23"),
-    );
+    // return Container();
+        return ImagesPreview(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AllImages(title: "קו אביטל 23"),
+            ),
+          );
+        }, "קו אביטל 23");
   }
 }

@@ -3,12 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Album {
   final String title;
   final String imageUrl;
+  final DateTime createdAt;
 
-  Album({required this.title, required this.imageUrl});
+  Album({required this.title, required this.imageUrl, required this.createdAt});
 
   Album.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : title = snapshot['title'],
-        imageUrl = snapshot['imageUrl'];
+        imageUrl = snapshot['imageUrl'],
+        createdAt = snapshot['createdAt'];
 
   // factory Album.fromSnapshot(DocumentSnapshot snapshot) {
   //   Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -18,8 +20,6 @@ class Album {
   //     imageUrl: data['imageUrl'],
   //   );
   // }
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'imageUrl': imageUrl,
-      };
+  Map<String, dynamic> toJson() =>
+      {'title': title, 'imageUrl': imageUrl, 'createdAt': createdAt};
 }

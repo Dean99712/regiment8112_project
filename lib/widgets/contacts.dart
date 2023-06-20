@@ -29,7 +29,7 @@ class Contacts extends StatelessWidget {
           controller: scrollController,
           physics: const BouncingScrollPhysics(),
           elements: contactsList,
-          groupBy: (element) => element['cls'],
+          groupBy: (element) => element['platoon'],
           itemComparator: (item1, item2) =>
               item1['name'].compareTo(item2['name']),
           // stickyHeaderBackgroundColor: const Color.fromRGBO(74, 72, 73, 1),
