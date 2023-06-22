@@ -8,6 +8,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart' as intel;
 import 'package:regiment8112_project/models/album.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
+import 'package:regiment8112_project/widgets/all_images2.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../services/firebase_storage_service.dart';
 import '../utils/colors.dart';
@@ -172,7 +173,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllImages(title: widget.text),
+                          builder: (context) => AllImages2(title: widget.text),
                         ));
                   },
                   child: const Row(

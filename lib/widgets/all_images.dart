@@ -74,6 +74,7 @@ class _AllImagesState extends State<AllImages> {
   @override
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -219,7 +220,7 @@ class _AllImagesState extends State<AllImages> {
                             tag: photos[index].imageUrl,
                             child: CachedNetworkImage(
                               maxHeightDiskCache:
-                                  _numOfAxisCount == 1 ? 1200 : 275,
+                                  _numOfAxisCount == 1 ? 1200 : 600,
                               fit: BoxFit.fill,
                               imageUrl: photos[index].imageUrl,
                               fadeInDuration: const Duration(milliseconds: 150),
