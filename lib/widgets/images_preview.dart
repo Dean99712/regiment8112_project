@@ -173,7 +173,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllImages2(title: widget.text),
+                          builder: (context) => AllImages(title: widget.text),
                         ));
                   },
                   child: const Row(

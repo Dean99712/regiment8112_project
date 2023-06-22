@@ -89,12 +89,6 @@ class _AllImagesState extends State<AllImages> {
         body: Column(
           children: [
             PlatformAppBar(
-              // title: CustomText(
-              //   fontSize: 16,
-              //   color: white,
-              //   text: widget.title,
-              //   fontWeight: FontWeight.w600,
-              // ),
               cupertino: (_, __) => CupertinoNavigationBarData(
                 trailing: const CustomText(
                   fontSize: 16,
@@ -220,7 +214,7 @@ class _AllImagesState extends State<AllImages> {
                             tag: photos[index].imageUrl,
                             child: CachedNetworkImage(
                               maxHeightDiskCache:
-                                  _numOfAxisCount == 1 ? 1200 : 600,
+                                  _numOfAxisCount == 1 ? 1200 : 275,
                               fit: BoxFit.fill,
                               imageUrl: photos[index].imageUrl,
                               fadeInDuration: const Duration(milliseconds: 150),
