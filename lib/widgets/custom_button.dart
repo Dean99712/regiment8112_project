@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
 
     return isIos
         ? Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: CupertinoButton(
               color: primaryColor,
               onPressed: function,

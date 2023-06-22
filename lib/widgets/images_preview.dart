@@ -176,10 +176,10 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                           builder: (context) => AllImages2(title: widget.text),
                         ));
                   },
-                  child: const Row(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.arrow_back_ios_new,
                         color: primaryColor,

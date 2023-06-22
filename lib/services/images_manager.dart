@@ -1,6 +1,6 @@
 import 'package:image_picker/image_picker.dart';
 
-class ImagesManagerService {
+class ImagesService {
 
   Future<List<XFile>> selectImages(
       ImagePicker imagePicker, String childName) async {

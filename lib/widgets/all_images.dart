@@ -31,7 +31,7 @@ class _AllImagesState extends State<AllImages> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final StorageService _storageService = StorageService();
-  final ImagesManagerService _imagesService = ImagesManagerService();
+  final ImagesService _imagesService = ImagesService();
 
   @override
   void initState() {
@@ -75,202 +75,183 @@ class _AllImagesState extends State<AllImages> {
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: primaryColor,
-          elevation: 0.0,
-          onPressed: () {
-            selectedImages(widget.title);
-          },
-          child: const Icon(Icons.add_a_photo),
-        ),
-        body: Column(
-          children: [
-            PlatformAppBar(
-              // title: CustomText(
-              //   fontSize: 16,
-              //   color: white,
-              //   text: widget.title,
-              //   fontWeight: FontWeight.w600,
-              // ),
-              cupertino: (_, __) => CupertinoNavigationBarData(
-                trailing: const CustomText(
-                  fontSize: 16,
-                  color: primaryColor,
-                  text: "סיים",
-                ),
-                transitionBetweenRoutes: true,
-                title: const CustomText(
-                  fontSize: 18,
-                  color: primaryColor,
-                  text: "כל התמונות",
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              material: (_, __) => MaterialAppBarData(
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        if (_numOfAxisCount != 6) {
-                          setState(() {
-                            _numOfAxisCount += 1;
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.zoom_out),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          if (_numOfAxisCount != 1) {
-                            setState(() {
-                              _numOfAxisCount -= 1;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.zoom_in)),
-                  ],
-                  backgroundColor: primaryColor,
-                  title: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: CustomText(
-                      fontSize: 16,
-                      color: white,
-                      text: widget.title,
-                    ),
-                  )),
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                // onTap: widget.switchScreen,
-                child: Icon(
-                  Icons.adaptive.arrow_back,
-                  color: isIos ? primaryColor : white,
-                  size: 18,
-                ),
-              ),
-            ),
+    return Column(
+      children: [
+        // PlatformAppBar(
+        //   cupertino: (_, __) => CupertinoNavigationBarData(
+        //     backgroundColor: Colors.transparent,
+        //     trailing: const CustomText(
+        //       fontSize: 16,
+        //       color: primaryColor,
+        //       text: "סיים",
+        //     ),
+        //     transitionBetweenRoutes: true,
+        //     title: const CustomText(
+        //       fontSize: 18,
+        //       color: primaryColor,
+        //       text: "כל התמונות",
+        //       fontWeight: FontWeight.w500,
+        //     ),
+        //   ),
+        //   material: (_, __) => MaterialAppBarData(
+        //       actions: [
+        //         IconButton(
+        //           onPressed: () {
+        //             if (_numOfAxisCount != 6) {
+        //               setState(() {
+        //                 _numOfAxisCount += 1;
+        //               });
+        //             }
+        //           },
+        //           icon: const Icon(Icons.zoom_out),
+        //         ),
+        //         IconButton(
+        //             onPressed: () {
+        //               if (_numOfAxisCount != 1) {
+        //                 setState(() {
+        //                   _numOfAxisCount -= 1;
+        //                 });
+        //               }
+        //             },
+        //             icon: const Icon(Icons.zoom_in)),
+        //       ],
+        //       backgroundColor: primaryColor,
+        //       title: GestureDetector(
+        //         onTap: () {
+        //           Navigator.pop(context);
+        //         },
+        //         child: CustomText(
+        //           fontSize: 16,
+        //           color: white,
+        //           text: widget.title,
+        //         ),
+        //       )),
+        //   leading: GestureDetector(
+        //     onTap: () {
+        //       Navigator.pop(context);
+        //     },
+        //     // onTap: widget.switchScreen,
+        //     child: Icon(
+        //       Icons.adaptive.arrow_back,
+        //       color: isIos ? primaryColor : white,
+        //       size: 18,
+        //     ),
+        //   ),
+        // ),
 
-            // FirestoreQueryBuilder<Map<String, dynamic>>(
-            //   query: _storageService.getPhotos("קו אביטל 23"),
-            //   pageSize: 70,
-            //   builder: (context, snapshot, child) {
-            //     return GridView.builder(
-            //         physics: const BouncingScrollPhysics(),
-            //         gridDelegate:
-            //             const SliverGridDelegateWithFixedCrossAxisCount(
-            //                 crossAxisCount: 4),
-            //         itemCount: snapshot.docs.length,
-            //         itemBuilder: (context, index) {
-            //           String photo = snapshot.docs[index]['imageUrl'];
-            //
-            //           if (snapshot.hasMore) {
-            //             snapshot.fetchMore();
-            //           }
-            //           return GestureDetector(
-            //               onTap: () {
-            //                 // Navigator.push(context,
-            //                 //   MaterialPageRoute(builder: (context) => ,);
-            //               },
-            //               child: photo.contains("jpg") ||
-            //                       photo.contains("jpeg")
-            //                   ? CachedNetworkImage(
-            //                       maxHeightDiskCache: 250,
-            //                       fit: BoxFit.fill,
-            //                       imageUrl: photo,
-            //                       fadeInDuration:
-            //                           const Duration(milliseconds: 150),
-            //                     )
-            //                   : photo.contains("HEIC")
-            //                       ? Container()
-            //                       : Container());
-            //         });
-            //   },
-            // ),
-            StreamBuilder(
-              stream: _photosStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var photos = snapshot.data!;
-                  return Flexible(
-                    flex: 1,
-                    child: GridView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: 2,
-                          mainAxisSpacing: 2,
-                          crossAxisCount: _numOfAxisCount),
-                      itemCount: photos.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ImageGallery(images: photos, index: index),
-                              ),
-                            );
-                          },
-                          child: Hero(
-                            tag: photos[index].imageUrl,
-                            child: CachedNetworkImage(
-                              maxHeightDiskCache:
-                                  _numOfAxisCount == 1 ? 1200 : 600,
-                              fit: BoxFit.fill,
-                              imageUrl: photos[index].imageUrl,
-                              fadeInDuration: const Duration(milliseconds: 150),
-                            ),
+        // FirestoreQueryBuilder<Map<String, dynamic>>(
+        //   query: _storageService.getPhotos("קו אביטל 23"),
+        //   pageSize: 70,
+        //   builder: (context, snapshot, child) {
+        //     return GridView.builder(
+        //         physics: const BouncingScrollPhysics(),
+        //         gridDelegate:
+        //             const SliverGridDelegateWithFixedCrossAxisCount(
+        //                 crossAxisCount: 4),
+        //         itemCount: snapshot.docs.length,
+        //         itemBuilder: (context, index) {
+        //           String photo = snapshot.docs[index]['imageUrl'];
+        //
+        //           if (snapshot.hasMore) {
+        //             snapshot.fetchMore();
+        //           }
+        //           return GestureDetector(
+        //               onTap: () {
+        //                 // Navigator.push(context,
+        //                 //   MaterialPageRoute(builder: (context) => ,);
+        //               },
+        //               child: photo.contains("jpg") ||
+        //                       photo.contains("jpeg")
+        //                   ? CachedNetworkImage(
+        //                       maxHeightDiskCache: 250,
+        //                       fit: BoxFit.fill,
+        //                       imageUrl: photo,
+        //                       fadeInDuration:
+        //                           const Duration(milliseconds: 150),
+        //                     )
+        //                   : photo.contains("HEIC")
+        //                       ? Container()
+        //                       : Container());
+        //         });
+        //   },
+        // ),
+        StreamBuilder(
+          stream: _photosStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var photos = snapshot.data!;
+              return Flexible(
+                flex: 1,
+                child: GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
+                      crossAxisCount: _numOfAxisCount),
+                  itemCount: photos.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ImageGallery(images: photos, index: index),
                           ),
                         );
-                        // return CupertinoContextMenu(
-                        //   actions: <Widget>[
-                        //     CupertinoContextMenuAction(
-                        //       trailingIcon: const IconData(0xf37f,
-                        //           fontFamily: CupertinoIcons.iconFont,
-                        //           fontPackage:
-                        //               CupertinoIcons.iconFontPackage),
-                        //       child: const Text("Delete photo"),
-                        //       onPressed: () {
-                        //         // _firestore.collection("תיקייה").doc(documentsList[index]).delete();
-                        //       },
-                        //     )
-                        //   ],
                       },
-                    ),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: CustomText(
-                        fontSize: 16,
-                        color: Colors.black,
-                        text: "הראתה שגיאה, אנא נסו שוב מאוחר יותר"),
-                  );
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: PlatformCircularProgressIndicator(
-                      material: (_, __) => MaterialProgressIndicatorData(
-                        color: secondaryColor,
+                      child: Hero(
+                        tag: photos[index].imageUrl,
+                        child: CachedNetworkImage(
+                          maxHeightDiskCache: _numOfAxisCount == 1 ? 1200 : 600,
+                          fit: BoxFit.fill,
+                          imageUrl: photos[index].imageUrl,
+                          fadeInDuration: const Duration(milliseconds: 150),
+                        ),
                       ),
-                      cupertino: (_, __) =>
-                          CupertinoProgressIndicatorData(animating: true),
-                    ),
-                  );
-                }
-                return const Center(
-                  child: Text("אין מידע להציג"),
-                );
-              },
-            ),
-          ],
+                    );
+                    // return CupertinoContextMenu(
+                    //   actions: <Widget>[
+                    //     CupertinoContextMenuAction(
+                    //       trailingIcon: const IconData(0xf37f,
+                    //           fontFamily: CupertinoIcons.iconFont,
+                    //           fontPackage:
+                    //               CupertinoIcons.iconFontPackage),
+                    //       child: const Text("Delete photo"),
+                    //       onPressed: () {
+                    //         // _firestore.collection("תיקייה").doc(documentsList[index]).delete();
+                    //       },
+                    //     )
+                    //   ],
+                  },
+                ),
+              );
+            }
+            if (snapshot.hasError) {
+              return const Center(
+                child: CustomText(
+                    fontSize: 16,
+                    color: Colors.black,
+                    text: "הראתה שגיאה, אנא נסו שוב מאוחר יותר"),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: PlatformCircularProgressIndicator(
+                  material: (_, __) => MaterialProgressIndicatorData(
+                    color: secondaryColor,
+                  ),
+                  cupertino: (_, __) =>
+                      CupertinoProgressIndicatorData(animating: true),
+                ),
+              );
+            }
+            return const Center(
+              child: Text("אין מידע להציג"),
+            );
+          },
         ),
-      ),
+      ],
     );
   }
 }
