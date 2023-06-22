@@ -1,35 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/bubble.dart';
-import '../../data/news.dart';
 import '../../models/news.dart';
+import '../../services/news_service.dart';
 
-class NewsTab extends StatelessWidget {
+class NewsTab extends StatefulWidget {
   const NewsTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<News> data = news;
+  State<NewsTab> createState() => _NewsTabState();
+}
 
+class _NewsTabState extends State<NewsTab> {
+  final NewsService _service = NewsService();
+  List<News> newsList = [];
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    getNewsFromDatabase();
+    super.initState();
+  }
+
+  Future getNewsFromDatabase() async {
+    setState(() {
+      isLoading = true;
+    });
+    var collection = await _service.getAllNews();
+    var documents =
+        collection.docs.map((doc) => News.fromSnapshot(doc)).toList();
+
+    setState(() {
+      isLoading = false;
+      newsList = documents;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         Flex(
-          direction: Axis.horizontal,
+          direction: Axis.vertical,
           children: [
             Expanded(
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    child: Bubble(
-                      date: '04/05/2023',
-                      text: data[index].news,
+              child: !isLoading
+                  ? ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: newsList.length,
+                      itemBuilder: (context, index) {
+                        var timestamp =
+                            newsList[index].createdAt.millisecondsSinceEpoch;
+                        final date =
+                            DateTime.fromMillisecondsSinceEpoch(timestamp);
+                        final newDate = intl.DateFormat('yMd', 'en-US').format(date);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 8),
+                          child: Bubble(
+                            date: newDate,
+                            text: newsList[index].news,
+                          ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: PlatformCircularProgressIndicator(
+                        cupertino: (_, __ ) => CupertinoProgressIndicatorData(
+                          animating: true,
+                        ),
+                        material: (_, __) => MaterialProgressIndicatorData(
+                          color: secondaryColor
+                        ),
+                      ),
                     ),
-                  );
-                },
-              ),
             )
           ],
         ),

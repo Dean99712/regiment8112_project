@@ -31,12 +31,12 @@ class StorageService {
   void addPhotosToAlbum(String childName, String url) async {
     var parentCollection = _firestore.collection("albums").doc(childName);
 
-    final data = {"albumName": childName, "createdAt": DateTime.now()};
+    final data = {"albumName": childName, "createdAt": Timestamp.now()};
     parentCollection.set(data);
 
     final collection = parentCollection.collection(childName);
     var album =
-        Album(title: childName, imageUrl: url, createdAt: DateTime.now())
+        Album(title: childName, imageUrl: url, createdAt: Timestamp.now())
             .toJson();
 
     return collection.doc().set(album);
@@ -46,8 +46,8 @@ class StorageService {
     return _firestore.collectionGroup(childName);
   }
 
-  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getAllAlbums() async {
-    return _firestore.collection("albums").snapshots();
+  CollectionReference<Map<String, dynamic>> getAllAlbums() {
+    return _firestore.collection("albums");
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getCollectionDocs(

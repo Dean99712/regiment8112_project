@@ -14,8 +14,7 @@ class ImagesTab extends StatefulWidget {
 }
 
 class _ImagesTabState extends State<ImagesTab> {
-  // final StorageService _storage = StorageService();
-
+  final StorageService _storage = StorageService();
   var activeScreen = 'images-preview';
 
   void switchScreen() {
@@ -35,20 +34,34 @@ class _ImagesTabState extends State<ImagesTab> {
   @override
   void initState() {
     super.initState();
-    // initializeData();
-    // data = getAlbumsName();
+  }
+
+  Future<Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      getDocuments() async {
+    var collection = await _storage.getAllAlbums().get();
+    final data = collection.docs.map((e) => e);
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
-    // return Container();
-        return ImagesPreview(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AllImages(title: "קו אביטל 23"),
-            ),
-          );
-        }, "קו אביטל 23");
+    return FutureBuilder(
+      future: getDocuments(),
+      builder: (context, snapshot) {
+        var list = snapshot.data!.map((e) => e.data()).toList();
+        return ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            String albumName = list[index]['albumName'];
+            Timestamp createdAt = list[index]["createdAt"];
+            return ImagesPreview(
+              date: createdAt,
+              text: albumName,
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Album {
   final String title;
   final String imageUrl;
-  final DateTime createdAt;
+  final Timestamp createdAt;
 
   Album({required this.title, required this.imageUrl, required this.createdAt});
 

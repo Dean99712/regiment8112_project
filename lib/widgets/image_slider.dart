@@ -25,7 +25,6 @@ class ImageGallery extends StatelessWidget {
       body: Center(
         child: SizedBox(
             width: double.infinity,
-            height: 400,
             child: Hero(
               tag: images[index].imageUrl,
               child: PhotoViewGallery.builder(
@@ -38,7 +37,7 @@ class ImageGallery extends StatelessWidget {
                     fadeInDuration: const Duration(milliseconds: 100),
                     fit: BoxFit.fitWidth,
                   ),
-                  minScale: PhotoViewComputedScale.covered,
+                  minScale: PhotoViewComputedScale.contained,
                 ),
                 pageController: PageController(initialPage: index),
                 loadingBuilder: (context, event) => const Center(child: CircularProgressIndicator.adaptive(),),
