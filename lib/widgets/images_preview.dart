@@ -136,10 +136,17 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                     );
                   }
                   if (snapshot.isFetching) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 75.0),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 75.0),
                       child: Center(
-                        child: CircularProgressIndicator.adaptive(),
+                        child: PlatformCircularProgressIndicator(
+                          material: (_, __) => MaterialProgressIndicatorData(
+                            color: secondaryColor,
+                          ),
+                          cupertino: (_, __) => CupertinoProgressIndicatorData(
+                            animating: true,
+                          ),
+                        ),
                       ),
                     );
                   }
@@ -176,10 +183,10 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                           builder: (context) => AllImages2(title: widget.text),
                         ));
                   },
-                  child: Row(
+                  child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.arrow_back_ios_new,
                         color: primaryColor,

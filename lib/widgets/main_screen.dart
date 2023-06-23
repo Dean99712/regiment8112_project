@@ -31,30 +31,43 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        floatingActionButton: activeTab != 'news' ? ScrollingFabAnimated(
-          width: 175,
-          icon: activeTab == 'news'
-              ? null
-              : const Icon(Icons.person, color: white, size: 30),
-          text: CustomText(
-              fontSize: 16,
-              color: white,
-              text: activeTab != 'news' ? 'הוסף איש קשר' : null),
-          onPress: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddContact(),));
-          },
-          scrollController: scrollController,
-          animateIcon: false,
-          color: primaryColor,
-          duration: const Duration(milliseconds: 150),
-          elevation: 0.0,
-          radius: 40.0,
-        )
-        : null,
+        floatingActionButton: activeTab != 'news'
+            ? ScrollingFabAnimated(
+                width: 175,
+                icon: activeTab == 'news'
+                    ? null
+                    : const Icon(Icons.person, color: white, size: 30),
+                text: CustomText(
+                    fontSize: 16,
+                    color: white,
+                    text: activeTab != 'news' ? 'הוסף איש קשר' : null),
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddContact(),
+                    ),
+                  );
+                },
+                scrollController: scrollController,
+                animateIcon: false,
+                color: primaryColor,
+                duration: const Duration(milliseconds: 150),
+                elevation: 0.0,
+                radius: 40.0,
+          inverted: true,
+              )
+            : null,
         body: Container(
           decoration: BoxDecoration(
               image: const DecorationImage(
@@ -80,7 +93,6 @@ class _MainScreenState extends State<MainScreen> {
                   }),
                 ),
                 Expanded(
-
                   child: activeTab == 'news'
                       ? SwipeableTab(scrollController)
                       : Contacts(scrollController),
