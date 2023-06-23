@@ -73,7 +73,10 @@ class _AllImages2State extends State<AllImages2> {
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     CupertinoSliverNavigationBar(
-                      largeTitle: Text(widget.title, style: GoogleFonts.heebo(fontWeight: FontWeight.w600),),
+                      largeTitle: Text(
+                        widget.title,
+                        style: GoogleFonts.heebo(fontWeight: FontWeight.w600),
+                      ),
                       trailing: CupertinoButton(
                         child: const Icon(
                           CupertinoIcons.ellipsis_circle,
@@ -106,35 +109,31 @@ class _AllImages2State extends State<AllImages2> {
           return MaterialAppData(
               home: Scaffold(
             appBar: AppBar(
+              elevation: 0.0,
               actions: [
-                IconButton(
-                  onPressed: () {
-                    if (_numOfAxisCount != 6) {
-                      setState(() {
-                        _numOfAxisCount += 1;
-                      });
-                    }
+                PopupMenuButton(
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem(enabled: _numOfAxisCount != 1 ? true : false, child: TextButton.icon(onPressed: () {
+                        if(_numOfAxisCount != 1) {
+                          setState(() {
+                            _numOfAxisCount -= 1;
+                          });
+                        }
+                      }, icon: const Icon(Icons.zoom_in), label: const Text("zoom in"))),
+                      PopupMenuItem(child: TextButton.icon(onPressed: () {
+                        if(_numOfAxisCount != 6) {
+                          setState(() {
+                            _numOfAxisCount += 1;
+                          });
+                        }
+                      }, icon: const Icon(Icons.zoom_out), label: const Text("zoom out")))
+                    ];
                   },
-                  icon: const Icon(Icons.zoom_out),
-                ),
-                IconButton(
-                    onPressed: () {
-                      if (_numOfAxisCount != 1) {
-                        setState(() {
-                          _numOfAxisCount -= 1;
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.zoom_in)),
+                  icon: const Icon(Icons.more_horiz),
+                )
               ],
-              leadingWidth: 100,
-              leading: TextButton.icon(
-                label: CustomText(
-                  fontWeight: FontWeight.w500,
-                  text: "חזרה",
-                  fontSize: 16,
-                  color: color,
-                ),
+              leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -143,7 +142,7 @@ class _AllImages2State extends State<AllImages2> {
                   color: color,
                 ),
               ),
-              titleSpacing: 50.0,
+              centerTitle: true,
               title: CustomText(
                   fontSize: 18,
                   color: color,

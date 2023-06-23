@@ -1,13 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart' as intel;
 import 'package:regiment8112_project/models/album.dart';
-import 'package:regiment8112_project/widgets/all_images.dart';
 import 'package:regiment8112_project/widgets/all_images2.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../services/firebase_storage_service.dart';
@@ -26,7 +24,7 @@ class ImagesPreview extends StatefulWidget {
 
 StorageService _storageService = StorageService();
 
-List<Album> imagesList = [];
+late Stream<List<Album>> _imagesList;
 
 class _ImagesPreviewState extends State<ImagesPreview> {
   @override
@@ -35,62 +33,59 @@ class _ImagesPreviewState extends State<ImagesPreview> {
     super.initState();
   }
 
-  Future<Query<Map<String, dynamic>>> getPhotosFromAlbum(
-      String childName) async {
-    final limit = _storageService.getPhotos(childName).limit(3);
+  void getPhotosFromAlbum(String childName) {
+    var collection = _storageService
+        .getPhotos(childName)
+        .orderBy("createdAt", descending: true)
+        .limit(3)
+        .snapshots();
 
-    final photos = await _storageService.getPhotos(childName).limit(3).get();
-
-    final albums = photos.docs.map((doc) => Album.fromSnapshot(doc)).toList();
+    var albums = collection.map((snapshot) =>
+        snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
 
     setState(() {
-      imagesList = albums;
+      _imagesList = albums;
     });
-    return limit;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Query<Map<String, dynamic>>>(
-      future: getPhotosFromAlbum(widget.text),
-      builder: (context, snapshot) {
-        var data = snapshot.data!;
-        return Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            children: [
-              FirestoreQueryBuilder<Map<String, dynamic>>(
-                query: data,
-                pageSize: 3,
-                builder: (context, snapshot, child) {
-                  var docs = snapshot.docs;
+    return StreamBuilder<List<Album>>(
+        stream: _imagesList,
+        builder: (context, snapshot) {
+          var date = DateTime.fromMillisecondsSinceEpoch(
+              widget.date.millisecondsSinceEpoch);
+          var formattedDate = intel.DateFormat('yMMM').format(date);
 
-                  if (snapshot.hasData) {
-                    final date = DateTime.fromMillisecondsSinceEpoch(
-                        widget.date.millisecondsSinceEpoch);
-                    var formattedDate = intel.DateFormat('yMMMM').format(date);
-                    return Wrap(
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Wrap(
-                            textDirection: TextDirection.rtl,
-                            direction: Axis.horizontal,
-                            alignment: WrapAlignment.spaceBetween,
-                            children: [
-                              CustomText(
-                                text: widget.text,
-                                fontSize: 16,
-                                color: white,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              CustomText(
-                                text: formattedDate,
-                                fontSize: 16,
-                                color: white,
-                              ),
-                              SizedBox(
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Column(
+                children: [
+                  Wrap(
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Wrap(
+                          textDirection: TextDirection.rtl,
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                              text: widget.text,
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            CustomText(
+                              text: formattedDate,
+                              fontSize: 16,
+                              color: white,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15.0),
+                              child: SizedBox(
                                 height: 250,
                                 child: GridView.builder(
                                   itemCount: 3,
@@ -104,9 +99,10 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                                         QuiltedGridTile(1, 1),
                                         QuiltedGridTile(1, 1),
                                       ]),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    String photo = docs[index]["imageUrl"];
+                                  itemBuilder: (BuildContext context, int index) {
+                                    List<Album> imagesList = snapshot.data!;
+                                    String photo = imagesList[index].imageUrl;
+
                                     return InkWell(
                                       onTap: () {
                                         Navigator.push(
@@ -129,82 +125,60 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                                   },
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  if (snapshot.isFetching) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 75.0),
-                      child: Center(
-                        child: PlatformCircularProgressIndicator(
-                          material: (_, __) => MaterialProgressIndicatorData(
-                            color: secondaryColor,
-                          ),
-                          cupertino: (_, __) => CupertinoProgressIndicatorData(
-                            animating: true,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 75.0),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          PlatformCircularProgressIndicator(
-                            material: (_, __) => MaterialProgressIndicatorData(
-                              color: secondaryColor,
                             ),
-                            cupertino: (_, __) =>
-                                CupertinoProgressIndicatorData(
-                              animating: true,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllImages2(title: widget.text),
-                        ));
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Icon(
-                        Icons.arrow_back_ios_new,
-                        color: primaryColor,
-                        size: 16,
-                      ),
-                      CustomText(
-                        fontSize: 16,
-                        color: primaryColor,
-                        text: "לכל התמונות",
+                          ],
+                        ),
                       ),
                     ],
                   ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AllImages2(title: widget.text),
+                            ));
+                      },
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.arrow_back_ios_new,
+                            color: primaryColor,
+                            size: 16,
+                          ),
+                          CustomText(
+                            fontSize: 16,
+                            color: primaryColor,
+                            text: "לכל התמונות",
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 75.0),
+              child: Center(
+                child: PlatformCircularProgressIndicator(
+                  material: (_, __) => MaterialProgressIndicatorData(
+                    color: secondaryColor,
+                  ),
+                  cupertino: (_, __) => CupertinoProgressIndicatorData(
+                      radius: 15.0, color: primaryColor),
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
+            );
+          }
+          return Container();
+        });
   }
 }
