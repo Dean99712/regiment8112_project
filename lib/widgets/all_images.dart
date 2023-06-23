@@ -59,14 +59,15 @@ class _AllImagesState extends State<AllImages> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.itemCount);
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
     return StreamBuilder(
       stream: _photosStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var photos = snapshot.data!;
           return GridView.builder(
-            controller: widget.scrollController,
+            controller: isIOS ? null : widget.scrollController,
             physics: const BouncingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 2,
@@ -74,18 +75,10 @@ class _AllImagesState extends State<AllImages> {
                 crossAxisCount: widget.itemCount),
             itemCount: photos.length,
             itemBuilder: (context, index) {
-              return CupertinoContextMenu(
+              return isIOS ? CupertinoContextMenu(
                 actions: <Widget>[
                   CupertinoContextMenuAction(
-                    trailingIcon: const IconData(0xf37f,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage),
-                    child: const Text("Delete photo"),
-                    onPressed: () {
-                      // _firestore.collection("תיקייה").doc(documentsList[index]).delete();
-                    },
-                  ),
-                  CupertinoContextMenuAction(
+                    isDestructiveAction: true,
                     trailingIcon: const IconData(0xf37f,
                         fontFamily: CupertinoIcons.iconFont,
                         fontPackage: CupertinoIcons.iconFontPackage),
@@ -117,6 +110,25 @@ class _AllImagesState extends State<AllImages> {
                     ),
                   ),
                 ),
+              ) : GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ImageGallery(images: photos, index: index),
+                    ),
+                  );
+                },
+                child: Hero(
+                  tag: photos[index].imageUrl,
+                  child: CachedNetworkImage(
+                    maxHeightDiskCache: widget.itemCount == 1 ? 1200 : 600,
+                    fit: BoxFit.fill,
+                    imageUrl: photos[index].imageUrl,
+                    fadeInDuration: const Duration(milliseconds: 150),
+                  ),
+                ),
               );
             },
           );
@@ -136,7 +148,10 @@ class _AllImagesState extends State<AllImages> {
                 color: secondaryColor,
               ),
               cupertino: (_, __) =>
-                  CupertinoProgressIndicatorData(animating: true),
+                  CupertinoProgressIndicatorData(
+                    radius: 15.0,
+                      color: primaryColor,
+                      animating: true),
             ),
           );
         }

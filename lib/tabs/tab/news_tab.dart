@@ -70,7 +70,8 @@ class _NewsTabState extends State<NewsTab> {
                   : Center(
                       child: PlatformCircularProgressIndicator(
                         cupertino: (_, __ ) => CupertinoProgressIndicatorData(
-                          animating: true,
+                          radius: 15.0,
+                          color: primaryColor
                         ),
                         material: (_, __) => MaterialProgressIndicatorData(
                           color: secondaryColor

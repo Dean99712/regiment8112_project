@@ -67,110 +67,117 @@ class _AllImages2State extends State<AllImages2> {
   Widget build(BuildContext context) {
     return PlatformApp(
         debugShowCheckedModeBanner: false,
-        cupertino: (_, __) =>
-            CupertinoAppData(
+        cupertino: (_, __) => CupertinoAppData(
               home: CupertinoPageScaffold(
                 child: NestedScrollView(
-                  physics: const BouncingScrollPhysics(),
-                    headerSliverBuilder: (context, innerBoxIsScrolled) =>
-                    [
-                      CupertinoSliverNavigationBar(
-                        largeTitle: Text(widget.title,
-                            style: GoogleFonts.heebo(
-                                fontWeight: FontWeight.w600)),
-                        trailing: CupertinoButton(
-                          child: const Icon(CupertinoIcons.ellipsis_circle,
-                            color: primaryColor,),
-                          onPressed: () {},
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    CupertinoSliverNavigationBar(
+                      largeTitle: Text(widget.title, style: GoogleFonts.heebo(fontWeight: FontWeight.w600),),
+                      trailing: CupertinoButton(
+                        child: const Icon(
+                          CupertinoIcons.ellipsis_circle,
+                          color: primaryColor,
                         ),
-                        leading: CupertinoButton(
-                          child: const Icon(
-                            CupertinoIcons.plus,
-                            color: primaryColor,
-                          ),
-                          onPressed: () {
-                            selectedImages(widget.title);
-                          },
+                        onPressed: () {},
+                      ),
+                      leading: CupertinoButton(
+                        child: const Icon(
+                          CupertinoIcons.plus,
+                          color: primaryColor,
                         ),
-                      )
-                    ],
-                    body: AllImages(
-                      _numOfAxisCount,
-                      title: widget.title,
-                      scrollOffset: _scrollControllerOffset,
-                      scrollController: _scrollController,
-                    )),
+                        onPressed: () {
+                          selectedImages(widget.title);
+                        },
+                      ),
+                    )
+                  ],
+                  body: AllImages(
+                    _numOfAxisCount,
+                    title: widget.title,
+                    scrollOffset: _scrollControllerOffset,
+                    scrollController: _scrollController,
+                  ),
+                ),
               ),
             ),
         material: (_, __) {
           var color = _scrollControllerOffset < 50 ? white : white;
           return MaterialAppData(
-            home: Scaffold(
-              appBar: AppBar(
-                actions: [
-                  IconButton(
+              home: Scaffold(
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    if (_numOfAxisCount != 6) {
+                      setState(() {
+                        _numOfAxisCount += 1;
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.zoom_out),
+                ),
+                IconButton(
                     onPressed: () {
-                      if (_numOfAxisCount != 6) {
+                      if (_numOfAxisCount != 1) {
                         setState(() {
-                          _numOfAxisCount += 1;
+                          _numOfAxisCount -= 1;
                         });
                       }
                     },
-                    icon: const Icon(Icons.zoom_out),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        if (_numOfAxisCount != 1) {
-                          setState(() {
-                            _numOfAxisCount -= 1;
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.zoom_in)),
-                ],
-                leadingWidth: 100,
-                leading: TextButton.icon(
-                label: CustomText(fontWeight: FontWeight.w500,
-                text: "חזרה",fontSize: 16, color: color,),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back, color: color,),
+                    icon: const Icon(Icons.zoom_in)),
+              ],
+              leadingWidth: 100,
+              leading: TextButton.icon(
+                label: CustomText(
+                  fontWeight: FontWeight.w500,
+                  text: "חזרה",
+                  fontSize: 16,
+                  color: color,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: color,
+                ),
+              ),
+              titleSpacing: 50.0,
+              title: CustomText(
+                  fontSize: 18,
+                  color: color,
+                  text: widget.title,
+                  fontWeight: FontWeight.w600),
+              backgroundColor: _scrollControllerOffset < 50
+                  ? primaryColor
+                  : Colors.transparent
+                      .withOpacity((_scrollControllerOffset / 350).clamp(0, 1))
+                      .withOpacity(0.1),
             ),
-            titleSpacing: 50.0,
-            title: CustomText(
-                fontSize: 18,
-                color: color,
-                text: widget.title,
-                fontWeight: FontWeight.w600),
-            backgroundColor: _scrollControllerOffset < 50
-                ? primaryColor
-                : Colors.transparent.withOpacity(
-                (_scrollControllerOffset / 350).clamp(0, 1)).withOpacity(0.1),
-          ),
-          extendBodyBehindAppBar: true,
-          floatingActionButton: ScrollingFabAnimated(
-          width: 175,
-          icon: const Icon(Icons.add_a_photo_sharp, color: white),
-          text: const CustomText(
-          fontSize: 16, color: white, text: "הוסף תמונות"),
-          onPress: () {
-          selectedImages(widget.title);
-          },
-          scrollController: _scrollController,
-          animateIcon: false,
-          color: primaryColor,
-          duration: const Duration(milliseconds: 150),
-          elevation: 0.0,
-          inverted: true,
-          radius: 40.0,
-          ),
-          body: AllImages(
-          _numOfAxisCount,
-          title: widget.title,
-          scrollOffset: _scrollControllerOffset,
-          scrollController: _scrollController,
-          ),
+            extendBodyBehindAppBar: true,
+            floatingActionButton: ScrollingFabAnimated(
+              width: 175,
+              icon: const Icon(Icons.add_a_photo_sharp, color: white),
+              text: const CustomText(
+                  fontSize: 16, color: white, text: "הוסף תמונות"),
+              onPress: () {
+                selectedImages(widget.title);
+              },
+              scrollController: _scrollController,
+              animateIcon: false,
+              color: primaryColor,
+              duration: const Duration(milliseconds: 150),
+              elevation: 0.0,
+              inverted: true,
+              radius: 40.0,
+            ),
+            body: AllImages(
+              _numOfAxisCount,
+              title: widget.title,
+              scrollOffset: _scrollControllerOffset,
+              scrollController: _scrollController,
+            ),
           ));
         });
   }
