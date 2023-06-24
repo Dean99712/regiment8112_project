@@ -73,6 +73,8 @@ class _AllImages2State extends State<AllImages2> {
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     CupertinoSliverNavigationBar(
+                      transitionBetweenRoutes: true,
+                      stretch: true,
                       largeTitle: Text(
                         widget.title,
                         style: GoogleFonts.heebo(fontWeight: FontWeight.w600),
@@ -82,7 +84,9 @@ class _AllImages2State extends State<AllImages2> {
                           CupertinoIcons.ellipsis_circle,
                           color: primaryColor,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+
+                        },
                       ),
                       leading: CupertinoButton(
                         child: const Icon(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 import '../models/album.dart';
 
 class ImageGallery extends StatelessWidget {
@@ -22,7 +23,7 @@ class ImageGallery extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Icon(CupertinoIcons.chevron_back)),
+                child: const Icon(CupertinoIcons.chevron_back, color: white,)),
           ),
           body: ImageSlider(
             images: images,
