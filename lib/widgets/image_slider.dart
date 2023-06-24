@@ -33,6 +33,9 @@ class ImageGallery extends StatelessWidget {
           backgroundColor: Colors.black,
           extendBodyBehindAppBar: true,
           appBar: AppBar(
+            actions: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
+            ],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);

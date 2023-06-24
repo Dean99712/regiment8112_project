@@ -23,6 +23,7 @@ class ImagesPreview extends StatefulWidget {
 }
 
 StorageService _storageService = StorageService();
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 late Stream<List<Album>> _imagesList;
 
@@ -33,9 +34,25 @@ class _ImagesPreviewState extends State<ImagesPreview> {
     super.initState();
   }
 
+  // void getPhotosFromAlbum(String childName) {
+  //   var collection = _storageService
+  //       .getPhotos(childName)
+  //       .orderBy("createdAt", descending: true)
+  //       .limit(3)
+  //       .snapshots();
+  //
+  //   var albums = collection.map((snapshot) =>
+  //       snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
+  //
+  //   setState(() {
+  //     _imagesList = albums;
+  //   });
+  // }
+
   void getPhotosFromAlbum(String childName) {
-    var collection = _storageService
-        .getPhotos(childName)
+    var collection = _firestore
+        .collectionGroup("album")
+        .where("title", isEqualTo: childName)
         .orderBy("createdAt", descending: true)
         .limit(3)
         .snapshots();
@@ -56,7 +73,6 @@ class _ImagesPreviewState extends State<ImagesPreview> {
           var date = DateTime.fromMillisecondsSinceEpoch(
               widget.date.millisecondsSinceEpoch);
           var formattedDate = intel.DateFormat('yMMM').format(date);
-
           if (snapshot.hasData) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -103,7 +119,6 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                                       (BuildContext context, int index) {
                                     List<Album> imagesList = snapshot.data!;
                                     String photo = imagesList[index].imageUrl;
-
                                     return InkWell(
                                       onTap: () {
                                         Navigator.push(

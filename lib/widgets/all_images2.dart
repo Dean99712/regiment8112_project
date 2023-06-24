@@ -124,14 +124,14 @@ class _AllImages2State extends State<AllImages2> {
                             _numOfAxisCount -= 1;
                           });
                         }
-                      }, icon: const Icon(Icons.zoom_in), label: const Text("zoom in"))),
+                      }, icon: const Icon(Icons.zoom_in, color: Colors.black,), label: const Text(style: TextStyle(color: Colors.black), "zoom in"))),
                       PopupMenuItem(child: TextButton.icon(onPressed: () {
                         if(_numOfAxisCount != 6) {
                           setState(() {
                             _numOfAxisCount += 1;
                           });
                         }
-                      }, icon: const Icon(Icons.zoom_out), label: const Text("zoom out")))
+                      }, icon: const Icon(Icons.zoom_out, color: Colors.black,), label: const Text(style:TextStyle(color: Colors.black), "zoom out")))
                     ];
                   },
                   icon: const Icon(Icons.more_horiz),
