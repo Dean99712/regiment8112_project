@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class People {
   String name;
   String lastName;
@@ -11,6 +13,13 @@ class People {
     return People(json['name'], json['lastName'], json['phoneNumber'],
         json['city'], json['platoon']);
   }
+
+  People.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : name = snapshot['name'],
+        lastName = snapshot['lastName'],
+        phoneNumber = snapshot['phoneNumber'],
+        city = snapshot['city'],
+        platoon = snapshot['platoon'];
 
   Map<String, dynamic> toJson() {
     return {

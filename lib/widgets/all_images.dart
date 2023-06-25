@@ -10,8 +10,7 @@ import '../models/album.dart';
 import '../utils/colors.dart';
 
 class AllImages extends StatefulWidget {
-  const AllImages(
-      this.itemCount,
+  const AllImages(this.itemCount,
       {required this.title,
       required this.scrollOffset,
       required this.scrollController,
@@ -42,9 +41,9 @@ class _AllImagesState extends State<AllImages> {
 
   Stream<List<Album>> photosSnapshot(String childName) {
     var photos = _storageService
-        .getPhotos(childName)
-        .orderBy("createdAt", descending: true)
+        .getPhotosByAlbum(childName)
         .limit(55)
+        .orderBy("createdAt", descending: true)
         .snapshots();
 
     final albums = photos.map((snapshot) =>
@@ -75,61 +74,66 @@ class _AllImagesState extends State<AllImages> {
                 crossAxisCount: widget.itemCount),
             itemCount: photos.length,
             itemBuilder: (context, index) {
-              return isIOS ? CupertinoContextMenu(
-                actions: <Widget>[
-                  CupertinoContextMenuAction(
-                    isDestructiveAction: true,
-                    trailingIcon: const IconData(0xf37f,
-                        fontFamily: CupertinoIcons.iconFont,
-                        fontPackage: CupertinoIcons.iconFontPackage),
-                    child: const Text("Delete photo"),
-                    onPressed: () {
-                      // _firestore.collection("תיקייה").doc(documentsList[index]).delete();
-                    },
-                  ),
-                ],
-                child: Material(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ImageGallery(images: photos, index: index),
+              print(photos[index].imageUrl);
+              return isIOS
+                  ? CupertinoContextMenu(
+                      actions: <Widget>[
+                        CupertinoContextMenuAction(
+                          isDestructiveAction: true,
+                          trailingIcon: const IconData(0xf37f,
+                              fontFamily: CupertinoIcons.iconFont,
+                              fontPackage: CupertinoIcons.iconFontPackage),
+                          child: const Text("Delete photo"),
+                          onPressed: () {
+                            // _firestore.collection("תיקייה").doc(documentsList[index]).delete();
+                          },
                         ),
-                      );
-                    },
-                    child: Hero(
-                      tag: photos[index].imageUrl,
-                      child: CachedNetworkImage(
-                        maxHeightDiskCache: widget.itemCount == 1 ? 1200 : 600,
-                        fit: BoxFit.fill,
-                        imageUrl: photos[index].imageUrl,
-                        fadeInDuration: const Duration(milliseconds: 150),
+                      ],
+                      child: Material(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ImageGallery(images: photos, index: index),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: photos[index].imageUrl,
+                            child: CachedNetworkImage(
+                              maxHeightDiskCache:
+                                  widget.itemCount == 1 ? 1200 : 600,
+                              fit: BoxFit.fill,
+                              imageUrl: photos[index].imageUrl,
+                              fadeInDuration: const Duration(milliseconds: 150),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ) : GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ImageGallery(images: photos, index: index),
-                    ),
-                  );
-                },
-                child: Hero(
-                  tag: photos[index].imageUrl,
-                  child: CachedNetworkImage(
-                    maxHeightDiskCache: widget.itemCount == 1 ? 1200 : 600,
-                    fit: BoxFit.fill,
-                    imageUrl: photos[index].imageUrl,
-                    fadeInDuration: const Duration(milliseconds: 150),
-                  ),
-                ),
-              );
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ImageGallery(images: photos, index: index),
+                          ),
+                        );
+                      },
+                      child: Hero(
+                        tag: photos[index].imageUrl,
+                        child: CachedNetworkImage(
+                          maxHeightDiskCache:
+                              widget.itemCount == 1 ? 1200 : 600,
+                          fit: BoxFit.fill,
+                          imageUrl: photos[index].imageUrl,
+                          fadeInDuration: const Duration(milliseconds: 150),
+                        ),
+                      ),
+                    );
             },
           );
         }
@@ -147,11 +151,8 @@ class _AllImagesState extends State<AllImages> {
               material: (_, __) => MaterialProgressIndicatorData(
                 color: secondaryColor,
               ),
-              cupertino: (_, __) =>
-                  CupertinoProgressIndicatorData(
-                    radius: 15.0,
-                      color: primaryColor,
-                      animating: true),
+              cupertino: (_, __) => CupertinoProgressIndicatorData(
+                  radius: 15.0, color: primaryColor, animating: true),
             ),
           );
         }

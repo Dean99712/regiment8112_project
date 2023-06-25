@@ -34,24 +34,8 @@ class _ImagesPreviewState extends State<ImagesPreview> {
     super.initState();
   }
 
-  // void getPhotosFromAlbum(String childName) {
-  //   var collection = _storageService
-  //       .getPhotos(childName)
-  //       .orderBy("createdAt", descending: true)
-  //       .limit(3)
-  //       .snapshots();
-  //
-  //   var albums = collection.map((snapshot) =>
-  //       snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
-  //
-  //   setState(() {
-  //     _imagesList = albums;
-  //   });
-  // }
-
   void getPhotosFromAlbum(String childName) {
-    var collection = _firestore
-        .collectionGroup("album")
+    var collection = _firestore.collectionGroup("album")
         .where("title", isEqualTo: childName)
         .orderBy("createdAt", descending: true)
         .limit(3)
@@ -158,10 +142,10 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                                   AllImages2(title: widget.text),
                             ));
                       },
-                      child: Row(
+                      child: const Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.arrow_back_ios_new,
                             color: primaryColor,

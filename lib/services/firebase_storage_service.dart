@@ -42,7 +42,11 @@ class StorageService {
     return collection.doc().set(album);
   }
 
-  Query<Map<String, dynamic>> getPhotos(String childName) {
+  Query<Map<String, dynamic>> getPhotos() {
+    return _firestore.collectionGroup("album");
+  }
+
+  Query<Map<String, dynamic>> getPhotosByAlbum(String childName) {
     return _firestore.collectionGroup(childName);
   }
 

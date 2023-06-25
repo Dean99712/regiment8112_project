@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
                 width: 175,
                 icon: activeTab == 'news'
                     ? null
-                    : const Icon(Icons.person, color: white, size: 30),
+                    : const Icon(Icons.person_add, color: white, size: 30),
                 text: CustomText(
                     fontSize: 16,
                     color: white,
