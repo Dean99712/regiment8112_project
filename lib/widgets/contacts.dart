@@ -7,10 +7,19 @@ import 'package:regiment8112_project/widgets/custom_text.dart';
 
 import '../data/contacts.dart';
 
-class Contacts extends StatelessWidget {
+class Contacts extends StatefulWidget {
   const Contacts(this.scrollController, {super.key});
 
   final ScrollController scrollController;
+
+  @override
+  State<Contacts> createState() => _ContactsState();
+}
+
+class _ContactsState extends State<Contacts> {
+
+  String groupByType = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +35,7 @@ class Contacts extends StatelessWidget {
         ),
       ),
       child: GroupedListView<dynamic, String>(
-          controller: scrollController,
+          controller: widget.scrollController,
           physics: const BouncingScrollPhysics(),
           elements: contactsList,
           groupBy: (element) => element['platoon'],
