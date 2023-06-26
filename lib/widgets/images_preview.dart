@@ -4,11 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:intl/intl.dart' as intel;
+import 'package:intl/intl.dart' as intl;
 import 'package:regiment8112_project/models/album.dart';
-import 'package:regiment8112_project/widgets/all_images2.dart';
+import 'package:regiment8112_project/screens/images_screen.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
-import '../services/firebase_storage_service.dart';
 import '../utils/colors.dart';
 import 'custom_text.dart';
 
@@ -22,12 +21,12 @@ class ImagesPreview extends StatefulWidget {
   State<ImagesPreview> createState() => _ImagesPreviewState();
 }
 
-StorageService _storageService = StorageService();
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 late Stream<List<Album>> _imagesList;
 
 class _ImagesPreviewState extends State<ImagesPreview> {
+
   @override
   void initState() {
     getPhotosFromAlbum(widget.text);
@@ -35,10 +34,9 @@ class _ImagesPreviewState extends State<ImagesPreview> {
   }
 
   void getPhotosFromAlbum(String childName) {
-    var collection = _firestore.collectionGroup("album")
+    var collection = _firestore
+        .collectionGroup("album")
         .where("title", isEqualTo: childName)
-        .orderBy("createdAt", descending: true)
-        .limit(3)
         .snapshots();
 
     var albums = collection.map((snapshot) =>
@@ -56,10 +54,10 @@ class _ImagesPreviewState extends State<ImagesPreview> {
         builder: (context, snapshot) {
           var date = DateTime.fromMillisecondsSinceEpoch(
               widget.date.millisecondsSinceEpoch);
-          var formattedDate = intel.DateFormat('yMMM').format(date);
+          var formattedDate = intl.DateFormat('yMMM').format(date);
           if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              padding: const EdgeInsets.symmetric(horizontal: 25.0).add(const EdgeInsets.only(bottom: 30.0)),
               child: Column(
                 children: [
                   Wrap(
@@ -116,7 +114,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                                       },
                                       child: CachedNetworkImage(
                                         imageUrl: photo,
-                                        maxHeightDiskCache: 275,
+                                        maxHeightDiskCache: 500,
                                         fadeInDuration:
                                             const Duration(milliseconds: 150),
                                         fit: BoxFit.fill,
@@ -139,7 +137,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  AllImages2(title: widget.text),
+                                  ImagesScreen(title: widget.text, photos: snapshot.data!),
                             ));
                       },
                       child: const Row(

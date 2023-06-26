@@ -31,10 +31,12 @@ class StorageService {
   void addPhotosToAlbum(String childName, String url) async {
     var parentCollection = _firestore.collection("albums").doc(childName);
 
-    final data = {"albumName": childName, "createdAt": Timestamp.now()};
-    parentCollection.set(data);
+    if (!parentCollection.id.contains(childName)) {
+      final data = {"albumName": childName, "createdAt": Timestamp.now()};
+      parentCollection.set(data);
+    }
 
-    final collection = parentCollection.collection(childName);
+    final collection = parentCollection.collection('album');
     var album =
         Album(title: childName, imageUrl: url, createdAt: Timestamp.now())
             .toJson();
@@ -42,12 +44,12 @@ class StorageService {
     return collection.doc().set(album);
   }
 
-  Query<Map<String, dynamic>> getPhotos() {
-    return _firestore.collectionGroup("album");
-  }
-
-  Query<Map<String, dynamic>> getPhotosByAlbum(String childName) {
-    return _firestore.collectionGroup(childName);
+  Query<Map<String, dynamic>> getPhotosByAlbum(String childName, int limit) {
+    return _firestore
+        .collectionGroup('album')
+        .where('title', isEqualTo: childName)
+        .orderBy("createdAt", descending: true)
+        .limit(limit);
   }
 
   CollectionReference<Map<String, dynamic>> getAllAlbums() {
@@ -57,5 +59,9 @@ class StorageService {
   Future<QuerySnapshot<Map<String, dynamic>>> getCollectionDocs(
       String childName) async {
     return await _firestore.collection(childName).get();
+  }
+  
+  void deleteDocument(String documentSnapshot) {
+    _firestore.collection("album");
   }
 }

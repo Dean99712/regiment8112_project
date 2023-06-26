@@ -12,19 +12,21 @@ import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 
+import '../models/album.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/images_manager.dart';
 
-class AllImages2 extends StatefulWidget {
-  const AllImages2({required this.title, super.key});
+class ImagesScreen extends StatefulWidget {
+  const ImagesScreen({required this.title, required this.photos, super.key});
 
   final String title;
+  final List<Album> photos;
 
   @override
-  State<AllImages2> createState() => _AllImages2State();
+  State<ImagesScreen> createState() => _ImagesScreenState();
 }
 
-class _AllImages2State extends State<AllImages2> {
+class _ImagesScreenState extends State<ImagesScreen> {
   int _numOfAxisCount = 3;
   bool isExtended = false;
   List<XFile> selectedImagesList = [];
@@ -68,6 +70,9 @@ class _AllImages2State extends State<AllImages2> {
     return PlatformApp(
         debugShowCheckedModeBanner: false,
         cupertino: (_, __) => CupertinoAppData(
+          theme: const CupertinoThemeData(
+            brightness: Brightness.dark
+          ),
               home: CupertinoPageScaffold(
                 child: NestedScrollView(
                   floatHeaderSlivers: true,
@@ -102,6 +107,7 @@ class _AllImages2State extends State<AllImages2> {
                   body: AllImages(
                     _numOfAxisCount,
                     title: widget.title,
+                    photos: widget.photos,
                     scrollOffset: _scrollControllerOffset,
                     scrollController: _scrollController,
                   ),
@@ -111,6 +117,7 @@ class _AllImages2State extends State<AllImages2> {
         material: (_, __) {
           var color = _scrollControllerOffset < 50 ? white : white;
           return MaterialAppData(
+            theme: ThemeData.dark(useMaterial3: true),
               home: Scaffold(
             appBar: AppBar(
               elevation: 0.0,
@@ -124,14 +131,14 @@ class _AllImages2State extends State<AllImages2> {
                             _numOfAxisCount -= 1;
                           });
                         }
-                      }, icon: const Icon(Icons.zoom_in, color: Colors.black,), label: const Text(style: TextStyle(color: Colors.black), "zoom in"))),
+                      }, icon: const Icon(Icons.zoom_in, color: secondaryColor,), label: const Text(style: TextStyle(color: white), "הגדל"))),
                       PopupMenuItem(child: TextButton.icon(onPressed: () {
                         if(_numOfAxisCount != 6) {
                           setState(() {
                             _numOfAxisCount += 1;
                           });
                         }
-                      }, icon: const Icon(Icons.zoom_out, color: Colors.black,), label: const Text(style:TextStyle(color: Colors.black), "zoom out")))
+                      }, icon: const Icon(Icons.zoom_out, color: secondaryColor,), label: const Text(style:TextStyle(color: white), "הקטן")))
                     ];
                   },
                   icon: const Icon(Icons.more_horiz),
@@ -178,6 +185,7 @@ class _AllImages2State extends State<AllImages2> {
             body: AllImages(
               _numOfAxisCount,
               title: widget.title,
+              photos: widget.photos,
               scrollOffset: _scrollControllerOffset,
               scrollController: _scrollController,
             ),

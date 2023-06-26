@@ -4,10 +4,12 @@ import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({required this.text, required this.function, super.key});
+  const CustomButton({required this.text, required this.function, this.color = primaryColor,this.width = double.infinity, super.key});
 
   final String text;
   final void Function() function;
+  final Color color;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +18,35 @@ class CustomButton extends StatelessWidget {
     return isIos
         ? Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0),
-          child: CupertinoButton(
-              color: primaryColor,
-              onPressed: function,
-              child: CustomText(
-                fontSize: 16,
-                color: white,
-                text: text,
-              )),
+          child: SizedBox(
+            width: width,
+            child: CupertinoButton(
+                color: color,
+                onPressed: function,
+                child: CustomText(
+                  fontSize: 16,
+                  color: white,
+                  text: text,
+                ),
+            ),
+          ),
         )
         : Padding(
           padding: const EdgeInsets.all(8.0),
-          child: MaterialButton(
-              shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              color: primaryColor,
-              onPressed: function,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CustomText(fontSize: 16, color: white, text: text),
+          child: SizedBox(
+            width: width,
+            child: MaterialButton(
+              elevation: 0.0,
+                shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                color: color,
+                onPressed: function,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: CustomText(fontSize: 16, color: white, text: text),
+                ),
               ),
-            ),
+          ),
         );
   }
 }

@@ -11,9 +11,7 @@ const topAlignment = Alignment.topLeft;
 const bottomAlignment = Alignment.bottomRight;
 
 class MainScreen extends StatefulWidget {
-  const MainScreen(this.colors, {super.key});
-
-  final List<Color> colors;
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -69,15 +67,15 @@ class _MainScreenState extends State<MainScreen> {
               )
             : null,
         body: Container(
-          decoration: BoxDecoration(
-              image: const DecorationImage(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
                   opacity: 0.12,
                   image: AssetImage("assets/images/Group 126.png"),
                   fit: BoxFit.cover),
               gradient: RadialGradient(
                 center: Alignment.center,
                 radius: 0.1,
-                colors: widget.colors,
+                colors: [Color.fromRGBO(60, 58, 59, 1), Color.fromRGBO(60, 58, 59, 1)],
               )),
           child: Center(
             child: Column(

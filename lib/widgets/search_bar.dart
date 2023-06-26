@@ -11,14 +11,24 @@ class CustomSearchBar extends StatefulWidget {
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
+
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Widget renderSearchBar(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 1.3,
-        child: const Directionality(
+        child: Directionality(
           textDirection: TextDirection.rtl,
           child: CupertinoSearchTextField(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            controller: _searchController,
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             backgroundColor: white,
             placeholder: "חפש...",
           ),
@@ -28,6 +38,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       return Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
+          leading: Icon(Icons.search, color: Colors.transparent.withOpacity(0.4),),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width / 1.3,
           ),
@@ -50,10 +61,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
-      child: Wrap(
-        direction: Axis.horizontal,
-        crossAxisAlignment: WrapCrossAlignment.start,
-        alignment: WrapAlignment.spaceBetween,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           renderSearchBar(context),
           IconButton(

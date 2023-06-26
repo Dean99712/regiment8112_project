@@ -1,32 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:regiment8112_project/screens/main_screen.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage(this.start, {Key? key}) : super(key: key);
+class OtpScreen extends StatefulWidget {
+  const OtpScreen(
+      {required this.smsCode, required this.verificationId, super.key});
 
-  final void Function() start;
+  final String smsCode;
+  final String verificationId;
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<OtpScreen> createState() => _OtpScreenState();
 }
 
-final controller = TextEditingController();
-
-class _LoginPageState extends State<LoginPage> {
+class _OtpScreenState extends State<OtpScreen> {
+  String smsCode = '';
+  String verificationId = '';
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void initState() {
+    verificationId = widget.verificationId;
+    super.initState();
   }
+
+  final _controller = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    final AuthService auth = AuthService();
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -49,30 +57,34 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Image.asset("assets/svg/logo.png", height: 210, width: 210),
                 Text(
-                  'חרמ"ש מסייעת',
-                  style: GoogleFonts.rubikDirt(
-                      fontSize: 32,
-                      color: const Color.fromRGBO(86, 154, 82, 1)),
+                  'לאימות הקוד',
+                  style:
+                      GoogleFonts.rubikDirt(fontSize: 32, color: primaryColor),
                 ),
-                Text(
-                  "8112",
-                  style: GoogleFonts.rubikDirt(
-                      fontSize: 90,
-                      color: const Color.fromRGBO(86, 154, 82, 1)),
-                ),
-                CustomTextField(controller: controller, text: "מספר טלפון"),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CustomButton(text: "לקבלת קוד חד פעמי", function: () async {
-                        dynamic result = await auth.signInAnon();
-                        if (result != null) {
-                          print("Success");
-                          widget.start();
-                        } else {
-                          print("Error");
-                        }
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: CustomTextField(
+                      controller: _controller,
+                      // controller: controller,
+                      text: "מספר טלפון",
+                      onChanged: (value) {
+                        smsCode = value;
                       }),
                 ),
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: CustomButton(
+                      text: "כניסה",
+                      color: secondaryColor,
+                      function: () async {
+                        try {
+                          _authService.verifyOtp(smsCode, verificationId);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainScreen(),), (route) => false);
+                        } catch (e) {
+                          print('wrong otp');
+                        }
+                      },
+                    )),
                 Container(
                   padding: const EdgeInsets.only(top: 24),
                   child: SizedBox(

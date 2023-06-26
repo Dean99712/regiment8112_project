@@ -16,19 +16,19 @@ class _ImagesTabState extends State<ImagesTab> {
   final StorageService _storage = StorageService();
   var activeScreen = 'images-preview';
 
-  void switchScreen() {
-    if (activeScreen == 'images-preview') {
-      setState(() {
-        widget.tabController.animateTo(2);
-        activeScreen = 'all-images';
-      });
-    } else {
-      setState(() {
-        widget.tabController.animateTo(1);
-        activeScreen = 'images-preview';
-      });
-    }
-  }
+  // void switchScreen() {
+  //   if (activeScreen == 'images-preview') {
+  //     setState(() {
+  //       widget.tabController.animateTo(2);
+  //       activeScreen = 'all-images';
+  //     });
+  //   } else {
+  //     setState(() {
+  //       widget.tabController.animateTo(1);
+  //       activeScreen = 'images-preview';
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _ImagesTabState extends State<ImagesTab> {
 
   Future<Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>>
       getDocuments() async {
-    var collection = await _storage.getAllAlbums().get();
+    var collection = await _storage.getAllAlbums().orderBy("createdAt", descending: true).get();
     final data = collection.docs.map((e) => e);
     return data;
   }

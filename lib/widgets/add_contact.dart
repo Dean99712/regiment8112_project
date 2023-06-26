@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/data/plattons.dart';
-import 'package:regiment8112_project/services/contacts_service.dart';
+import 'package:regiment8112_project/services/user_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
+import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
 class AddContact extends StatefulWidget {
   const AddContact({super.key});
@@ -14,16 +15,13 @@ class AddContact extends StatefulWidget {
   State<AddContact> createState() => _AddContactState();
 }
 
-final ContactService _service = ContactService();
-
+final UserService _service = UserService();
 
 int _selectedValue = 1;
 
 class _AddContactState extends State<AddContact> {
-
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _platoonController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cityController = TextEditingController();
 
@@ -32,20 +30,18 @@ class _AddContactState extends State<AddContact> {
     super.dispose();
     _nameController.dispose();
     _lastNameController.dispose();
-    _platoonController.dispose();
     _cityController.dispose();
     _phoneController.dispose();
   }
 
   void createUser() {
     _service.addContact(_nameController.text, _lastNameController.text,
-        _phoneController.text, _cityController.text, _platoonController.text);
+        _phoneController.text, _cityController.text, platoon[_selectedValue]);
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     return PlatformApp(
         material: (_, __) => MaterialAppData(
@@ -90,57 +86,20 @@ class _AddContactState extends State<AddContact> {
                                 style: GoogleFonts.rubikDirt(
                                     fontSize: 32, color: primaryColor)),
                             SizedBox(
-                              height: size.height / 1.6,
+                              height: size.height / 2.5,
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  TextField(
-                                    style: const TextStyle(color: white),
-                                    controller: _nameController,
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'שם פרטי',
-                                        disabledBorder: InputBorder.none,
-                                        filled: true,
-                                        fillColor: white),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CustomTextField(controller: _nameController, text: "שם פרטי", maxLength: null, width: 170,),
+                                      CustomTextField(controller: _lastNameController, text: "שם משפחה", maxLength: null,width: 175,),
+                                    ],
                                   ),
-                                  TextField(
-                                    controller: _lastNameController,
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'שם משפחה',
-                                        filled: true,
-                                        fillColor: white),
-                                  ),
-                                  TextField(
-                                    controller: _cityController,
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'עיר מגורים',
-                                        filled: true,
-                                        fillColor: white),
-                                  ),
-                                  TextField(
-                                    onSubmitted: (String value) {
-
-                                    },
-                                    controller: _platoonController,
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        filled: true,
-                                        labelText: 'מחלקה',
-                                        fillColor: white),
-                                  ),
-                                  TextField(
-                                    keyboardType: TextInputType.phone,
-                                    controller: _phoneController,
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        filled: true,
-                                        labelText: 'מספר טלפון',
-                                        fillColor: white),
-                                  ),
+                                  CustomTextField(controller: _cityController, text: "עיר מגורים", maxLength: null,),
+                                  CustomTextField(controller: _phoneController, text: "מספר טלפון"),
                                 ],
                               ),
                             ),
@@ -150,8 +109,8 @@ class _AddContactState extends State<AddContact> {
                               child: ElevatedButton.icon(
                                 label: const CustomText(
                                   fontSize: 16,
-                                  color: white,
                                   text: "הוסף",
+                                  color: white,
                                 ),
                                 icon: const Icon(Icons.add_outlined),
                                 style: ButtonStyle(
@@ -178,6 +137,7 @@ class _AddContactState extends State<AddContact> {
                       color: backgroundColor,
                       child: CupertinoFormSection(children: [
                         CupertinoTextField(
+                          textInputAction: TextInputAction.next,
                           controller: _nameController,
                           textDirection: TextDirection.rtl,
                           placeholder: "שם פרטי",
@@ -192,6 +152,11 @@ class _AddContactState extends State<AddContact> {
                               GoogleFonts.heebo(color: primaryColor),
                         ),
                         CupertinoTextField(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: primaryColor
+                            )
+                          ),
                           textDirection: TextDirection.rtl,
                           controller: _cityController,
                           placeholder: "עיר מגורים",
