@@ -26,6 +26,7 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 late Stream<List<Album>> _imagesList;
 
 class _ImagesPreviewState extends State<ImagesPreview> {
+  int itemCount = 3;
 
   @override
   void initState() {
@@ -37,6 +38,8 @@ class _ImagesPreviewState extends State<ImagesPreview> {
     var collection = _firestore
         .collectionGroup("album")
         .where("title", isEqualTo: childName)
+        .orderBy("createdAt", descending: true)
+        .limit(3)
         .snapshots();
 
     var albums = collection.map((snapshot) =>
@@ -57,7 +60,8 @@ class _ImagesPreviewState extends State<ImagesPreview> {
           var formattedDate = intl.DateFormat('yMMM').format(date);
           if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0).add(const EdgeInsets.only(bottom: 30.0)),
+              padding: const EdgeInsets.symmetric(horizontal: 25.0)
+                  .add(const EdgeInsets.only(bottom: 30.0)),
               child: Column(
                 children: [
                   Wrap(
@@ -86,6 +90,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                               child: SizedBox(
                                 height: 250,
                                 child: GridView.builder(
+                                  // itemCount: snapshot.data!.length == 3 ? 3 : 1,
                                   itemCount: 3,
                                   physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate: SliverQuiltedGridDelegate(
@@ -137,7 +142,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ImagesScreen(title: widget.text, photos: snapshot.data!),
+                                  ImagesScreen(title: widget.text),
                             ));
                       },
                       child: const Row(
@@ -153,6 +158,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                             fontSize: 16,
                             color: primaryColor,
                             text: "לכל התמונות",
+                            fontWeight: FontWeight.w500,
                           ),
                         ],
                       ),

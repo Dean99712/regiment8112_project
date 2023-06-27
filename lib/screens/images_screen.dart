@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,16 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/all_images.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
-
-import '../models/album.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/images_manager.dart';
 
 class ImagesScreen extends StatefulWidget {
-  const ImagesScreen({required this.title, required this.photos, super.key});
+  const ImagesScreen({required this.title, super.key});
 
   final String title;
-  final List<Album> photos;
 
   @override
   State<ImagesScreen> createState() => _ImagesScreenState();
@@ -107,7 +103,6 @@ class _ImagesScreenState extends State<ImagesScreen> {
                   body: AllImages(
                     _numOfAxisCount,
                     title: widget.title,
-                    photos: widget.photos,
                     scrollOffset: _scrollControllerOffset,
                     scrollController: _scrollController,
                   ),
@@ -132,13 +127,13 @@ class _ImagesScreenState extends State<ImagesScreen> {
                           });
                         }
                       }, icon: const Icon(Icons.zoom_in, color: secondaryColor,), label: const Text(style: TextStyle(color: white), "הגדל"))),
-                      PopupMenuItem(child: TextButton.icon(onPressed: () {
+                      PopupMenuItem(enabled: _numOfAxisCount != 6 ? true : false,child: TextButton.icon(onPressed: () {
                         if(_numOfAxisCount != 6) {
                           setState(() {
                             _numOfAxisCount += 1;
                           });
                         }
-                      }, icon: const Icon(Icons.zoom_out, color: secondaryColor,), label: const Text(style:TextStyle(color: white), "הקטן")))
+                      },icon: const Icon(Icons.zoom_out, color: secondaryColor,), label: const Text(style:TextStyle(color: white), "הקטן")))
                     ];
                   },
                   icon: const Icon(Icons.more_horiz),
@@ -185,7 +180,6 @@ class _ImagesScreenState extends State<ImagesScreen> {
             body: AllImages(
               _numOfAxisCount,
               title: widget.title,
-              photos: widget.photos,
               scrollOffset: _scrollControllerOffset,
               scrollController: _scrollController,
             ),
