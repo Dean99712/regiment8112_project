@@ -88,44 +88,47 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                             Padding(
                               padding: const EdgeInsets.only(top: 15.0),
                               child: SizedBox(
-                                height: 250,
-                                child: GridView.builder(
-                                  // itemCount: snapshot.data!.length == 3 ? 3 : 1,
-                                  itemCount: 3,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate: SliverQuiltedGridDelegate(
-                                      mainAxisSpacing: 5,
-                                      crossAxisSpacing: 5,
-                                      crossAxisCount: 3,
-                                      pattern: const [
-                                        QuiltedGridTile(2, 2),
-                                        QuiltedGridTile(1, 1),
-                                        QuiltedGridTile(1, 1),
-                                      ]),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    List<Album> imagesList = snapshot.data!;
-                                    String photo = imagesList[index].imageUrl;
-                                    return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ImageGallery(
-                                                      images: imagesList,
-                                                      index: index,
-                                                    )));
-                                      },
-                                      child: CachedNetworkImage(
-                                        imageUrl: photo,
-                                        maxHeightDiskCache: 500,
-                                        fadeInDuration:
-                                            const Duration(milliseconds: 150),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    );
-                                  },
+                                height: 240,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: GridView.builder(
+                                    // itemCount: snapshot.data!.length == 3 ? 3 : 1,
+                                    itemCount: 3,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    gridDelegate: SliverQuiltedGridDelegate(
+                                        mainAxisSpacing: 5,
+                                        crossAxisSpacing: 5,
+                                        crossAxisCount: 3,
+                                        pattern: const [
+                                          QuiltedGridTile(2, 2),
+                                          QuiltedGridTile(1, 1),
+                                          QuiltedGridTile(1, 1),
+                                        ]),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      List<Album> imagesList = snapshot.data!;
+                                      String photo = imagesList[index].imageUrl;
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ImageGallery(
+                                                        images: imagesList,
+                                                        index: index,
+                                                      )));
+                                        },
+                                        child: CachedNetworkImage(
+                                          imageUrl: photo,
+                                          maxHeightDiskCache: 500,
+                                          fadeInDuration:
+                                              const Duration(milliseconds: 150),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),

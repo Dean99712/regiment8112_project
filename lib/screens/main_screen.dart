@@ -36,67 +36,67 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        floatingActionButton: activeTab != 'news'
-            ? ScrollingFabAnimated(
-                width: 175,
-                icon: activeTab == 'news'
-                    ? null
-                    : const Icon(Icons.person_add, color: white, size: 30),
-                text: CustomText(
-                    fontSize: 16,
-                    color: white,
-                    text: activeTab != 'news' ? 'הוסף איש קשר' : null),
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddContact(),
-                    ),
-                  );
-                },
-                scrollController: scrollController,
-                animateIcon: false,
-                color: primaryColor,
-                duration: const Duration(milliseconds: 150),
-                elevation: 0.0,
-                radius: 40.0,
-          inverted: true,
-              )
-            : null,
-        body: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  opacity: 0.12,
-                  image: AssetImage("assets/images/Group 126.png"),
-                  fit: BoxFit.cover),
-              gradient: RadialGradient(
-                center: Alignment.center,
-                radius: 0.1,
-                colors: [Color.fromRGBO(60, 58, 59, 1), Color.fromRGBO(60, 58, 59, 1)],
-              )),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
-                  child: TopSection(activeTab, (value) {
-                    setState(() {
-                      activeTab = value;
-                    });
-                  }),
-                ),
-                Expanded(
-                  child: activeTab == 'news'
-                      ? SwipeableTab(scrollController)
-                      : Contacts(scrollController),
-                )
+    return Scaffold(
+      floatingActionButton: activeTab != 'news'
+          ? ScrollingFabAnimated(
+              width: 175,
+              icon: activeTab == 'news'
+                  ? null
+                  : const Icon(Icons.person_add, color: white, size: 30),
+              text: CustomText(
+                  fontSize: 16,
+                  color: white,
+                  text: activeTab != 'news' ? 'הוסף איש קשר' : null),
+              onPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddContact(),
+                  ),
+                );
+              },
+              scrollController: scrollController,
+              animateIcon: false,
+              color: primaryColor,
+              duration: const Duration(milliseconds: 150),
+              elevation: 0.0,
+              radius: 40.0,
+              inverted: true,
+            )
+          : null,
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                opacity: 0.12,
+                image: AssetImage("assets/images/Group 126.png"),
+                fit: BoxFit.cover),
+            gradient: RadialGradient(
+              center: Alignment.center,
+              radius: 0.1,
+              colors: [
+                Color.fromRGBO(60, 58, 59, 1),
+                Color.fromRGBO(60, 58, 59, 1)
               ],
-            ),
+            )),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+                child: TopSection(activeTab, (value) {
+                  setState(() {
+                    activeTab = value;
+                  });
+                }),
+              ),
+              Expanded(
+                child: activeTab == 'news'
+                    ? SwipeableTab(scrollController)
+                    : Contacts(scrollController),
+              )
+            ],
           ),
         ),
       ),

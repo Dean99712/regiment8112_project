@@ -20,10 +20,14 @@ class ImageGallery extends StatelessWidget {
           navigationBar: CupertinoNavigationBar(
             backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
             leading: CupertinoButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(CupertinoIcons.chevron_back, color: white,)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                CupertinoIcons.chevron_back,
+                color: white,
+              ),
+            ),
           ),
           body: ImageSlider(
             images: images,

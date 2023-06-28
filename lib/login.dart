@@ -6,10 +6,13 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'חרמ"ש מסייעת 8112',
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        backgroundColor: const Color.fromRGBO(60, 58, 59, 1)
+      ),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
+      home: const Scaffold(
         body: LoginPage(),
       ),
     );

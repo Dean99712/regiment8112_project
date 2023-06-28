@@ -17,10 +17,10 @@ class AllImages extends StatefulWidget {
       required this.scrollController,
       super.key});
 
-  final int itemCount;
+  final int? itemCount;
   final String title;
-  final double scrollOffset;
-  final ScrollController scrollController;
+  final double? scrollOffset;
+  final ScrollController? scrollController;
 
   @override
   State<AllImages> createState() => _AllImagesState();
@@ -34,7 +34,7 @@ class _AllImagesState extends State<AllImages> {
 
   final StorageService _storageService = StorageService();
 
-  int limit = 55;
+  int limit = 700;
 
   @override
   void initState() {
@@ -46,6 +46,7 @@ class _AllImagesState extends State<AllImages> {
   Future getDocuments(String chileName) async {
     await _firestore
         .collectionGroup("album")
+        .orderBy("createdAt", descending: true)
         .where("title", isEqualTo: chileName)
         .get()
         .then((snapshot) => snapshot.docs.forEach((element) {
@@ -65,15 +66,35 @@ class _AllImagesState extends State<AllImages> {
     return albums;
   }
 
-  Future<Iterable<CollectionReference<Map<String, dynamic>>>> deleteDocuments(String childName, List<String> documents, int index) async {
-    var collection = await _firestore
+  Future deleteDocuments(
+      String childName, int index) async {
+    var snapshot = await _firestore
         .collection("albums")
-        .where('albumName', isEqualTo: childName)
+        .doc(childName)
+        .collection("album")
+        .orderBy("createdAt")
         .get();
 
-    var childCollection =
-        collection.docs.map((collections) => collections.reference.collection("album"));
-    return childCollection.map((e) => e);
+     var docs = snapshot.docs
+        .map((event) => event.reference);
+    for (var doc in docs) {
+      if (documentsList[index] == doc.id) {
+        doc.delete();
+        documentsList.removeWhere((element) => element.contains(doc.id));
+      }
+    }
+  }
+
+  Widget buildImage(Album image) {
+    return Hero(
+        tag: image.imageUrl,
+        child: CachedNetworkImage(
+          maxHeightDiskCache: widget.itemCount == 1 ? 1200 : 600,
+          fit: BoxFit.fill,
+          imageUrl: image.imageUrl,
+          fadeInDuration: const Duration(milliseconds: 150),
+          // progressIndicatorBuilder: (context, url, progress) => ,
+        ));
   }
 
   @override
@@ -90,69 +111,69 @@ class _AllImagesState extends State<AllImages> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 2,
                 mainAxisSpacing: 2,
-                crossAxisCount: widget.itemCount),
+                crossAxisCount: widget.itemCount!),
             itemCount: photos.length,
             itemBuilder: (context, index) {
-              return isIOS
-                  ? CupertinoContextMenu(
-                      actions: <Widget>[
-                        CupertinoContextMenuAction(
-                          isDestructiveAction: true,
-                          trailingIcon: const IconData(0xf37f,
-                              fontFamily: CupertinoIcons.iconFont,
-                              fontPackage: CupertinoIcons.iconFontPackage),
-                          child: const Text("Delete photo"),
-                          onPressed: () async {
-                            deleteDocuments(widget.title, documentsList, index);
-                            // _firestore.collection("תיקייה").doc(documentsList[index]).delete();
-                          },
-                        ),
-                      ],
-                      child: Material(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+              return CupertinoContextMenu(
+                  enableHapticFeedback: true,
+                  actions: [
+                    CupertinoContextMenuAction(
+                        isDefaultAction: true,
+                        trailingIcon: const IconData(0xf4ca,
+                            fontFamily: CupertinoIcons.iconFont,
+                            fontPackage: CupertinoIcons.iconFontPackage),
+                        child: const Text("שתף"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                    CupertinoContextMenuAction(
+                      isDestructiveAction: true,
+                      trailingIcon: const IconData(0xf4c4,
+                          fontPackage: CupertinoIcons.iconFontPackage,
+                          fontFamily: CupertinoIcons.iconFont),
+                      child: const Text(
+                        "מחק תמונה זו",
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (context) => CupertinoActionSheet(
+                            message: const Text(
+                                "פעולה זו תמחוק את התמונה לצמיתות",
+                                style: TextStyle(fontSize: 10)),
+                            cancelButton: CupertinoButton(
+                                child: const Text("ביטול"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                            actions: [
+                              CupertinoActionSheetAction(
+                                isDestructiveAction: true,
+                                child: const Text("מחק תמונה זו"),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  deleteDocuments(widget.title, index);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                  child: Material(
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     ImageGallery(images: photos, index: index),
-                              ),
-                            );
-                          },
-                          child: Hero(
-                            tag: photos[index].imageUrl,
-                            child: CachedNetworkImage(
-                              maxHeightDiskCache:
-                                  widget.itemCount == 1 ? 1200 : 600,
-                              fit: BoxFit.fill,
-                              imageUrl: photos[index].imageUrl,
-                              fadeInDuration: const Duration(milliseconds: 150),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ImageGallery(images: photos, index: index),
-                          ),
-                        );
-                      },
-                      child: Hero(
-                        tag: photos[index].imageUrl,
-                        child: CachedNetworkImage(
-                          maxHeightDiskCache:
-                              widget.itemCount == 1 ? 1200 : 600,
-                          fit: BoxFit.fill,
-                          imageUrl: photos[index].imageUrl,
-                          fadeInDuration: const Duration(milliseconds: 150),
-                        ),
-                      ),
-                    );
+                              ));
+                        },
+                        child: buildImage(photos[index])),
+                  ));
             },
           );
         }
