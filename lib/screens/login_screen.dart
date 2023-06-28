@@ -88,13 +88,16 @@ class _LoginPageState extends State<LoginPage> {
                 style: GoogleFonts.rubikDirt(
                     fontSize: 90, color: const Color.fromRGBO(86, 154, 82, 1)),
               ),
-              CustomTextField(
-                  type: TextInputType.phone,
-                  controller: null,
-                  text: "מספר טלפון",
-                  onChanged: (value) {
-                    phone = value;
-                  }),
+              Padding(
+                padding: const EdgeInsets.only(top: 25.0),
+                child: CustomTextField(
+                    type: TextInputType.phone,
+                    controller: null,
+                    text: "מספר טלפון",
+                    onChanged: (value) {
+                      phone = value;
+                    }),
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: CustomButton(

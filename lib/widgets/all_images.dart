@@ -66,8 +66,7 @@ class _AllImagesState extends State<AllImages> {
     return albums;
   }
 
-  Future deleteDocuments(
-      String childName, int index) async {
+  Future deleteDocuments(String childName, int index) async {
     var snapshot = await _firestore
         .collection("albums")
         .doc(childName)
@@ -75,8 +74,7 @@ class _AllImagesState extends State<AllImages> {
         .orderBy("createdAt")
         .get();
 
-     var docs = snapshot.docs
-        .map((event) => event.reference);
+    var docs = snapshot.docs.map((event) => event.reference);
     for (var doc in docs) {
       if (documentsList[index] == doc.id) {
         doc.delete();
@@ -86,14 +84,23 @@ class _AllImagesState extends State<AllImages> {
   }
 
   Widget buildImage(Album image) {
+
     return Hero(
         tag: image.imageUrl,
         child: CachedNetworkImage(
-          maxHeightDiskCache: widget.itemCount == 1 ? 1200 : 600,
+          maxHeightDiskCache: widget.itemCount == 1 ? 1200 : widget.itemCount == 3 ? 600 : 250,
           fit: BoxFit.fill,
           imageUrl: image.imageUrl,
           fadeInDuration: const Duration(milliseconds: 150),
-          // progressIndicatorBuilder: (context, url, progress) => ,
+          progressIndicatorBuilder: (context, url, progress) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: primaryColor,
+                    backgroundColor: white.withOpacity(0.3),
+                  ),
+                );
+          },
         ));
   }
 
@@ -114,66 +121,79 @@ class _AllImagesState extends State<AllImages> {
                 crossAxisCount: widget.itemCount!),
             itemCount: photos.length,
             itemBuilder: (context, index) {
-              return CupertinoContextMenu(
-                  enableHapticFeedback: true,
-                  actions: [
-                    CupertinoContextMenuAction(
-                        isDefaultAction: true,
-                        trailingIcon: const IconData(0xf4ca,
-                            fontFamily: CupertinoIcons.iconFont,
-                            fontPackage: CupertinoIcons.iconFontPackage),
-                        child: const Text("שתף"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
-                    CupertinoContextMenuAction(
-                      isDestructiveAction: true,
-                      trailingIcon: const IconData(0xf4c4,
-                          fontPackage: CupertinoIcons.iconFontPackage,
-                          fontFamily: CupertinoIcons.iconFont),
-                      child: const Text(
-                        "מחק תמונה זו",
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) => CupertinoActionSheet(
-                            message: const Text(
-                                "פעולה זו תמחוק את התמונה לצמיתות",
-                                style: TextStyle(fontSize: 10)),
-                            cancelButton: CupertinoButton(
-                                child: const Text("ביטול"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                            actions: [
-                              CupertinoActionSheetAction(
-                                isDestructiveAction: true,
-                                child: const Text("מחק תמונה זו"),
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                  deleteDocuments(widget.title, index);
-                                },
-                              )
-                            ],
+              return isIOS
+                  ? CupertinoContextMenu(
+                      enableHapticFeedback: true,
+                      actions: [
+                        CupertinoContextMenuAction(
+                            isDefaultAction: true,
+                            trailingIcon: const IconData(0xf4ca,
+                                fontFamily: CupertinoIcons.iconFont,
+                                fontPackage: CupertinoIcons.iconFontPackage),
+                            child: const Text("שתף"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                        CupertinoContextMenuAction(
+                          isDestructiveAction: true,
+                          trailingIcon: const IconData(0xf4c4,
+                              fontPackage: CupertinoIcons.iconFontPackage,
+                              fontFamily: CupertinoIcons.iconFont),
+                          child: const Text(
+                            "מחק תמונה זו",
                           ),
-                        );
-                      },
-                    )
-                  ],
-                  child: Material(
-                    child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ImageGallery(images: photos, index: index),
-                              ));
-                        },
-                        child: buildImage(photos[index])),
-                  ));
+                          onPressed: () {
+                            Navigator.pop(context);
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (context) => CupertinoActionSheet(
+                                message: const Text(
+                                    "פעולה זו תמחוק את התמונה לצמיתות",
+                                    style: TextStyle(fontSize: 10)),
+                                cancelButton: CupertinoButton(
+                                    child: const Text("ביטול"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                                actions: [
+                                  CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    child: const Text("מחק תמונה זו"),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      deleteDocuments(widget.title, index);
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                      child: Material(
+                        child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ImageGallery(
+                                        images: photos, index: index),
+                                  ));
+                            },
+                            child: buildImage(photos[index])),
+                      ))
+                  : Material(
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ImageGallery(
+                                      images: photos, index: index),
+                                ));
+                          },
+                          child: buildImage(photos[index])),
+                    );
             },
           );
         }

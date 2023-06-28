@@ -8,7 +8,10 @@ import 'package:regiment8112_project/utils/colors.dart';
 import '../models/album.dart';
 
 class ImageGallery extends StatelessWidget {
-  const ImageGallery({required this.images, required this.index, super.key});
+  const ImageGallery(
+      {required this.images,
+      required this.index,
+      super.key});
 
   final int index;
   final List<Album> images;
@@ -38,7 +41,12 @@ class ImageGallery extends StatelessWidget {
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
+              PopupMenuButton(
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                            onTap: () {}, child: const Text("מחק תמונה זו"))
+                      ],
+                  icon: const Icon(Icons.more_horiz))
             ],
             leading: IconButton(
               onPressed: () {

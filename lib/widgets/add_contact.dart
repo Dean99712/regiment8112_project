@@ -45,6 +45,7 @@ class _AddContactState extends State<AddContact> {
     final size = MediaQuery
         .of(context)
         .size;
+
     return PlatformScaffold(
       material: (_, __) =>
           MaterialScaffoldData(

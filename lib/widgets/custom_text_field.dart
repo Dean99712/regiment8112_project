@@ -10,7 +10,7 @@ class CustomTextField extends StatelessWidget {
       this.type = TextInputType.text,
       this.maxLength = 10,
       this.width = double.infinity,
-        this.onChanged,
+      this.onChanged,
       super.key});
 
   final TextEditingController? controller;
@@ -27,14 +27,16 @@ class CustomTextField extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: PlatformTextField(
-          keyboardType: type,
+            keyboardType: type,
             onChanged: onChanged,
             controller: controller,
             maxLength: maxLength,
             cupertino: (_, __) => CupertinoTextFieldData(
                   cursorColor: primaryColor,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  decoration: BoxDecoration(
+                      color: white.withOpacity(0.5),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10))),
                   textDirection: TextDirection.rtl,
                   placeholder: text,
                   placeholderStyle: GoogleFonts.heebo(color: primaryColor),
@@ -47,11 +49,12 @@ class CustomTextField extends StatelessWidget {
                         borderSide: BorderSide(color: primaryColor, width: 2.0),
                       ),
                       border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       labelText: text,
                       filled: true,
-                      fillColor: white),
+                      fillColor: white.withOpacity(0.3)),
                 )),
       ),
     );

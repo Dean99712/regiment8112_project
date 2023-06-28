@@ -52,7 +52,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Album>>(
+    return StreamBuilder<List<Album>?>(
         stream: _imagesList,
         builder: (context, snapshot) {
           var date = DateTime.fromMillisecondsSinceEpoch(
@@ -94,7 +94,8 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                                   child: GridView.builder(
                                     // itemCount: snapshot.data!.length == 3 ? 3 : 1,
                                     itemCount: 3,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     gridDelegate: SliverQuiltedGridDelegate(
                                         mainAxisSpacing: 5,
                                         crossAxisSpacing: 5,

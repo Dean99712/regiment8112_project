@@ -38,6 +38,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       return Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
+          backgroundColor: MaterialStateProperty.all(white.withOpacity(0.4)),
           leading: Icon(Icons.search, color: Colors.transparent.withOpacity(0.4),),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width / 1.3,
