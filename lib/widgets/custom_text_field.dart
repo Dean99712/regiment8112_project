@@ -11,6 +11,8 @@ class CustomTextField extends StatelessWidget {
       this.maxLength = 10,
       this.width = double.infinity,
       this.onChanged,
+      this.textAlign,
+      this.textInputAction,
       super.key});
 
   final TextEditingController? controller;
@@ -18,6 +20,8 @@ class CustomTextField extends StatelessWidget {
   final TextInputType type;
   final int? maxLength;
   final double width;
+  final TextAlign? textAlign;
+  final TextInputAction? textInputAction;
   final void Function(String)? onChanged;
 
   @override
@@ -32,6 +36,8 @@ class CustomTextField extends StatelessWidget {
             controller: controller,
             maxLength: maxLength,
             cupertino: (_, __) => CupertinoTextFieldData(
+                  textInputAction: textInputAction,
+                  textAlign: textAlign,
                   cursorColor: primaryColor,
                   decoration: BoxDecoration(
                       color: white.withOpacity(0.5),
@@ -49,8 +55,8 @@ class CustomTextField extends StatelessWidget {
                         borderSide: BorderSide(color: primaryColor, width: 2.0),
                       ),
                       border: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       labelText: text,
                       filled: true,
