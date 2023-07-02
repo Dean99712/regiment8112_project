@@ -30,9 +30,12 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
+    var size = MediaQuery.of(context).size;
     return SizedBox(
       width: width,
-      height: 52,
+      height: isIos ? size.width / 8.8 : size.width / 6,
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: PlatformTextField(
