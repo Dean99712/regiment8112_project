@@ -57,70 +57,78 @@ class _AddContactState extends State<AddContact> {
 
   Widget container(List<Widget> child) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            opacity: 0.12,
-            image: AssetImage("assets/images/Group 126.png"),
-            fit: BoxFit.cover),
-        gradient: RadialGradient(
-          center: Alignment.center,
-          radius: 0.1,
-          colors: [backgroundColor, backgroundColor],
+    return Material(
+      child: Container(
+        height: size.height,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              opacity: 0.22,
+              image: AssetImage("assets/images/Group 126.png"),
+              fit: BoxFit.cover),
+          gradient: RadialGradient(
+            center: Alignment.center,
+            radius: 0.1,
+            colors: [backgroundColor, backgroundColor],
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
-        child: SingleChildScrollView(
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/svg/logo.png',
-                      width: 97,
-                      height: 97,
-                    )
-                  ],
-                ),
-                Text("הוסף איש קשר",
-                    style: GoogleFonts.rubikDirt(
-                        fontSize: 32, color: primaryColor)),
-                SizedBox(
-                  height: size.height / 2.3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: child,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+          child: SingleChildScrollView(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/svg/logo.png',
+                        width: 97,
+                        height: 97,
+                      )
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: 52,
-                  width: size.width / 2.2,
-                  child: ElevatedButton.icon(
-                    label: const CustomText(
-                      fontSize: 16,
-                      text: "הוסף",
-                      color: white,
+                  Text("הוסף איש קשר",
+                      style: GoogleFonts.rubikDirt(
+                          fontSize: 36, color: primaryColor)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: SizedBox(
+                      height: size.height / 2.0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: child,
+                      ),
                     ),
-                    icon: const Icon(Icons.add_outlined),
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(primaryColor)),
-                    onPressed: () {
-                      if (Theme.of(context).platform == TargetPlatform.iOS) {
-                        createUserCupertino();
-                      } else {
-                        createUserMaterial();
-                      }
-                    },
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: SizedBox(
+                      height: 52,
+                      width: size.width / 2.2,
+                      child: ElevatedButton.icon(
+                        label: const CustomText(
+                          fontSize: 16,
+                          text: "הוסף",
+                          color: white,
+                        ),
+                        icon: const Icon(Icons.add_outlined),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(primaryColor)),
+                        onPressed: () {
+                          if (Theme.of(context).platform == TargetPlatform.iOS) {
+                            createUserCupertino();
+                          } else {
+                            createUserMaterial();
+                          }
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -130,6 +138,8 @@ class _AddContactState extends State<AddContact> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return PlatformScaffold(
       material: (_, __) => MaterialScaffoldData(
           body: container([
@@ -170,8 +180,13 @@ class _AddContactState extends State<AddContact> {
       ])),
       cupertino: (_, __) => CupertinoPageScaffoldData(
           body: container([
-        CustomTextField(controller: _nameController, text: "שם פרטי"),
-        CustomTextField(controller: _lastNameController, text: "שם משפחה"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomTextField(controller: _nameController, text: "שם פרטי", width: size.width / 2.4),
+            CustomTextField(controller: _lastNameController, text: "שם משפחה", width: size.width / 2.4),
+          ],
+        ),
         CustomTextField(
           controller: _phoneController,
           text: "מספר טלפון",
@@ -183,7 +198,7 @@ class _AddContactState extends State<AddContact> {
           text: _selectedValue == -1 ? 'בחר מחלקה' : platoon[_selectedValue],
           readOnly: true,
           prefix: CupertinoButton(
-            child: const Icon(CupertinoIcons.arrow_down_circle),
+            child: const Icon(CupertinoIcons.chevron_down, color: primaryColor,),
             onPressed: () {
               showCupertinoModalPopup(
                 context: context,

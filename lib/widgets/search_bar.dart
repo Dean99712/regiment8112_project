@@ -8,9 +8,10 @@ import 'package:regiment8112_project/utils/colors.dart';
 import '../providers/filter_provider.dart';
 
 class CustomSearchBar extends ConsumerWidget {
-  const CustomSearchBar({required this.controller, this.onChanged, super.key});
+  const CustomSearchBar({this.onChanged, super.key});
+  // const CustomSearchBar({required this.controller, this.onChanged, super.key});key
 
-  final SearchController controller;
+  // final SearchController controller;
   final void Function(String)? onChanged;
 
   Widget renderSearchBar(BuildContext context, WidgetRef ref) {
@@ -24,48 +25,48 @@ class CustomSearchBar extends ConsumerWidget {
           child: CupertinoSearchTextField(
             autofocus: true,
             onChanged: onChanged,
-            controller: controller,
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            backgroundColor: white,
+            backgroundColor: white.withOpacity(0.3),
             placeholder: "חפש...",
           ),
         ),
       );
     } else {
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: SearchBar(
-          trailing: <Widget>[
-            search.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      controller.clear();
-                      ref.read(searchProvider.notifier).state = '';
-                    })
-                : const SizedBox()
-          ],
-          onChanged: onChanged,
-          backgroundColor: MaterialStateProperty.all(white.withOpacity(0.4)),
-          leading: Icon(
-            Icons.search,
-            color: Colors.transparent.withOpacity(0.4),
-          ),
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width / 1.3,
-          ),
-          elevation: MaterialStateProperty.all(0),
-          textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
-          hintText: 'חפש...',
-          shape: MaterialStateProperty.all(
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-            ),
-          ),
-        ),
-      );
+      return Container();
+      // return Directionality(
+      //   textDirection: TextDirection.rtl,
+      //   child: SearchBar(
+      //     trailing: <Widget>[
+      //       search.isNotEmpty
+      //           ? IconButton(
+      //               icon: const Icon(Icons.close),
+      //               onPressed: () {
+      //                 controller.clear();
+      //                 ref.read(searchProvider.notifier).state = '';
+      //               })
+      //           : const SizedBox()
+      //     ],
+      //     onChanged: onChanged,
+      //     backgroundColor: MaterialStateProperty.all(white.withOpacity(0.4)),
+      //     leading: Icon(
+      //       Icons.search,
+      //       color: Colors.transparent.withOpacity(0.4),
+      //     ),
+      //     constraints: BoxConstraints(
+      //       maxWidth: MediaQuery.of(context).size.width / 1.3,
+      //     ),
+      //     elevation: MaterialStateProperty.all(0),
+      //     textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
+      //     hintText: 'חפש...',
+      //     shape: MaterialStateProperty.all(
+      //       const RoundedRectangleBorder(
+      //         borderRadius: BorderRadius.all(
+      //           Radius.circular(10.0),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // );
     }
   }
 

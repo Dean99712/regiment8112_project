@@ -21,11 +21,11 @@ class TopSection extends ConsumerStatefulWidget {
 class _TopSectionState extends ConsumerState<TopSection> {
   var activeTab = 'news';
 
-  final searchController = SearchController();
+  // final searchController = SearchController();
 
   @override
   void dispose() {
-    searchController.dispose();
+    // searchController.dispose();
     super.dispose();
   }
 
@@ -113,7 +113,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
         activeTab == 'news'
             ? const NextSummon()
             : CustomSearchBar(
-                controller: searchController,
+                // controller: searchController,
                 onChanged: (value) {
                   searchProv.updateQuery(value);
                 },

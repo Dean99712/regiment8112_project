@@ -251,12 +251,17 @@ class _ContactsState extends ConsumerState<Contacts> {
   }
 
   Widget caller(String phone) {
-    return CupertinoActionSheet(actions: [
+    return CupertinoActionSheet(
+        cancelButton: CupertinoButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("ביטול"),
+        ),
+        actions: [
       CupertinoActionSheetAction(
         onPressed: () async {
           call(phone);
         },
-        child: Text(phone),
+        child: Text('התקשר $phone'),
       )
     ]);
   }

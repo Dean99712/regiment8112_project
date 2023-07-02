@@ -32,6 +32,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
+      height: 52,
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: PlatformTextField(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:regiment8112_project/tabs/tab.dart';
-import 'package:regiment8112_project/tabs/tab/images_tab.dart';
-import 'package:regiment8112_project/tabs/tab/news_tab.dart';
-import 'package:regiment8112_project/tabs/tab/updates_tab.dart';
+import 'package:regiment8112_project/tabs/images_tab.dart';
+import 'package:regiment8112_project/tabs/news_tab.dart';
+import 'package:regiment8112_project/tabs/updates_tab.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 
 class SwipeableTab extends StatefulWidget {
   const SwipeableTab(this.scrollController, {Key? key}) : super(key: key);
@@ -51,9 +52,9 @@ class _SwipeableTabState extends State<SwipeableTab>
                   const TextStyle(fontWeight: FontWeight.normal),
               labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               padding: const EdgeInsets.only(top: 20),
-              unselectedLabelColor: const Color.fromRGBO(86, 154, 82, 1),
-              indicatorColor: const Color.fromRGBO(251, 174, 27, 1),
-              labelColor: const Color.fromRGBO(251, 174, 27, 1),
+              unselectedLabelColor: primaryColor,
+              indicatorColor: secondaryColor,
+              labelColor: secondaryColor,
               tabs: myTabs),
           Expanded(
             child: TabBarView(controller: tabController, children: [

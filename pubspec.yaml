@@ -58,7 +58,7 @@ dependencies:
   firebase_ui_storage: ^0.1.0-dev.6
   firebase_ui_firestore: 1.4.0
   flutter_blurhash: ^0.7.0
-  intl: ^0.18.0
+  intl: ^0.17.0
   flutter_phone_direct_caller: ^2.1.1
   flutter_scrolling_fab_animated: ^0.1.4
   firebase_database: ^10.2.2

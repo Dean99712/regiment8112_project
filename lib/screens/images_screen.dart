@@ -65,134 +65,168 @@ class _ImagesScreenState extends State<ImagesScreen> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
         cupertino: (_, __) => CupertinoPageScaffoldData(
-          body: NestedScrollView(
-                  floatHeaderSlivers: true,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    CupertinoSliverNavigationBar(
-                      transitionBetweenRoutes: true,
-                      stretch: true,
-                      largeTitle: Text(
-                        widget.title,
-                        style: GoogleFonts.heebo(fontWeight: FontWeight.w600),
+              body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  CupertinoSliverNavigationBar(
+                    transitionBetweenRoutes: true,
+                    stretch: true,
+                    largeTitle: Text(
+                      widget.title,
+                      style: GoogleFonts.heebo(
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
+                    trailing: CupertinoButton(
+                      child: const Icon(
+                        CupertinoIcons.ellipsis_circle,
+                        color: primaryColor,
                       ),
-                      trailing: CupertinoButton(
-                        child: const Icon(
-                          CupertinoIcons.ellipsis_circle,
-                          color: primaryColor,
-                        ),
-                        onPressed: () {},
+                      onPressed: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) => CupertinoActionSheet(
+                                  cancelButton: CupertinoButton(
+                                    child: const Text("בטל"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  actions: [
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        if (_numOfAxisCount != 1) {
+                                          setState(() {
+                                            _numOfAxisCount -= 1;
+                                          });
+                                        }
+                                      },
+                                      child: const Text("הגדלה"),
+                                    ),
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        if (_numOfAxisCount != 6) {
+                                          setState(() {
+                                            _numOfAxisCount += 1;
+                                          });
+                                        }
+                                      },
+                                      child: const Text("הקטנה"),
+                                    ),
+                                  ],
+                                ));
+                      },
+                    ),
+                    leading: CupertinoButton(
+                      child: const Icon(
+                        CupertinoIcons.plus,
+                        color: primaryColor,
                       ),
-                      leading: CupertinoButton(
-                        child: const Icon(
-                          CupertinoIcons.plus,
-                          color: primaryColor,
-                        ),
-                        onPressed: () {
-                          selectedImages(widget.title);
-                        },
-                      ),
-                    )
-                  ],
-                  body: AllImages(
-                    _numOfAxisCount,
-                    title: widget.title,
-                    scrollOffset: _scrollControllerOffset,
-                    scrollController: _scrollController,
-                  ),
+                      onPressed: () {
+                        selectedImages(widget.title);
+                      },
+                    ),
+                  )
+                ],
+                body: AllImages(
+                  _numOfAxisCount,
+                  title: widget.title,
+                  scrollOffset: _scrollControllerOffset,
+                  scrollController: _scrollController,
                 ),
               ),
+            ),
         material: (_, __) {
           var color = _scrollControllerOffset < 50 ? white : white;
           return MaterialScaffoldData(
-              appBar: AppBar(
-                elevation: 0.0,
-                actions: [
-                  PopupMenuButton(
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        PopupMenuItem(
-                            enabled: _numOfAxisCount != 1 ? true : false,
-                            child: TextButton.icon(
-                                onPressed: () {
-                                  if (_numOfAxisCount != 1) {
-                                    setState(() {
-                                      _numOfAxisCount -= 1;
-                                    });
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.zoom_in,
-                                  color: secondaryColor,
-                                ),
-                                label: const Text(
-                                    style: TextStyle(color: white), "הגדל"))),
-                        PopupMenuItem(
-                            enabled: _numOfAxisCount != 6 ? true : false,
-                            child: TextButton.icon(
-                                onPressed: () {
-                                  if (_numOfAxisCount != 6) {
-                                    setState(() {
-                                      _numOfAxisCount += 1;
-                                    });
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.zoom_out,
-                                  color: secondaryColor,
-                                ),
-                                label: const Text(
-                                    style: TextStyle(color: white), "הקטן")))
-                      ];
-                    },
-                    icon: const Icon(Icons.more_horiz),
-                  )
-                ],
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
+            appBar: AppBar(
+              elevation: 0.0,
+              actions: [
+                PopupMenuButton(
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem(
+                          enabled: _numOfAxisCount != 1 ? true : false,
+                          child: TextButton.icon(
+                              onPressed: () {
+                                if (_numOfAxisCount != 1) {
+                                  setState(() {
+                                    _numOfAxisCount -= 1;
+                                  });
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.zoom_in,
+                                color: secondaryColor,
+                              ),
+                              label: const Text(
+                                  style: TextStyle(color: white), "הגדל"))),
+                      PopupMenuItem(
+                          enabled: _numOfAxisCount != 6 ? true : false,
+                          child: TextButton.icon(
+                              onPressed: () {
+                                if (_numOfAxisCount != 6) {
+                                  setState(() {
+                                    _numOfAxisCount += 1;
+                                  });
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.zoom_out,
+                                color: secondaryColor,
+                              ),
+                              label: const Text(
+                                  style: TextStyle(color: white), "הקטן")))
+                    ];
                   },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: color,
-                  ),
-                ),
-                centerTitle: true,
-                title: CustomText(
-                    fontSize: 18,
-                    color: color,
-                    text: widget.title,
-                    fontWeight: FontWeight.w600),
-                backgroundColor: _scrollControllerOffset < 50
-                    ? primaryColor
-                    : Colors.transparent
-                        .withOpacity(
-                            (_scrollControllerOffset / 350).clamp(0, 1))
-                        .withOpacity(0.1),
-              ),
-              extendBodyBehindAppBar: true,
-              floatingActionButton: ScrollingFabAnimated(
-                width: 175,
-                icon: const Icon(Icons.add_a_photo_sharp, color: white),
-                text: const CustomText(
-                    fontSize: 16, color: white, text: "הוסף תמונות"),
-                onPress: () {
-                  selectedImages(widget.title);
+                  icon: const Icon(Icons.more_horiz),
+                )
+              ],
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-                scrollController: _scrollController,
-                animateIcon: false,
-                color: primaryColor,
-                duration: const Duration(milliseconds: 150),
-                elevation: 0.0,
-                inverted: true,
-                radius: 40.0,
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: color,
+                ),
               ),
-              body: AllImages(
-                _numOfAxisCount,
-                title: widget.title,
-                scrollOffset: _scrollControllerOffset,
-                scrollController: _scrollController,
-              ),
-            );
+              centerTitle: true,
+              title: CustomText(
+                  fontSize: 18,
+                  color: color,
+                  text: widget.title,
+                  fontWeight: FontWeight.w600),
+              backgroundColor: _scrollControllerOffset < 50
+                  ? primaryColor
+                  : Colors.transparent
+                      .withOpacity((_scrollControllerOffset / 350).clamp(0, 1))
+                      .withOpacity(0.1),
+            ),
+            extendBodyBehindAppBar: true,
+            floatingActionButton: ScrollingFabAnimated(
+              width: 175,
+              icon: const Icon(Icons.add_a_photo_sharp, color: white),
+              text: const CustomText(
+                  fontSize: 16, color: white, text: "הוסף תמונות"),
+              onPress: () {
+                selectedImages(widget.title);
+              },
+              scrollController: _scrollController,
+              animateIcon: false,
+              color: primaryColor,
+              duration: const Duration(milliseconds: 150),
+              elevation: 0.0,
+              inverted: true,
+              radius: 40.0,
+            ),
+            body: AllImages(
+              _numOfAxisCount,
+              title: widget.title,
+              scrollOffset: _scrollControllerOffset,
+              scrollController: _scrollController,
+            ),
+          );
         });
   }
 }

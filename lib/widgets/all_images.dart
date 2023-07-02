@@ -125,18 +125,19 @@ class _AllImagesState extends State<AllImages> {
                 crossAxisCount: widget.itemCount!),
             itemCount: photos.length,
             itemBuilder: (context, index) {
+              var color = Theme.of(context).colorScheme;
               return isIOS
                   ? CupertinoContextMenu(
-                      enableHapticFeedback: true,
                       actions: [
                         CupertinoContextMenuAction(
                             isDefaultAction: true,
                             trailingIcon: const IconData(0xf4ca,
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage),
-                            child: const Text("שתף"),
+                            child: Text("שתף", style: TextStyle(color: color.onBackground),),
                             onPressed: () {
                               Navigator.pop(context);
+                              showModalBottomSheet(context: context, builder: (context) => Container());
                             }),
                         CupertinoContextMenuAction(
                           isDestructiveAction: true,

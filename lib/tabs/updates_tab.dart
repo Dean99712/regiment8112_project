@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:regiment8112_project/models/updates.dart';
 
-import '../../widgets/bubble.dart';
-import '../../data/updates.dart';
+import '../widgets/bubble.dart';
+import '../data/updates.dart';
 
 class UpdatesTab extends StatelessWidget {
   const UpdatesTab({Key? key}) : super(key: key);
