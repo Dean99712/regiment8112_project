@@ -27,7 +27,7 @@ class CustomSearchBar extends ConsumerWidget {
             onChanged: onChanged,
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             backgroundColor: white.withOpacity(0.3),
-            placeholder: "חפש...",
+            placeholder: ".חפש...",
           ),
         ),
       );
