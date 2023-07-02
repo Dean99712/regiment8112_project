@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 import 'screens/login_screen.dart';
 
 class Login extends StatelessWidget {
@@ -9,7 +10,9 @@ class Login extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         brightness: Brightness.dark,
-        backgroundColor: const Color.fromRGBO(60, 58, 59, 1)
+        primaryColor: primaryColor,
+        splashColor: secondaryColor,
+        backgroundColor: backgroundColor,
       ),
       debugShowCheckedModeBanner: false,
       home: const Scaffold(

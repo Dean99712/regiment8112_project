@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'login.dart';
@@ -12,6 +13,6 @@ WidgetsFlutterBinding.ensureInitialized();
   );
   Intl.defaultLocale = 'he';
   initializeDateFormatting('he', null);
-  runApp(const Login());
+  runApp(const ProviderScope(child: Login()));
 }
 

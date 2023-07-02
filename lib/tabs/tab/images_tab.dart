@@ -16,20 +16,6 @@ class _ImagesTabState extends State<ImagesTab> {
   final StorageService _storage = StorageService();
   var activeScreen = 'images-preview';
 
-  // void switchScreen() {
-  //   if (activeScreen == 'images-preview') {
-  //     setState(() {
-  //       widget.tabController.animateTo(2);
-  //       activeScreen = 'all-images';
-  //     });
-  //   } else {
-  //     setState(() {
-  //       widget.tabController.animateTo(1);
-  //       activeScreen = 'images-preview';
-  //     });
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -47,19 +33,22 @@ class _ImagesTabState extends State<ImagesTab> {
     return FutureBuilder(
       future: getDocuments(),
       builder: (context, snapshot) {
-        var list = snapshot.data!.map((e) => e.data()).toList();
-        return ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            String albumName = list[index]['albumName'];
-            Timestamp createdAt = list[index]["createdAt"];
-            return ImagesPreview(
-              date: createdAt,
-              text: albumName,
-            );
-          },
-        );
+        if (snapshot.hasData) {
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              var list = snapshot.data!.map((e) => e.data()).toList();
+              String albumName = list[index]['albumName'];
+              Timestamp createdAt = list[index]["createdAt"];
+              return ImagesPreview(
+                date: createdAt,
+                text: albumName,
+              );
+            },
+          );
+        }
+        return Container();
       },
     );
   }

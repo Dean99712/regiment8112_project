@@ -1,33 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:regiment8112_project/providers/search_provider.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 
-class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({super.key});
+import '../providers/filter_provider.dart';
 
-  @override
-  State<CustomSearchBar> createState() => _CustomSearchBarState();
-}
+class CustomSearchBar extends ConsumerWidget {
+  const CustomSearchBar({required this.controller, this.onChanged, super.key});
 
-class _CustomSearchBarState extends State<CustomSearchBar> {
+  final SearchController controller;
+  final void Function(String)? onChanged;
 
-  final _searchController = TextEditingController();
+  Widget renderSearchBar(BuildContext context, WidgetRef ref) {
+    var search = ref.watch(searchProvider);
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  Widget renderSearchBar(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 1.3,
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: CupertinoSearchTextField(
-            controller: _searchController,
+            autofocus: true,
+            onChanged: onChanged,
+            controller: controller,
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             backgroundColor: white,
             placeholder: "חפש...",
@@ -38,8 +35,22 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       return Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
+          trailing: <Widget>[
+            search.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      controller.clear();
+                      ref.read(searchProvider.notifier).state = '';
+                    })
+                : const SizedBox()
+          ],
+          onChanged: onChanged,
           backgroundColor: MaterialStateProperty.all(white.withOpacity(0.4)),
-          leading: Icon(Icons.search, color: Colors.transparent.withOpacity(0.4),),
+          leading: Icon(
+            Icons.search,
+            color: Colors.transparent.withOpacity(0.4),
+          ),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width / 1.3,
           ),
@@ -59,19 +70,22 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var isGrouped = ref.watch(isGroupedProvider);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          renderSearchBar(context),
+          renderSearchBar(context, ref),
           IconButton(
             color: primaryColor,
             enableFeedback: true,
             icon: const Icon(Icons.filter_list_outlined),
             onPressed: () {
+              ref.read(isGroupedProvider.notifier).state = !isGrouped;
             },
           )
         ],

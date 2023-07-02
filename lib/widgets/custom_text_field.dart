@@ -6,20 +6,24 @@ import 'package:regiment8112_project/utils/colors.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField(
       {required this.controller,
-      required this.text,
-      this.type = TextInputType.text,
-      this.maxLength = 10,
-      this.width = double.infinity,
-      this.onChanged,
-      this.textAlign,
-      this.textInputAction,
-      super.key});
+        required this.text,
+        this.type = TextInputType.text,
+        this.maxLength = 10,
+        this.readOnly = false,
+        this.width = double.infinity,
+        this.textAlign,
+        this.onChanged,
+        this.prefix,
+        this.textInputAction,
+        super.key});
 
   final TextEditingController? controller;
   final String text;
   final TextInputType type;
   final int? maxLength;
   final double width;
+  final bool readOnly;
+  final Widget? prefix;
   final TextAlign? textAlign;
   final TextInputAction? textInputAction;
   final void Function(String)? onChanged;
@@ -35,33 +39,35 @@ class CustomTextField extends StatelessWidget {
             onChanged: onChanged,
             controller: controller,
             maxLength: maxLength,
+            readOnly: readOnly,
             cupertino: (_, __) => CupertinoTextFieldData(
-                  textInputAction: textInputAction,
-                  textAlign: textAlign,
-                  cursorColor: primaryColor,
-                  decoration: BoxDecoration(
-                      color: white.withOpacity(0.5),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  textDirection: TextDirection.rtl,
-                  placeholder: text,
-                  placeholderStyle: GoogleFonts.heebo(color: primaryColor),
-                ),
+              textInputAction: textInputAction,
+              textAlign: textAlign,
+              prefix: prefix,
+              cursorColor: primaryColor,
+              decoration: BoxDecoration(
+                  color: white.withOpacity(0.5),
+                  borderRadius:
+                  const BorderRadius.all(Radius.circular(10))),
+              textDirection: TextDirection.rtl,
+              placeholder: text,
+              placeholderStyle: GoogleFonts.heebo(color: primaryColor),
+            ),
             material: (_, __) => MaterialTextFieldData(
-                  decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: primaryColor, width: 2.0),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      labelText: text,
-                      filled: true,
-                      fillColor: white.withOpacity(0.3)),
-                )),
+              decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(color: primaryColor, width: 2.0),
+                  ),
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  labelText: text,
+                  filled: true,
+                  fillColor: white.withOpacity(0.3)),
+            )),
       ),
     );
   }

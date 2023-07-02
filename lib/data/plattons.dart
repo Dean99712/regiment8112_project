@@ -1,4 +1,4 @@
-var platoon = [
+List<String> platoon = [
   "מחלקה 1",
   "מחלקה 2",
   "מחלקה 3",

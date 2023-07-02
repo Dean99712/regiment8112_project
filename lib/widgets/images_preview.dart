@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:regiment8112_project/models/album.dart';
@@ -11,23 +11,21 @@ import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../utils/colors.dart';
 import 'custom_text.dart';
 
-class ImagesPreview extends StatefulWidget {
+class ImagesPreview extends ConsumerStatefulWidget {
   const ImagesPreview({required this.text, required this.date, super.key});
 
   final String text;
   final Timestamp date;
 
   @override
-  State<ImagesPreview> createState() => _ImagesPreviewState();
+  ConsumerState<ImagesPreview> createState() => _ImagesPreviewState();
 }
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 late Stream<List<Album>> _imagesList;
 
-class _ImagesPreviewState extends State<ImagesPreview> {
-  int itemCount = 3;
-
+class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
   @override
   void initState() {
     getPhotosFromAlbum(widget.text);
@@ -52,7 +50,7 @@ class _ImagesPreviewState extends State<ImagesPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Album>?>(
+    return StreamBuilder<List<Album>>(
         stream: _imagesList,
         builder: (context, snapshot) {
           var date = DateTime.fromMillisecondsSinceEpoch(
@@ -87,49 +85,109 @@ class _ImagesPreviewState extends State<ImagesPreview> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 15.0),
-                              child: SizedBox(
-                                height: 240,
+                              child: Container(
+                                color: snapshot.data!.isEmpty
+                                    ? Colors.black.withOpacity(0.2)
+                                    : null,
+                                height: snapshot.data!.length == 2 ? 175 : 240,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  child: GridView.builder(
-                                    // itemCount: snapshot.data!.length == 3 ? 3 : 1,
-                                    itemCount: 3,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate: SliverQuiltedGridDelegate(
-                                        mainAxisSpacing: 5,
-                                        crossAxisSpacing: 5,
-                                        crossAxisCount: 3,
-                                        pattern: const [
-                                          QuiltedGridTile(2, 2),
-                                          QuiltedGridTile(1, 1),
-                                          QuiltedGridTile(1, 1),
-                                        ]),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      List<Album> imagesList = snapshot.data!;
-                                      String photo = imagesList[index].imageUrl;
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ImageGallery(
-                                                        images: imagesList,
-                                                        index: index,
-                                                      )));
-                                        },
-                                        child: CachedNetworkImage(
-                                          imageUrl: photo,
-                                          maxHeightDiskCache: 500,
-                                          fadeInDuration:
-                                              const Duration(milliseconds: 150),
-                                          fit: BoxFit.fill,
+                                  child: snapshot.data!.isEmpty
+                                      ? Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const CustomText(
+                                                  text: "האלבום ריק,",
+                                                  fontSize: 20,
+                                                  color: white),
+                                              CustomText(
+                                                text:
+                                                    " היכנס אליו על מנת להוסיף תמונות",
+                                                fontSize: 12,
+                                                color: white.withOpacity(0.5),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : GridView.builder(
+                                          itemCount: snapshot.data!.isEmpty
+                                              ? 0
+                                              : snapshot.data!.length == 2
+                                                  ? 2
+                                                  : 3,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          gridDelegate:
+                                              SliverQuiltedGridDelegate(
+                                                  mainAxisSpacing: 5,
+                                                  crossAxisSpacing: 5,
+                                                  crossAxisCount: snapshot.data!
+                                                                  .length ==
+                                                              1 &&
+                                                          snapshot.data!.isEmpty
+                                                      ? 1
+                                                      : snapshot.data!.length ==
+                                                              2
+                                                          ? 2
+                                                          : 3,
+                                                  pattern: snapshot
+                                                              .data!.length ==
+                                                          1
+                                                      ? const [
+                                                          QuiltedGridTile(3, 3),
+                                                        ]
+                                                      : snapshot.data!.length ==
+                                                              2
+                                                          ? const [
+                                                              QuiltedGridTile(
+                                                                  1, 1),
+                                                              QuiltedGridTile(
+                                                                  1, 1),
+                                                              // QuiltedGridTile(1, 1),
+                                                            ]
+                                                          : const [
+                                                              QuiltedGridTile(
+                                                                  2, 2),
+                                                              QuiltedGridTile(
+                                                                  1, 1),
+                                                              QuiltedGridTile(
+                                                                  1, 1),
+                                                            ]),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            List<Album> imagesList =
+                                                snapshot.data!;
+                                            String photo =
+                                                imagesList[index].imageUrl;
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ImageGallery(
+                                                              images:
+                                                                  imagesList,
+                                                              index: index,
+                                                            )));
+                                              },
+                                              child: CachedNetworkImage(
+                                                imageUrl: photo,
+                                                maxHeightDiskCache:
+                                                    imagesList.length == 1
+                                                        ? 1200
+                                                        : 500,
+                                                fadeInDuration: const Duration(
+                                                    milliseconds: 150),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      );
-                                    },
-                                  ),
                                 ),
                               ),
                             ),

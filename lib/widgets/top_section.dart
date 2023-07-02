@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:regiment8112_project/providers/search_provider.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/next_summon.dart';
 import 'package:regiment8112_project/widgets/search_bar.dart';
 import 'custom_text.dart';
 
-class TopSection extends StatefulWidget {
+class TopSection extends ConsumerStatefulWidget {
   const TopSection(this.currentTab, this.updateActiveTab, {super.key});
 
   final String currentTab;
@@ -13,24 +15,25 @@ class TopSection extends StatefulWidget {
   final Function(String value) updateActiveTab;
 
   @override
-  State<TopSection> createState() => _TopSectionState();
+  ConsumerState<TopSection> createState() => _TopSectionState();
 }
 
-class _TopSectionState extends State<TopSection> {
+class _TopSectionState extends ConsumerState<TopSection> {
   var activeTab = 'news';
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  final searchController = SearchController();
 
-  void function(BuildContext context, String route, Widget widget) {
-    Navigator.push(context,
-        MaterialPageRoute(maintainState: true, builder: (context) => widget));
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    var searchProv = ref.read(searchProvider.notifier);
+
     return Column(
       children: [
         Row(
@@ -42,6 +45,7 @@ class _TopSectionState extends State<TopSection> {
                 material: (_, __) => MaterialTextButtonData(
                   onPressed: () {
                     setState(() {
+                      searchProv.state = '';
                       activeTab = 'news';
                     });
                     widget.updateActiveTab(activeTab);
@@ -54,6 +58,7 @@ class _TopSectionState extends State<TopSection> {
                 ),
                 cupertino: (_, __) => CupertinoTextButtonData(onPressed: () {
                   setState(() {
+                    searchProv.state = '';
                     activeTab = 'news';
                   });
                   widget.updateActiveTab(activeTab);
@@ -64,10 +69,13 @@ class _TopSectionState extends State<TopSection> {
                     text: "עדכונים וחדשות"),
               ),
             ),
-            Image.asset(
-              'assets/svg/logo.png',
-              width: 97,
-              height: 97,
+            Hero(
+              tag: "logo image",
+              child: Image.asset(
+                'assets/svg/logo.png',
+                width: 97,
+                height: 97,
+              ),
             ),
             PlatformTextButton(
               material: (_, __) => MaterialTextButtonData(
@@ -102,7 +110,14 @@ class _TopSectionState extends State<TopSection> {
             )
           ],
         ),
-        activeTab == 'news' ? const NextSummon() : const CustomSearchBar()
+        activeTab == 'news'
+            ? const NextSummon()
+            : CustomSearchBar(
+                controller: searchController,
+                onChanged: (value) {
+                  searchProv.updateQuery(value);
+                },
+              )
       ],
     );
   }

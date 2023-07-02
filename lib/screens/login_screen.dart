@@ -77,7 +77,10 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset("assets/svg/logo.png", height: 210, width: 210),
+              Hero(
+                  tag: "logo image",
+                  child: Image.asset("assets/svg/logo.png",
+                      height: 210, width: 210)),
               Text(
                 'חרמ"ש מסייעת',
                 style: GoogleFonts.rubikDirt(
