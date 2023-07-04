@@ -57,6 +57,8 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
               widget.date.millisecondsSinceEpoch);
           var formattedDate = intl.DateFormat('yMMM').format(date);
           if (snapshot.hasData) {
+            List<Album> imagesList =
+            snapshot.data!;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0)
                   .add(const EdgeInsets.only(bottom: 30.0)),
@@ -159,8 +161,6 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                             ]),
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            List<Album> imagesList =
-                                                snapshot.data!;
                                             String photo =
                                                 imagesList[index].imageUrl;
                                             return InkWell(
@@ -207,10 +207,10 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                   ImagesScreen(title: widget.text),
                             ));
                       },
-                      child: Row(
+                      child: const Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children:const [
+                        children:[
                           Icon(
                             Icons.arrow_back_ios_new,
                             color: primaryColor,

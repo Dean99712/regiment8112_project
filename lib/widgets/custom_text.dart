@@ -5,7 +5,7 @@ import 'package:regiment8112_project/utils/colors.dart';
 class CustomText extends StatelessWidget {
   const CustomText(
       {required this.text,
-      required this.fontSize,
+      this.fontSize = 16,
       this.color = primaryColor,
       this.fontWeight = FontWeight.normal,
       this.textAlign = TextAlign.center,

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,14 +28,11 @@ class _OtpScreenState extends State<OtpScreen> {
     super.initState();
   }
 
-  final _controller = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
           padding: const EdgeInsets.all(60),
@@ -49,7 +45,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   fit: BoxFit.cover),
               gradient: RadialGradient(radius: 0.91, colors: [
                 Color.fromRGBO(121, 121, 121, 1),
-                Color.fromRGBO(60, 58, 59, 1),
+                backgroundColor,
               ])),
           child: SingleChildScrollView(
             child: Column(
@@ -64,8 +60,8 @@ class _OtpScreenState extends State<OtpScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 30.0),
                   child: CustomTextField(
-                      controller: _controller,
-                      // controller: controller,
+                      maxLength: 6,
+                      controller: null,
                       text: "מספר טלפון",
                       onChanged: (value) {
                         smsCode = value;
@@ -78,10 +74,16 @@ class _OtpScreenState extends State<OtpScreen> {
                       color: secondaryColor,
                       function: () async {
                         try {
-                          _authService.verifyOtp(smsCode, verificationId);
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainScreen(),), (route) => false);
+                          await _authService
+                              .verifyOtp(smsCode, verificationId)
+                              .whenComplete(() => Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const MainScreen(),
+                                  ),
+                                  (route) => false));
                         } catch (e) {
-                          print('wrong otp');
+                          print('$e wrong otp');
                         }
                       },
                     )),
@@ -117,7 +119,6 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 }

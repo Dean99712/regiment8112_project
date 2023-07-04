@@ -13,7 +13,7 @@ class SearchNotifier extends StateNotifier<String> {
     var value = state = query;
     var collection = _firestore
         .collection("users")
-        .where("name", isLessThan: '${value}z')
+        .where("name", isLessThan: '${value}ת')
         .where("name", isGreaterThanOrEqualTo: value)
         .snapshots();
 

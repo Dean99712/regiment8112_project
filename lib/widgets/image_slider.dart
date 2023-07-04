@@ -2,19 +2,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import '../models/album.dart';
+import '../providers/documents_provider.dart';
 
-class ImageGallery extends StatelessWidget {
-  const ImageGallery({required this.images, required this.index, super.key});
+class ImageGallery extends ConsumerWidget {
+  const ImageGallery(
+      {this.title, required this.images, required this.index, super.key});
 
+  final String? title;
   final int index;
   final List<Album> images;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final PageController pageController =
+        PageController(initialPage: index, keepPage: true);
+
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
           navigationBar: CupertinoNavigationBar(
@@ -41,11 +48,23 @@ class ImageGallery extends StatelessWidget {
               PopupMenuButton(
                   itemBuilder: (context) => [
                         PopupMenuItem(
-                          onTap: () {},
+                          onTap: () {
+                            showPlatformDialog(
+                              context: context,
+                              builder: (context) => const Text(
+                                  "אתה עומד למחוק תמונה זו, האם אתה בטוח ?"),
+                            );
+                          },
                           child: const Text("שתף תמונה"),
                         ),
                         PopupMenuItem(
-                          onTap: () {},
+                          onTap: () {
+                            ref
+                                .read(documentsProvider.notifier)
+                                .deleteDocument(title!, index);
+                            images.removeAt(index);
+                            pageController.jumpToPage(index + 1);
+                          },
                           child: const Text("מחק תמונה זו"),
                         ),
                       ],
@@ -62,16 +81,19 @@ class ImageGallery extends StatelessWidget {
           body: ImageSlider(
             images: images,
             index: index,
+            controller: pageController,
           )),
     );
   }
 }
 
 class ImageSlider extends StatelessWidget {
-  const ImageSlider({required this.images, required this.index, super.key});
+  const ImageSlider(
+      {required this.images, required this.index, this.controller, super.key});
 
   final int index;
   final List<Album> images;
+  final PageController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +114,7 @@ class ImageSlider extends StatelessWidget {
               ),
               minScale: PhotoViewComputedScale.contained,
             ),
-            pageController: PageController(initialPage: index),
+            pageController: controller,
             loadingBuilder: (context, event) => const Center(
               child: CircularProgressIndicator.adaptive(),
             ),

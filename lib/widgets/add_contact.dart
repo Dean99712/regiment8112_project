@@ -62,7 +62,7 @@ class _AddContactState extends State<AddContact> {
         height: size.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              opacity: 0.22,
+              opacity: 0.12,
               image: AssetImage("assets/images/Group 126.png"),
               fit: BoxFit.cover),
           gradient: RadialGradient(

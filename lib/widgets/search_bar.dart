@@ -18,7 +18,7 @@ class CustomSearchBar extends ConsumerWidget {
 
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return SizedBox(
-        width: MediaQuery.of(context).size.width / 1.3,
+        width: MediaQuery.of(context).size.width / 1.2,
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: CupertinoSearchTextField(

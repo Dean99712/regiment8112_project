@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../models/album.dart';
+import '../providers/documents_provider.dart';
 import '../utils/colors.dart';
 
-class AllImages extends StatefulWidget {
+class AllImages extends ConsumerStatefulWidget {
   const AllImages(this.itemCount,
       {required this.title,
       required this.scrollOffset,
@@ -21,14 +22,12 @@ class AllImages extends StatefulWidget {
   final ScrollController? scrollController;
 
   @override
-  State<AllImages> createState() => _AllImagesState();
+  ConsumerState<AllImages> createState() => _AllImagesState();
 }
 
-class _AllImagesState extends State<AllImages> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class _AllImagesState extends ConsumerState<AllImages> {
   List<XFile> selectedImagesList = [];
   late Stream<List<Album>>? _photosStream;
-  List<String> documentsList = [];
 
   final StorageService _storageService = StorageService();
 
@@ -37,20 +36,7 @@ class _AllImagesState extends State<AllImages> {
   @override
   void initState() {
     super.initState();
-    getDocuments(widget.title);
     photosSnapshot(widget.title, limit);
-  }
-
-  Future getDocuments(String chileName) async {
-    await _firestore
-        .collectionGroup("album")
-        .orderBy("createdAt", descending: true)
-        .where("title", isEqualTo: chileName)
-        .get()
-        // ignore: avoid_function_literals_in_foreach_calls
-        .then((snapshot) => snapshot.docs.forEach((element) {
-              documentsList.add(element.reference.id);
-            }));
   }
 
   Stream<List<Album>> photosSnapshot(String childName, int limit) {
@@ -63,23 +49,6 @@ class _AllImagesState extends State<AllImages> {
       _photosStream = albums;
     });
     return albums;
-  }
-
-  Future deleteDocuments(String childName, int index) async {
-    var snapshot = await _firestore
-        .collection("albums")
-        .doc(childName)
-        .collection("album")
-        .orderBy("createdAt")
-        .get();
-
-    var docs = snapshot.docs.map((event) => event.reference);
-    for (var doc in docs) {
-      if (documentsList[index] == doc.id) {
-        doc.delete();
-        documentsList.removeWhere((element) => element.contains(doc.id));
-      }
-    }
   }
 
   Widget buildImage(Album image) {
@@ -109,11 +78,12 @@ class _AllImagesState extends State<AllImages> {
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    ref.watch(documentsProvider.notifier).getDocuments(widget.title);
+    var documentsProv = ref.read(documentsProvider.notifier);
 
     return StreamBuilder(
       stream: _photosStream,
       builder: (context, snapshot) {
-        // if (snapshot.hasData) {
           List<Album> photos = snapshot.data ?? [];
           return GridView.builder(
             key: ValueKey<int>(widget.itemCount!),
@@ -166,7 +136,7 @@ class _AllImagesState extends State<AllImages> {
                                     child: const Text("מחק תמונה זו"),
                                     onPressed: () async {
                                       Navigator.pop(context);
-                                      deleteDocuments(widget.title, index);
+                                      documentsProv.deleteDocument(widget.title, index);
                                     },
                                   )
                                 ],
@@ -194,7 +164,7 @@ class _AllImagesState extends State<AllImages> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ImageGallery(
-                                      images: photos, index: index),
+                                      images: photos, index: index, title: widget.title),
                                 ));
                           },
                           child: buildImage(photos[index])),

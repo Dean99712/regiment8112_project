@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-
+    final size = MediaQuery.of(context).size;
     return isIos
         ? Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -35,6 +35,7 @@ class CustomButton extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
             width: width,
+            height: size.height / 17,
             child: MaterialButton(
               elevation: 0.0,
                 shape:

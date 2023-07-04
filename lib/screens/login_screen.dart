@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regiment8112_project/screens/main_screen.dart';
 import 'package:regiment8112_project/screens/otp_screen.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
+
+import 'main_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -37,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          print('Error, invalid code');
+          debugPrint('Error, invalid code');
         }
       },
       codeSent: (verificationId, int? resendToken) {
@@ -58,6 +60,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -71,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 fit: BoxFit.cover),
             gradient: RadialGradient(radius: 0.91, colors: [
               Color.fromRGBO(121, 121, 121, 1),
-              Color.fromRGBO(60, 58, 59, 1),
+              backgroundColor,
             ])),
         child: SingleChildScrollView(
           child: Column(
@@ -84,12 +89,12 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 'חרמ"ש מסייעת',
                 style: GoogleFonts.rubikDirt(
-                    fontSize: 32, color: const Color.fromRGBO(86, 154, 82, 1)),
+                    fontSize: 32, color: primaryColor),
               ),
               Text(
                 "8112",
                 style: GoogleFonts.rubikDirt(
-                    fontSize: 90, color: const Color.fromRGBO(86, 154, 82, 1)),
+                    fontSize: 90, color: primaryColor),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 25.0),
@@ -112,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => const MainScreen(),
                           ));
                       // authenticateUser(phone);
-                    }),
+                    }, width: size.width < 380 ? size.width : size.width / 1.5,),
               ),
               Container(
                 padding: const EdgeInsets.only(top: 24),
