@@ -45,7 +45,6 @@ class _SwipeableTabState extends State<SwipeableTab>
       heightFactor: double.infinity,
       child: Column(
         children: [
-          // TabBars(),
           TabBar(
               controller: tabController,
               unselectedLabelStyle:
@@ -60,7 +59,7 @@ class _SwipeableTabState extends State<SwipeableTab>
             child: TabBarView(controller: tabController, children: [
               const NewsTab(),
               const UpdatesTab(),
-              ImagesTab(tabController),
+              const ImagesTab(),
             ]),
           ),
         ],

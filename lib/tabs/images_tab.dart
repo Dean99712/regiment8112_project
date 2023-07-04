@@ -4,9 +4,7 @@ import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/widgets/images_preview.dart';
 
 class ImagesTab extends StatefulWidget {
-  const ImagesTab(this.tabController, {super.key});
-
-  final TabController tabController;
+  const ImagesTab({super.key});
 
   @override
   State<ImagesTab> createState() => _ImagesTabState();
@@ -15,7 +13,6 @@ class ImagesTab extends StatefulWidget {
 class _ImagesTabState extends State<ImagesTab> {
 
   final StorageService _storage = StorageService();
-  var activeScreen = 'images-preview';
 
   @override
   void initState() {

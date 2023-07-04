@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "חרמש מסייעת 8112--target macOS & C:\src\flutter/bin/internal/exit_with_errorlevel.bat" "\0"
+            VALUE "FileDescription", "Regiment 8112" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "חרמש מסייעת 8112--target macOS & C:\src\flutter/bin/internal/exit_with_errorlevel.bat" "\0"
+            VALUE "InternalName", "Regiment 8112" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "regiment8112_project.exe" "\0"
-            VALUE "ProductName", "חרמש מסייעת 8112--target macOS & C:\src\flutter/bin/internal/exit_with_errorlevel.bat" "\0"
+            VALUE "ProductName", 'חרמ"ש מסייעת 8112' "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

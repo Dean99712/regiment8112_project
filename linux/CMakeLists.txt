@@ -4,10 +4,10 @@ project(runner LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
-set(BINARY_NAME "חרמש מסייעת 8112--target macOS & C:\src\flutter/bin/internal/exit_with_errorlevel.bat")
+set(BINARY_NAME "Regiment 8112")
 # The unique GTK application identifier for this application. See:
 # https://wiki.gnome.org/HowDoI/ChooseApplicationID
-set(APPLICATION_ID "com.onatcipli.networkUpp")
+set(APPLICATION_ID "com.regiment.regiment8112")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

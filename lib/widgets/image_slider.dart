@@ -55,17 +55,22 @@ class ImageGallery extends ConsumerWidget {
                                   "אתה עומד למחוק תמונה זו, האם אתה בטוח ?"),
                             );
                           },
-                          child: const Text("שתף תמונה"),
+                          child: const Text("שתף/ שתפי תמונה"),
                         ),
                         PopupMenuItem(
                           onTap: () {
                             ref
                                 .read(documentsProvider.notifier)
                                 .deleteDocument(title!, index);
-                            images.removeAt(index);
-                            pageController.jumpToPage(index + 1);
+                            pageController.nextPage(
+                                duration: Duration(milliseconds: 150),
+                                curve: Curves.easeIn);
+                            if (images[index] == images.last)
+                              pageController.previousPage(
+                                  duration: Duration(milliseconds: 150),
+                                  curve: Curves.easeIn);
                           },
-                          child: const Text("מחק תמונה זו"),
+                          child: const Text("מחק/י תמונה זו"),
                         ),
                       ],
                   icon: const Icon(Icons.more_horiz))

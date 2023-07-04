@@ -12,14 +12,6 @@ class Album {
         imageUrl = snapshot['imageUrl'],
         createdAt = snapshot['createdAt'];
 
-  // factory Album.fromSnapshot(DocumentSnapshot snapshot) {
-  //   Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-  //   // List<String> imageUrls = List.from(data['imageUrl']);
-  //   return Album(
-  //     title: data['title'],
-  //     imageUrl: data['imageUrl'],
-  //   );
-  // }
   Map<String, dynamic> toJson() =>
       {'title': title, 'imageUrl': imageUrl, 'createdAt': createdAt};
 }

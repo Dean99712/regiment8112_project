@@ -21,6 +21,7 @@ class DocumentsNotifier extends StateNotifier<List<String>> {
   }
 
   Future deleteDocument(String childName, int index) async {
+
     var snapshot = await _firestore
         .collection("albums")
         .doc(childName)

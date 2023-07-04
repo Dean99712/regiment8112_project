@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = חרמש מסייעת 8112--target macOS & C:\src\flutter/bin/internal/exit_with_errorlevel.bat;
+PRODUCT_NAME = Regiment 8112;
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.onatcipli.networkUpp;
+PRODUCT_BUNDLE_IDENTIFIER = com.example.regiment8112_project;
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
