@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "241677351610",
+    "firebase_url": "https://regiment8112-8abfe-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "regiment8112-8abfe",
     "storage_bucket": "regiment8112-8abfe.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:241677351610:android:3607fc8bbb57eafbcb6083",
+        "mobilesdk_app_id": "1:241677351610:android:aae522e2d81e149acb6083",
         "android_client_info": {
-          "package_name": "com.example.regiment8112_project"
+          "package_name": "com.regiment.regiment8112"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "241677351610-pls0hijak8qfn9l00so2dj2oabbt7k1g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.regiment.regiment8112",
+            "certificate_hash": "1096a2402404d02eeb481c8d25788200b571f93b"
+          }
+        },
         {
           "client_id": "241677351610-vq8tn9vr8ch1ingelrqf46n5s20md8hn.apps.googleusercontent.com",
           "client_type": 3
