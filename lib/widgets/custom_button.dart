@@ -19,7 +19,7 @@ class CustomButton extends StatelessWidget {
         ? Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: SizedBox(
-            width: width,
+            width: double.infinity,
             child: CupertinoButton(
                 color: color,
                 onPressed: function,

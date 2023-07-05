@@ -202,7 +202,7 @@ class _AddContactState extends State<AddContact> {
             onPressed: () {
               showCupertinoModalPopup(
                 context: context,
-                builder: (context) => pickerCupertino(),
+                builder: (context) => Container(child: pickerCupertino()),
               );
             },
           ),

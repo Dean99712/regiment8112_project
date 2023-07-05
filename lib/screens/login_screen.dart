@@ -109,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: CustomButton(
+
                     text: "לקבלת קוד חד פעמי",
                     function: () async {
                       Navigator.pushReplacement(
