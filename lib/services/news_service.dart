@@ -9,4 +9,11 @@ class NewsService {
         .orderBy("created_at", descending: true)
         .get();
   }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllUpdates() async {
+    return await _firestore
+        .collection("updates")
+        .orderBy("created_at", descending: true)
+        .get();
+  }
 }

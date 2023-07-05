@@ -1,6 +1,12 @@
-class Updates {
-  Updates(this.updates, this.dateTime);
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  final String updates;
-  final DateTime dateTime;
+class Updates {
+  Updates(this.update, this.createdAt);
+
+  final String update;
+  final Timestamp createdAt;
+
+  Updates.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : update = snapshot['update'],
+        createdAt = snapshot['created_at'];
 }
