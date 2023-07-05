@@ -108,7 +108,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                   color: white),
                                               CustomText(
                                                 text:
-                                                    " היכנס אליו על מנת להוסיף תמונות",
+                                                    " היכנס על מנת להוסיף תמונות",
                                                 fontSize: 12,
                                                 color: white.withOpacity(0.5),
                                               ),
