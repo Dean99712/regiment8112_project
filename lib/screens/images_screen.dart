@@ -69,6 +69,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   CupertinoSliverNavigationBar(
+                    previousPageTitle: widget.title,
                     transitionBetweenRoutes: true,
                     stretch: true,
                     largeTitle: Text(

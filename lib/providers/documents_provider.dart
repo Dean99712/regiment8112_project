@@ -15,13 +15,12 @@ class DocumentsNotifier extends StateNotifier<List<String>> {
         .get()
     // ignore: avoid_function_literals_in_foreach_calls
         .then((snapshot) => snapshot.docs.forEach((element) {
-          final id = element.reference.id;
-          state = [...state, id];
+      final id = element.reference.id;
+      state = [...state, id];
     }));
   }
 
   Future deleteDocument(String childName, int index) async {
-
     var snapshot = await _firestore
         .collection("albums")
         .doc(childName)

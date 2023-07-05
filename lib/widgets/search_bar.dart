@@ -10,7 +10,7 @@ import '../providers/filter_provider.dart';
 class CustomSearchBar extends ConsumerWidget {
   const CustomSearchBar({required this.controller, this.onChanged, super.key});
 
-  final SearchController controller;
+  final TextEditingController controller;
   final void Function(String)? onChanged;
 
   Widget renderSearchBar(BuildContext context, WidgetRef ref) {
@@ -18,7 +18,7 @@ class CustomSearchBar extends ConsumerWidget {
 
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return SizedBox(
-        width: MediaQuery.of(context).size.width / 1.2,
+        width: MediaQuery.of(context).size.width / 1.35,
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: CupertinoSearchTextField(

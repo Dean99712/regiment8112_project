@@ -21,7 +21,7 @@ class TopSection extends ConsumerStatefulWidget {
 class _TopSectionState extends ConsumerState<TopSection> {
   var activeTab = 'news';
 
-  final _searchController = SearchController();
+  final _searchController = TextEditingController();
 
   @override
   void dispose() {
@@ -116,7 +116,6 @@ class _TopSectionState extends ConsumerState<TopSection> {
                 controller: _searchController,
                 onChanged: (value) {
                   searchProv.updateQuery(value);
-                  print(_searchController.text);
                 },
               )
       ],

@@ -102,6 +102,7 @@ class ImageSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Center(
       child: SizedBox(
         width: double.infinity,
@@ -119,7 +120,7 @@ class ImageSlider extends StatelessWidget {
               ),
               minScale: PhotoViewComputedScale.contained,
             ),
-            pageController: controller,
+            pageController: isIos ? PageController(initialPage: index) : controller,
             loadingBuilder: (context, event) => const Center(
               child: CircularProgressIndicator.adaptive(),
             ),

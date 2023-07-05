@@ -210,7 +210,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                       child: const Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children:[
+                        children: [
                           Icon(
                             Icons.arrow_back_ios_new,
                             color: primaryColor,
