@@ -12,6 +12,7 @@ class Album {
         imageUrl = snapshot['imageUrl'],
         createdAt = snapshot['createdAt'];
 
+
   Map<String, dynamic> toJson() =>
       {'title': title, 'imageUrl': imageUrl, 'createdAt': createdAt};
 }

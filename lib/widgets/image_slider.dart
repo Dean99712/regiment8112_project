@@ -20,7 +20,7 @@ class ImageGallery extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController =
-        PageController(initialPage: index, keepPage: true);
+        PageController(initialPage: index);
 
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
@@ -62,6 +62,7 @@ class ImageGallery extends ConsumerWidget {
                             ref
                                 .read(documentsProvider.notifier)
                                 .deleteDocument(title!, index);
+                            print(ref.watch(documentsProvider).length);
                             pageController.nextPage(
                                 duration: Duration(milliseconds: 150),
                                 curve: Curves.easeIn);
@@ -69,6 +70,7 @@ class ImageGallery extends ConsumerWidget {
                               pageController.previousPage(
                                   duration: Duration(milliseconds: 150),
                                   curve: Curves.easeIn);
+                            if(images.length <= 1) Navigator.pop(context);
                           },
                           child: const Text("מחק/י תמונה זו"),
                         ),

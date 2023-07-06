@@ -44,7 +44,7 @@ class _ContactsState extends ConsumerState<Contacts> {
     final phone = phoneNumber.substring(1);
     final Uri url = Uri(scheme: 'tel', path: '+972$phone');
     if (await canLaunchUrl(url)) {
-      await launchUrl(url);
+       launchUrl(url);
     } else {
       showDialog(
         context: context,

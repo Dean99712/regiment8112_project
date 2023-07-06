@@ -50,15 +50,14 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Album>>(
+    return StreamBuilder(
         stream: _imagesList,
         builder: (context, snapshot) {
           var date = DateTime.fromMillisecondsSinceEpoch(
               widget.date.millisecondsSinceEpoch);
           var formattedDate = intl.DateFormat('yMMM').format(date);
           if (snapshot.hasData) {
-            List<Album> imagesList =
-            snapshot.data!;
+            List<Album> imagesList = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0)
                   .add(const EdgeInsets.only(bottom: 30.0)),
@@ -91,7 +90,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                 color: snapshot.data!.isEmpty
                                     ? Colors.black.withOpacity(0.2)
                                     : null,
-                                height: snapshot.data!.length == 2 ? 175 : 220,
+                                height: snapshot.data!.length == 2 ? 175 : 240,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: snapshot.data!.isEmpty

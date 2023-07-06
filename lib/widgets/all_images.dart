@@ -78,7 +78,9 @@ class _AllImagesState extends ConsumerState<AllImages> {
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
     ref.watch(documentsProvider.notifier).getDocuments(widget.title);
+
     var documentsProv = ref.read(documentsProvider.notifier);
 
     return StreamBuilder(
