@@ -29,6 +29,13 @@
             {
               "client_id": "142406398301-590memrt9ocbn3cab8fac3ei3t0kdhvo.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "142406398301-smcjf5oqe5koln1btp5hfg03u26t92nm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.regiment.regiment8112"
+              }
             }
           ]
         }
