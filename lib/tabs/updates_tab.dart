@@ -91,13 +91,13 @@ class _UpdatesTabState extends State<UpdatesTab> {
             height: 34,
             // width: double.infinity,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color.fromRGBO(60, 58, 59, 1),
-                        Color.fromRGBO(60, 58, 59, 0),
+                        backgroundColorDark,
+                        backgroundColorDark.withOpacity(0),
                       ])),
             ),
           ),

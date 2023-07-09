@@ -68,7 +68,7 @@ class _AddContactState extends State<AddContact> {
           gradient: RadialGradient(
             center: Alignment.center,
             radius: 0.1,
-            colors: [backgroundColor, backgroundColor],
+            colors: [backgroundColorDark, backgroundColorDark],
           ),
         ),
         child: Padding(

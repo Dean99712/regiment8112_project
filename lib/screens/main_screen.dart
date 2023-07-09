@@ -67,18 +67,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           : null,
       body: Container(
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                opacity: 0.12,
-                image: AssetImage("assets/images/Group 126.png"),
-                fit: BoxFit.cover),
-            gradient: RadialGradient(
-              center: Alignment.center,
-              radius: 0.1,
-              colors: [
-                Color.fromRGBO(60, 58, 59, 1),
-                Color.fromRGBO(60, 58, 59, 1)
-              ],
-            )),
+          image: DecorationImage(
+              opacity: 0.12,
+              image: AssetImage("assets/images/Group 126.png"),
+              fit: BoxFit.cover),
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

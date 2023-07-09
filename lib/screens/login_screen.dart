@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
-        padding: const EdgeInsets.all(60),
+        padding: const EdgeInsets.all(30.0),
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 fit: BoxFit.cover),
             gradient: RadialGradient(radius: 0.91, colors: [
               Color.fromRGBO(121, 121, 121, 1),
-              backgroundColor,
+              backgroundColorDark,
             ])),
         child: SingleChildScrollView(
           child: Column(
@@ -109,7 +109,6 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: CustomButton(
-
                     text: "לקבלת קוד חד פעמי",
                     function: () async {
                       Navigator.pushReplacement(
@@ -118,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => const MainScreen(),
                           ));
                       // authenticateUser(phone);
-                    }, width: size.width < 380 ? size.width : size.width / 1.5,),
+                    }, width: size.width < 380 ? size.width * 0.5 : size.width * 0.5,),
               ),
               Container(
                 padding: const EdgeInsets.only(top: 24),

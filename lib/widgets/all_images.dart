@@ -77,10 +77,12 @@ class _AllImagesState extends ConsumerState<AllImages> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     ref.watch(documentsProvider.notifier).getDocuments(widget.title);
-
+    final documents = ref.read(documentsProvider);
+    print('$documents  data has changes');
     var documentsProv = ref.read(documentsProvider.notifier);
 
     return StreamBuilder(
@@ -97,7 +99,6 @@ class _AllImagesState extends ConsumerState<AllImages> {
                 crossAxisCount: widget.itemCount!),
             itemCount: photos.length,
             itemBuilder: (context, index) {
-              var color = Theme.of(context).colorScheme;
               return isIOS
                   ? CupertinoContextMenu(
                       actions: [
@@ -106,10 +107,17 @@ class _AllImagesState extends ConsumerState<AllImages> {
                             trailingIcon: const IconData(0xf4ca,
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage),
-                            child: Text("שתף", style: TextStyle(color: color.onBackground),),
+                            child: Text("שתף", style: TextStyle(color: theme.onBackground),),
                             onPressed: () {
                               Navigator.pop(context);
-                              showModalBottomSheet(context: context, builder: (context) => Container());
+                              showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                  context: context, builder: (context) => Container(
+                                decoration: BoxDecoration(
+                                  color: theme.background,
+                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))
+                                ),
+                              ));
                             }),
                         CupertinoContextMenuAction(
                           isDestructiveAction: true,
@@ -138,7 +146,7 @@ class _AllImagesState extends ConsumerState<AllImages> {
                                     child: const Text("מחק תמונה זו"),
                                     onPressed: () async {
                                       Navigator.pop(context);
-                                      documentsProv.deleteDocument(widget.title, index);
+                                      await documentsProv.deleteDocument(widget.title, index);
                                     },
                                   )
                                 ],
