@@ -63,6 +63,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return PlatformScaffold(
         cupertino: (_, __) => CupertinoPageScaffoldData(
               body: NestedScrollView(
@@ -160,8 +161,8 @@ class _ImagesScreenState extends State<ImagesScreen> {
                                 Icons.zoom_in,
                                 color: secondaryColor,
                               ),
-                              label: const Text(
-                                  style: TextStyle(color: white), "הגדל"))),
+                              label: Text(
+                                  style: TextStyle(color: colorScheme.onBackground), "הגדל"))),
                       PopupMenuItem(
                           enabled: _numOfAxisCount != 6 ? true : false,
                           child: TextButton.icon(
@@ -176,8 +177,8 @@ class _ImagesScreenState extends State<ImagesScreen> {
                                 Icons.zoom_out,
                                 color: secondaryColor,
                               ),
-                              label: const Text(
-                                  style: TextStyle(color: white), "הקטן")))
+                              label: Text(
+                                  style: TextStyle(color: colorScheme.onBackground), "הקטן")))
                     ];
                   },
                   icon: const Icon(Icons.more_horiz),

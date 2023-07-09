@@ -31,8 +31,11 @@ class _TopSectionState extends ConsumerState<TopSection> {
 
   @override
   Widget build(BuildContext context) {
-
+    final colorScheme = Theme.of(context).colorScheme;
     var searchProv = ref.read(searchProvider.notifier);
+    Color isContactList = activeTab == 'contactsList'
+        ? secondaryColor
+        : primaryColor;
 
     return Column(
       children: [
@@ -53,7 +56,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   child: CustomText(
                       fontSize: 16,
                       color:
-                          activeTab == 'news' ? secondaryColor : primaryColor,
+                          activeTab == 'news' ? colorScheme.secondary : colorScheme.primary,
                       text: "עדכונים וחדשות"),
                 ),
                 cupertino: (_, __) => CupertinoTextButtonData(onPressed: () {
@@ -65,7 +68,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                 }),
                 child: CustomText(
                     fontSize: 16,
-                    color: activeTab == 'news' ? secondaryColor : primaryColor,
+                    color: activeTab == 'news' ? colorScheme.secondary : colorScheme.primary,
                     text: "עדכונים וחדשות"),
               ),
             ),
@@ -87,9 +90,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                 },
                 child: CustomText(
                     fontSize: 16,
-                    color: activeTab == 'contactsList'
-                        ? secondaryColor
-                        : primaryColor,
+                    color: isContactList,
                     text: "רשימת קשר"),
                 // )
               ),
@@ -102,9 +103,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                 },
                 child: CustomText(
                     fontSize: 16,
-                    color: activeTab == 'contactsList'
-                        ? secondaryColor
-                        : primaryColor,
+                    color: isContactList,
                     text: "רשימת קשר"),
               ),
             )

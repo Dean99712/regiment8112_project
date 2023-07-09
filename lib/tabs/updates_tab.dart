@@ -14,7 +14,6 @@ class UpdatesTab extends StatefulWidget {
 }
 
 class _UpdatesTabState extends State<UpdatesTab> {
-
   bool isLoading = false;
   final NewsService _service = NewsService();
   late List<Updates> _updates;
@@ -31,7 +30,7 @@ class _UpdatesTabState extends State<UpdatesTab> {
     });
     var collection = await _service.getAllUpdates();
     final updates =
-    collection.docs.map((e) => Updates.fromSnapshot(e)).toList();
+        collection.docs.map((e) => Updates.fromSnapshot(e)).toList();
     setState(() {
       isLoading = false;
       _updates = updates;
@@ -40,7 +39,8 @@ class _UpdatesTabState extends State<UpdatesTab> {
 
   @override
   Widget build(BuildContext context) {
-     return Stack(
+    final theme = Theme.of(context);
+    return Stack(
       children: [
         Flex(
           direction: Axis.vertical,
@@ -48,38 +48,34 @@ class _UpdatesTabState extends State<UpdatesTab> {
             Expanded(
               child: !isLoading
                   ? ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: _updates.length,
-                itemBuilder: (context, index) {
-                  var timestamp =
-                      _updates[index].createdAt.millisecondsSinceEpoch;
-                  final date =
-                  DateTime.fromMillisecondsSinceEpoch(timestamp);
-                  final localDate = intl.DateFormat('yMd', 'en-US').format(date);
-                  final update = _updates[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 8),
-                    child: Bubble(
-                      date: localDate,
-                      text: update.update,
-                    ),
-                  );
-                },
-              )
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: _updates.length,
+                      itemBuilder: (context, index) {
+                        var timestamp =
+                            _updates[index].createdAt.millisecondsSinceEpoch;
+                        final date =
+                            DateTime.fromMillisecondsSinceEpoch(timestamp);
+                        final localDate =
+                            intl.DateFormat('yMd', 'en-US').format(date);
+                        final update = _updates[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 8),
+                          child: Bubble(
+                            date: localDate,
+                            text: update.update,
+                          ),
+                        );
+                      },
+                    )
                   : Center(
-                child: PlatformCircularProgressIndicator(
-                  cupertino: (_, __) =>
-                      CupertinoProgressIndicatorData(
-                          radius: 15.0,
-                          color: primaryColor
+                      child: PlatformCircularProgressIndicator(
+                        cupertino: (_, __) => CupertinoProgressIndicatorData(
+                            radius: 15.0, color: primaryColor),
+                        material: (_, __) => MaterialProgressIndicatorData(
+                            color: secondaryColor),
                       ),
-                  material: (_, __) =>
-                      MaterialProgressIndicatorData(
-                          color: secondaryColor
-                      ),
-                ),
-              ),
+                    ),
             )
           ],
         ),
@@ -88,17 +84,20 @@ class _UpdatesTabState extends State<UpdatesTab> {
           top: 0,
           right: 0,
           child: SizedBox(
-            height: 34,
+            height: 45,
             // width: double.infinity,
             child: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        backgroundColorDark,
-                        backgroundColorDark.withOpacity(0),
-                      ])),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: theme.brightness == Brightness.dark
+                    ? [
+                        theme.colorScheme.background,
+                        theme.colorScheme.background.withOpacity(0)
+                      ]
+                    : [greyShade100, greyShade100.withOpacity(0)],
+              )),
             ),
           ),
         ),

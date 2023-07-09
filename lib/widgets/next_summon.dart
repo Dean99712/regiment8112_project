@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../utils/colors.dart';
+
 class NextSummon extends StatelessWidget {
   const NextSummon({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).colorScheme.brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -19,7 +23,7 @@ class NextSummon extends StatelessWidget {
                       Color.fromRGBO(0, 0, 0, 0.10), BlendMode.multiply),
                   image: AssetImage("assets/images/Group 126.png"),
                   fit: BoxFit.cover),
-              color: const Color.fromRGBO(167, 93, 53, 1),
+              color: isDark ? brownShade300 : secondaryColor,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
@@ -37,12 +41,12 @@ class NextSummon extends StatelessWidget {
                 children: [
                   Text(
                     "הזימון הבא",
-                    style: GoogleFonts.heebo(color: Colors.white),
+                    style: GoogleFonts.heebo(color: colorScheme.onBackground),
                   ),
                   Text(
                     "18.09 - 25.09",
                     style: GoogleFonts.rubikDirt(
-                        color: Colors.white, fontSize: 24),
+                        color: colorScheme.onBackground, fontSize: 24),
                   ),
                 ],
               ),

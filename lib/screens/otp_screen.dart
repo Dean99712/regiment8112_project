@@ -45,7 +45,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   fit: BoxFit.cover),
               gradient: RadialGradient(radius: 0.91, colors: [
                 Color.fromRGBO(121, 121, 121, 1),
-                backgroundColorDark,
+                greyShade700,
               ])),
           child: SingleChildScrollView(
             child: Column(

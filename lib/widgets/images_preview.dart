@@ -50,6 +50,9 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
 
   @override
   Widget build(BuildContext context) {
+
+    final colorScheme = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
     return StreamBuilder(
         stream: _imagesList,
         builder: (context, snapshot) {
@@ -76,13 +79,13 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                             CustomText(
                               text: widget.text,
                               fontSize: 16,
-                              color: white,
+                              color: colorScheme.onBackground,
                               fontWeight: FontWeight.w500,
                             ),
                             CustomText(
                               text: formattedDate,
                               fontSize: 16,
-                              color: white,
+                              color: colorScheme.onBackground,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 15.0),
@@ -90,7 +93,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                 color: snapshot.data!.isEmpty
                                     ? Colors.black.withOpacity(0.2)
                                     : null,
-                                height: snapshot.data!.length == 2 ? 175 : 240,
+                                height: snapshot.data!.length == 2 ? size.height * 0.23 : size.height / 3.65,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: snapshot.data!.isEmpty

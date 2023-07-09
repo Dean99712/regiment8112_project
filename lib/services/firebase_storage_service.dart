@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:regiment8112_project/models/album.dart';
+import 'package:uuid/uuid.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -21,7 +22,16 @@ class StorageService {
     return itemList;
   }
 
-  void addPhotosToAlbum(String childName, String url) async {
+  Future deleteDocument(String childName, String id) async {
+    await _firestore
+        .collection("albums")
+        .doc(childName)
+        .collection("album")
+        .doc(id)
+        .delete();
+  }
+
+  Future addPhotosToAlbum(String childName, String url) async {
     var parentCollection = _firestore.collection("albums").doc(childName);
 
     if (!parentCollection.id.contains(childName)) {
@@ -30,11 +40,16 @@ class StorageService {
     }
 
     final collection = parentCollection.collection('album');
-    var album =
-        Album(title: childName, imageUrl: url, createdAt: Timestamp.now())
-            .toJson();
 
-    return collection.doc().set(album);
+    final uuid = Uuid().v4().replaceAll("-", "").substring(0, 20);
+    var album = Album(
+            id: uuid,
+            title: childName,
+            imageUrl: url,
+            createdAt: Timestamp.now())
+        .toJson();
+
+    await collection.doc(uuid).set(album);
   }
 
   Query<Map<String, dynamic>> getPhotosByAlbum(String childName, int limit) {
@@ -52,9 +67,5 @@ class StorageService {
   Future<QuerySnapshot<Map<String, dynamic>>> getCollectionDocs(
       String childName) async {
     return await _firestore.collection(childName).get();
-  }
-  
-  void deleteDocument(String documentSnapshot) {
-    _firestore.collection("album");
   }
 }

@@ -15,7 +15,8 @@ class CustomSearchBar extends ConsumerWidget {
 
   Widget renderSearchBar(BuildContext context, WidgetRef ref) {
     var search = ref.watch(searchProvider);
-
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 1.35,
@@ -34,6 +35,8 @@ class CustomSearchBar extends ConsumerWidget {
       return Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
+
+          controller: controller,
           trailing: <Widget>[
             search.isNotEmpty
                 ? IconButton(
@@ -45,7 +48,7 @@ class CustomSearchBar extends ConsumerWidget {
                 : const SizedBox()
           ],
           onChanged: onChanged,
-          backgroundColor: MaterialStateProperty.all(white.withOpacity(0.4)),
+          backgroundColor: MaterialStateProperty.all(isDark ? colorScheme.onBackground.withOpacity(0.5) : greyShade100),
           leading: Icon(
             Icons.search,
             color: Colors.transparent.withOpacity(0.4),
@@ -72,22 +75,29 @@ class CustomSearchBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var isGrouped = ref.watch(isGroupedProvider);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          renderSearchBar(context, ref),
-          IconButton(
-            color: primaryColor,
-            enableFeedback: true,
-            icon: const Icon(Icons.filter_list_outlined),
-            onPressed: () {
-              ref.read(isGroupedProvider.notifier).state = !isGrouped;
-            },
-          )
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        print('Back button pressed');
+        FocusScope.of(context).unfocus();
+        return false;
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 15.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            renderSearchBar(context, ref),
+            IconButton(
+              color: primaryColor,
+              enableFeedback: true,
+              icon: const Icon(Icons.filter_list_outlined),
+              onPressed: () {
+                ref.read(isGroupedProvider.notifier).state = !isGrouped;
+              },
+            )
+          ],
+        ),
       ),
     );
   }

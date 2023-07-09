@@ -41,6 +41,7 @@ class _ContactsState extends ConsumerState<Contacts> {
   }
 
   Future call(String phoneNumber) async {
+    final colorScheme = Theme.of(context).colorScheme;
     final phone = phoneNumber.substring(1);
     final Uri url = Uri(scheme: 'tel', path: '+972$phone');
     if (await canLaunchUrl(url)) {
@@ -48,10 +49,10 @@ class _ContactsState extends ConsumerState<Contacts> {
     } else {
       showDialog(
         context: context,
-        builder: (context) => const AlertDialog(
+        builder: (context) => AlertDialog(
           title: CustomText(
               fontSize: 16,
-              color: white,
+              color: colorScheme.onBackground,
               text: "מצטערים, המכשיר שברשותך אינו נתמך"),
         ),
       );
@@ -60,18 +61,19 @@ class _ContactsState extends ConsumerState<Contacts> {
 
   @override
   Widget build(BuildContext context) {
-    var query = ref.watch(searchProvider);
-    final userList = ref.watch(searchProvider.notifier).updateQuery(query);
 
-    var isGrouped = ref.watch(isGroupedProvider);
-
-    var size = MediaQuery.of(context).size;
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    var query = ref.watch(searchProvider);
+    var isGrouped = ref.watch(isGroupedProvider);
+    var size = MediaQuery.of(context).size;
+    final userList = ref.watch(searchProvider.notifier).updateQuery(query);
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/svg/boot.png'), opacity: 0.4),
+            image: AssetImage('assets/svg/boot.png'), opacity: isDark ? 0.5 : 0.75),
       ),
       child: StreamBuilder(
         stream: userList,
@@ -91,10 +93,10 @@ class _ContactsState extends ConsumerState<Contacts> {
             );
           }
           return snapshot.data!.isEmpty
-              ? const Center(
+              ? Center(
                 child: CustomText(
                   text: "הרשימה ריקה",
-                  color: white,
+                  color: colorScheme.onBackground,
                 ),
               )
               : isGrouped
@@ -103,9 +105,13 @@ class _ContactsState extends ConsumerState<Contacts> {
                       child: ListView.builder(
                           itemCount: users.length,
                           itemBuilder: (context, index) {
+                            final oddColor = (index % 2 == 0)
+                                ? greyShade600
+                                : Colors.transparent;
+
                             return Container(
-                              color: (index % 2 == 0)
-                                  ? const Color.fromRGBO(74, 72, 73, 1)
+                              color: isDark ? oddColor : (index % 2 == 0)
+                                  ? greyShade200
                                   : Colors.transparent,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -119,24 +125,21 @@ class _ContactsState extends ConsumerState<Contacts> {
                                       width: size.width / 8,
                                       child: CustomText(
                                           fontSize: 16,
-                                          color: const Color.fromRGBO(
-                                              215, 215, 215, 1.0),
+                                          color: isDark ? greyShade100 : colorScheme.onBackground,
                                           text: users[index].name),
                                     ),
                                     SizedBox(
                                       width: size.width / 4,
                                       child: CustomText(
                                           fontSize: 16,
-                                          color: const Color.fromRGBO(
-                                              215, 215, 215, 1.0),
+                                          color: isDark ? greyShade100 : colorScheme.onBackground,
                                           text: users[index].lastName),
                                     ),
                                     SizedBox(
                                       width: size.width / 4,
                                       child: CustomText(
                                           fontSize: 16,
-                                          color: const Color.fromRGBO(
-                                              215, 215, 215, 1.0),
+                                          color: isDark ? greyShade100 : colorScheme.onBackground,
                                           text: users[index].city),
                                     ),
                                     GestureDetector(
@@ -180,14 +183,14 @@ class _ContactsState extends ConsumerState<Contacts> {
                       order: GroupedListOrder.ASC,
                       groupSeparatorBuilder: (value) => Container(
                           width: double.infinity,
-                          color: const Color.fromRGBO(74, 72, 73, 1),
+                          color: isDark ?  greyShade600 : greyShade200,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomText(
-                                  color: white,
+                                  color: colorScheme.onBackground,
                                   fontSize: 16,
                                   text: value,
                                   fontWeight: FontWeight.w600,
@@ -207,24 +210,21 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 width: size.width / 4,
                                 child: CustomText(
                                     fontSize: 16,
-                                    color: const Color.fromRGBO(
-                                        215, 215, 215, 1.0),
+                                    color: isDark ? greyShade100 : colorScheme.onBackground,
                                     text: element['name']),
                               ),
                               SizedBox(
                                 width: size.width / 4,
                                 child: CustomText(
                                     fontSize: 16,
-                                    color: const Color.fromRGBO(
-                                        215, 215, 215, 1.0),
+                                    color: isDark ? greyShade100 : colorScheme.onBackground,
                                     text: element['lastName']),
                               ),
                               SizedBox(
                                 width: size.width / 5,
                                 child: CustomText(
                                     fontSize: 16,
-                                    color: const Color.fromRGBO(
-                                        215, 215, 215, 1.0),
+                                    color: isDark ? greyShade100 : colorScheme.onBackground,
                                     text: element['city']),
                               ),
                               GestureDetector(

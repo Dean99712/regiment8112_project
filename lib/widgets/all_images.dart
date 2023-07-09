@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../models/album.dart';
-import '../providers/documents_provider.dart';
 import '../utils/colors.dart';
 
 class AllImages extends ConsumerStatefulWidget {
@@ -25,13 +24,12 @@ class AllImages extends ConsumerStatefulWidget {
   ConsumerState<AllImages> createState() => _AllImagesState();
 }
 
-class _AllImagesState extends ConsumerState<AllImages> {
+class _AllImagesState extends ConsumerState<AllImages>
+    with TickerProviderStateMixin {
+  int limit = 50;
   List<XFile> selectedImagesList = [];
   late Stream<List<Album>>? _photosStream;
-
   final StorageService _storageService = StorageService();
-
-  int limit = 50;
 
   @override
   void initState() {
@@ -49,6 +47,12 @@ class _AllImagesState extends ConsumerState<AllImages> {
       _photosStream = albums;
     });
     return albums;
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController!.dispose();
+    super.dispose();
   }
 
   Widget buildImage(Album image) {
@@ -77,47 +81,40 @@ class _AllImagesState extends ConsumerState<AllImages> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
-    ref.watch(documentsProvider.notifier).getDocuments(widget.title);
-    final documents = ref.read(documentsProvider);
-    print('$documents  data has changes');
-    var documentsProv = ref.read(documentsProvider.notifier);
 
     return StreamBuilder(
       stream: _photosStream,
       builder: (context, snapshot) {
-          List<Album> photos = snapshot.data ?? [];
-          return GridView.builder(
-            key: ValueKey<int>(widget.itemCount!),
-            controller: isIOS ? null : widget.scrollController,
-            physics: const BouncingScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-                crossAxisCount: widget.itemCount!),
-            itemCount: photos.length,
-            itemBuilder: (context, index) {
-              return isIOS
-                  ? CupertinoContextMenu(
-                      actions: [
+        List<Album> photos = snapshot.data ?? [];
+        return GridView.builder(
+          key: ValueKey<int>(widget.itemCount!),
+          controller: isIOS ? null : widget.scrollController,
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+              crossAxisCount: widget.itemCount!),
+          itemCount: photos.length,
+          itemBuilder: (context, index) {
+            var color = Theme.of(context).colorScheme;
+            return isIOS
+                ? CupertinoContextMenu(
+                    actions: [
                         CupertinoContextMenuAction(
                             isDefaultAction: true,
                             trailingIcon: const IconData(0xf4ca,
                                 fontFamily: CupertinoIcons.iconFont,
                                 fontPackage: CupertinoIcons.iconFontPackage),
-                            child: Text("שתף", style: TextStyle(color: theme.onBackground),),
+                            child: Text(
+                              "שתף",
+                              style: TextStyle(color: color.onBackground),
+                            ),
                             onPressed: () {
                               Navigator.pop(context);
                               showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                  context: context, builder: (context) => Container(
-                                decoration: BoxDecoration(
-                                  color: theme.background,
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0))
-                                ),
-                              ));
+                                  context: context,
+                                  builder: (context) => Container());
                             }),
                         CupertinoContextMenuAction(
                           isDestructiveAction: true,
@@ -146,7 +143,6 @@ class _AllImagesState extends ConsumerState<AllImages> {
                                     child: const Text("מחק תמונה זו"),
                                     onPressed: () async {
                                       Navigator.pop(context);
-                                      await documentsProv.deleteDocument(widget.title, index);
                                     },
                                   )
                                 ],
@@ -155,32 +151,37 @@ class _AllImagesState extends ConsumerState<AllImages> {
                           },
                         )
                       ],
-                      child: Material(
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ImageGallery(
-                                        images: photos, index: index),
-                                  ));
-                            },
-                            child: buildImage(photos[index])),
-                      ))
-                  : Material(
+                    child: Material(
                       child: InkWell(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ImageGallery(
-                                      images: photos, index: index, title: widget.title),
+                                      images: photos, index: index),
                                 ));
                           },
                           child: buildImage(photos[index])),
-                    );
-            },
-          );
+                    ))
+                : Material(
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageGallery(
+                                images: photos,
+                                index: index,
+                                title: widget.title,
+                                scrollController: widget.scrollController,
+                              ),
+                            ),
+                          );
+                        },
+                        child: buildImage(photos[index])),
+                  );
+          },
+        );
       },
     );
   }

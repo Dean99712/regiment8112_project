@@ -57,18 +57,21 @@ class _AddContactState extends State<AddContact> {
 
   Widget container(List<Widget> child) {
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Material(
       child: Container(
         height: size.height,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-              opacity: 0.12,
+              opacity: isDark ? 0.12 : 1,
               image: AssetImage("assets/images/Group 126.png"),
               fit: BoxFit.cover),
           gradient: RadialGradient(
             center: Alignment.center,
             radius: 0.1,
-            colors: [backgroundColorDark, backgroundColorDark],
+            colors: [colorScheme.background, colorScheme.background],
           ),
         ),
         child: Padding(
@@ -91,7 +94,7 @@ class _AddContactState extends State<AddContact> {
                   ),
                   Text("הוסף איש קשר",
                       style: GoogleFonts.rubikDirt(
-                          fontSize: 36, color: primaryColor)),
+                          fontSize: 36, color: colorScheme.primary)),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: SizedBox(
@@ -116,9 +119,10 @@ class _AddContactState extends State<AddContact> {
                         icon: const Icon(Icons.add_outlined),
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(primaryColor)),
+                                MaterialStateProperty.all(isDark ? primaryColor : secondaryColor)),
                         onPressed: () {
-                          if (Theme.of(context).platform == TargetPlatform.iOS) {
+                          if (Theme.of(context).platform ==
+                              TargetPlatform.iOS) {
                             createUserCupertino();
                           } else {
                             createUserMaterial();
@@ -150,14 +154,14 @@ class _AddContactState extends State<AddContact> {
               controller: _nameController,
               text: "שם פרטי",
               maxLength: null,
-              width: 170,
+              width: size.width * 0.41,
               textInputAction: TextInputAction.next,
             ),
             CustomTextField(
               controller: _lastNameController,
               text: "שם משפחה",
               maxLength: null,
-              width: 175,
+              width: size.width * 0.41,
               textInputAction: TextInputAction.next,
             ),
           ],
@@ -183,8 +187,14 @@ class _AddContactState extends State<AddContact> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomTextField(controller: _nameController, text: "שם פרטי", width: size.width / 2.4),
-            CustomTextField(controller: _lastNameController, text: "שם משפחה", width: size.width / 2.4),
+            CustomTextField(
+                controller: _nameController,
+                text: "שם פרטי",
+                width: size.width / 2.4),
+            CustomTextField(
+                controller: _lastNameController,
+                text: "שם משפחה",
+                width: size.width / 2.4),
           ],
         ),
         CustomTextField(
@@ -198,7 +208,10 @@ class _AddContactState extends State<AddContact> {
           text: _selectedValue == -1 ? 'בחר מחלקה' : platoon[_selectedValue],
           readOnly: true,
           prefix: CupertinoButton(
-            child: const Icon(CupertinoIcons.chevron_down, color: primaryColor,),
+            child: const Icon(
+              CupertinoIcons.chevron_down,
+              color: primaryColor,
+            ),
             onPressed: () {
               showCupertinoModalPopup(
                 context: context,
@@ -212,6 +225,7 @@ class _AddContactState extends State<AddContact> {
   }
 
   Widget pickerMaterial() {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return DropdownButtonFormField<String>(
         value: _selectedVal,
         decoration: InputDecoration(
@@ -226,7 +240,7 @@ class _AddContactState extends State<AddContact> {
             ),
             labelText: "בחר מחלקה",
             filled: true,
-            fillColor: white.withOpacity(0.1)),
+            fillColor: isDark ? white.withOpacity(0.1) : greyShade100),
         hint: const CustomText(text: "בחר מחלקה", fontSize: 16),
         alignment: Alignment.center,
         items: platoon

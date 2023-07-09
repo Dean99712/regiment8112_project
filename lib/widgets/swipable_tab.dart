@@ -3,7 +3,6 @@ import 'package:regiment8112_project/tabs/tab.dart';
 import 'package:regiment8112_project/tabs/images_tab.dart';
 import 'package:regiment8112_project/tabs/news_tab.dart';
 import 'package:regiment8112_project/tabs/updates_tab.dart';
-import 'package:regiment8112_project/utils/colors.dart';
 
 class SwipeableTab extends StatefulWidget {
   const SwipeableTab(this.scrollController, {Key? key}) : super(key: key);
@@ -40,6 +39,7 @@ class _SwipeableTabState extends State<SwipeableTab>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Center(
       widthFactor: double.infinity,
       heightFactor: double.infinity,
@@ -51,9 +51,9 @@ class _SwipeableTabState extends State<SwipeableTab>
                   const TextStyle(fontWeight: FontWeight.normal),
               labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               padding: const EdgeInsets.only(top: 20),
-              unselectedLabelColor: primaryColor,
-              indicatorColor: secondaryColor,
-              labelColor: secondaryColor,
+              unselectedLabelColor: theme.primary,
+              indicatorColor: theme.secondary,
+              labelColor: theme.secondary,
               tabs: myTabs),
           Expanded(
             child: TabBarView(controller: tabController, children: [

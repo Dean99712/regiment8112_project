@@ -31,6 +31,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     var size = MediaQuery.of(context).size;
     return SizedBox(
@@ -70,7 +71,7 @@ class CustomTextField extends StatelessWidget {
                   ),
                   labelText: text,
                   filled: true,
-                  fillColor: white.withOpacity(0.3)),
+                  fillColor: isDark ? white.withOpacity(0.3) : greyShade100),
             )),
       ),
     );

@@ -37,13 +37,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       floatingActionButton: activeTab != 'news'
           ? ScrollingFabAnimated(
               width: 175,
               icon: activeTab == 'news'
                   ? null
-                  : const Icon(Icons.person_add, color: white, size: 30),
+                  : Icon(Icons.person_add, color: white, size: 30),
               text: CustomText(
                   fontSize: 16,
                   color: white,
@@ -66,11 +68,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             )
           : null,
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-              opacity: 0.12,
+              opacity: isDark ? 0.12 : 1,
               image: AssetImage("assets/images/Group 126.png"),
               fit: BoxFit.cover),
+          color: colorScheme.background,
         ),
         child: Center(
           child: Column(

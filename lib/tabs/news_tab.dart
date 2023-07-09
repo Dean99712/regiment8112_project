@@ -41,6 +41,7 @@ class _NewsTabState extends State<NewsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Stack(
       children: [
         Flex(
@@ -56,7 +57,8 @@ class _NewsTabState extends State<NewsTab> {
                             newsList[index].createdAt.millisecondsSinceEpoch;
                         final date =
                             DateTime.fromMillisecondsSinceEpoch(timestamp);
-                        final newDate = intl.DateFormat('yMd', 'en-US').format(date);
+                        final newDate =
+                            intl.DateFormat('yMd', 'en-US').format(date);
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 8),
@@ -69,13 +71,10 @@ class _NewsTabState extends State<NewsTab> {
                     )
                   : Center(
                       child: PlatformCircularProgressIndicator(
-                        cupertino: (_, __ ) => CupertinoProgressIndicatorData(
-                          radius: 15.0,
-                          color: primaryColor
-                        ),
+                        cupertino: (_, __) => CupertinoProgressIndicatorData(
+                            radius: 15.0, color: primaryColor),
                         material: (_, __) => MaterialProgressIndicatorData(
-                          color: secondaryColor
-                        ),
+                            color: secondaryColor),
                       ),
                     ),
             )
@@ -86,17 +85,20 @@ class _NewsTabState extends State<NewsTab> {
           top: 0,
           right: 0,
           child: SizedBox(
-            height: 34,
+            height: 50,
             // width: double.infinity,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                    Color.fromRGBO(60, 58, 59, 1),
-                    Color.fromRGBO(60, 58, 59, 0),
-                  ])),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: theme.brightness == Brightness.dark
+                    ? [
+                        theme.colorScheme.background,
+                        theme.colorScheme.background.withOpacity(0)
+                      ]
+                    : [greyShade100, greyShade100.withOpacity(0)],
+              )),
             ),
           ),
         ),

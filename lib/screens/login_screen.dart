@@ -62,22 +62,24 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
-        padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(60),
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
-                opacity: 0.12,
+                opacity: isDark ? 0.12 : 0.5,
                 image: AssetImage("assets/images/Group 126.png"),
                 fit: BoxFit.cover),
-            gradient: RadialGradient(radius: 0.91, colors: [
-              Color.fromRGBO(121, 121, 121, 1),
-              backgroundColorDark,
-            ])),
+            gradient: RadialGradient(radius: 1, colors: isDark ?[
+              greyShade400,
+              greyShade700,
+            ] : [white, greyShade400])),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -109,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: CustomButton(
+
                     text: "לקבלת קוד חד פעמי",
                     function: () async {
                       Navigator.pushReplacement(
@@ -117,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => const MainScreen(),
                           ));
                       // authenticateUser(phone);
-                    }, width: size.width < 380 ? size.width * 0.5 : size.width * 0.5,),
+                    }, width: size.width < 380 ? size.width : size.width / 1.5,),
               ),
               Container(
                 padding: const EdgeInsets.only(top: 24),
@@ -131,18 +134,18 @@ class _LoginPageState extends State<LoginPage> {
                           "לא מצליחים להתחבר?",
                           textDirection: TextDirection.rtl,
                           style: GoogleFonts.heebo(
-                              color: const Color.fromRGBO(190, 190, 190, 1),
+                              color: isDark ? greyShade200 : colorScheme.onBackground,
                               fontSize: 12),
                         ),
                         Text(
                           "תפנו לעזרה בקבוצת הוואטסאפ",
                           style: GoogleFonts.heebo(
-                              color: const Color.fromRGBO(190, 190, 190, 1),
+                              color: isDark ? greyShade200 : colorScheme.onBackground,
                               fontSize: 12),
                         ),
-                        const Icon(
+                        Icon(
                           FontAwesomeIcons.whatsapp,
-                          color: Color.fromRGBO(190, 190, 190, 1),
+                          color: isDark ? greyShade200 : colorScheme.onBackground,
                         )
                       ]),
                 ),
