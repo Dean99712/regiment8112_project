@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +27,7 @@ class AllImages extends ConsumerStatefulWidget {
 
 class _AllImagesState extends ConsumerState<AllImages>
     with TickerProviderStateMixin {
+  DocumentSnapshot? lastDocument;
   int limit = 50;
   List<XFile> selectedImagesList = [];
   late Stream<List<Album>>? _photosStream;
@@ -38,7 +40,15 @@ class _AllImagesState extends ConsumerState<AllImages>
   }
 
   Stream<List<Album>> photosSnapshot(String childName, int limit) {
-    var photos = _storageService.getPhotosByAlbum(childName, limit).snapshots();
+    Stream<QuerySnapshot<Map<String, dynamic>>> photos;
+
+    if (lastDocument == null) {
+      photos = _storageService.getPhotosByAlbum(childName, limit).snapshots();
+    } else
+      photos = _storageService
+          .getPhotosByAlbum(childName, limit)
+          .startAfterDocument(lastDocument!)
+          .snapshots();
 
     final albums = photos.map((snapshot) =>
         snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
@@ -57,26 +67,27 @@ class _AllImagesState extends ConsumerState<AllImages>
 
   Widget buildImage(Album image) {
     return Hero(
-        tag: image.imageUrl,
-        child: CachedNetworkImage(
-          maxHeightDiskCache: widget.itemCount == 1
-              ? 1200
-              : widget.itemCount == 3
-                  ? 600
-                  : 250,
-          fit: BoxFit.fill,
-          imageUrl: image.imageUrl,
-          fadeInDuration: const Duration(milliseconds: 150),
-          progressIndicatorBuilder: (context, url, progress) {
-            return Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: primaryColor,
-                backgroundColor: white.withOpacity(0.3),
-              ),
-            );
-          },
-        ));
+      tag: image.imageUrl,
+      child: CachedNetworkImage(
+        maxHeightDiskCache: widget.itemCount == 1
+            ? 1200
+            : widget.itemCount == 3
+                ? 600
+                : 250,
+        fit: BoxFit.fill,
+        imageUrl: image.imageUrl,
+        fadeInDuration: const Duration(milliseconds: 150),
+        progressIndicatorBuilder: (context, url, progress) {
+          return Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: primaryColor,
+              backgroundColor: white.withOpacity(0.3),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -170,10 +181,10 @@ class _AllImagesState extends ConsumerState<AllImages>
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageGallery(
-                                images: photos,
-                                index: index,
-                                title: widget.title,
-                                scrollController: widget.scrollController,
+                                  images: photos,
+                                  index: index,
+                                  title: widget.title,
+                                  scrollController: widget.scrollController
                               ),
                             ),
                           );

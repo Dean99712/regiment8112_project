@@ -8,6 +8,9 @@ class ImagesService {
     List<XFile> selectedImages = await imagePicker.pickMultiImage();
     if (selectedImages.isNotEmpty) {
       imageFilesList.addAll(selectedImages);
+      for(XFile item in selectedImages) {
+        print(item.name);
+      }
     }
     return imageFilesList;
   }

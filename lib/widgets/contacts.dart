@@ -116,57 +116,63 @@ class _ContactsState extends ConsumerState<Contacts> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 25),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: size.width / 8,
-                                      child: CustomText(
-                                          fontSize: 16,
-                                          color: isDark ? greyShade100 : colorScheme.onBackground,
-                                          text: users[index].name),
-                                    ),
-                                    SizedBox(
-                                      width: size.width / 4,
-                                      child: CustomText(
-                                          fontSize: 16,
-                                          color: isDark ? greyShade100 : colorScheme.onBackground,
-                                          text: users[index].lastName),
-                                    ),
-                                    SizedBox(
-                                      width: size.width / 4,
-                                      child: CustomText(
-                                          fontSize: 16,
-                                          color: isDark ? greyShade100 : colorScheme.onBackground,
-                                          text: users[index].city),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        if (isIos) {
-                                          showCupertinoModalPopup(
-                                            context: context,
-                                            builder: (context) =>
-                                                caller(users[index].lastName),
-                                          );
-                                        } else {
-                                          call(users[index].phoneNumber);
-                                        }
-                                      },
-                                      child: Container(
-                                          width: 30,
-                                          height: 30,
-                                          decoration: const BoxDecoration(
-                                              color: primaryColor,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(50))),
-                                          child: const Icon(
-                                              size: 20,
-                                              Icons.phone,
-                                              color: white)),
-                                    )
-                                  ],
+                                child: SizedBox(
+                                  height: size.height * 0.05,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width: size.width / 4,
+                                        child: CustomText(
+                                            textAlign: TextAlign.start,
+                                            fontSize: 16,
+                                            color: isDark ? greyShade100 : colorScheme.onBackground,
+                                            text: users[index].name),
+                                      ),
+                                      SizedBox(
+                                        width: size.width / 4,
+                                        child: CustomText(
+                                          textAlign: TextAlign.start,
+                                            fontSize: 16,
+                                            color: isDark ? greyShade100 : colorScheme.onBackground,
+                                            text: users[index].lastName),
+                                      ),
+                                      SizedBox(
+                                        width: size.width / 5,
+                                        child: CustomText(
+                                            textAlign: TextAlign.start,
+                                            fontSize: 16,
+                                            color: isDark ? greyShade100 : colorScheme.onBackground,
+                                            text: users[index].city),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          if (isIos) {
+                                            showCupertinoModalPopup(
+                                              context: context,
+                                              builder: (context) =>
+                                                  caller(users[index].lastName),
+                                            );
+                                          } else {
+                                            call(users[index].phoneNumber);
+                                          }
+                                        },
+                                        child: Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: const BoxDecoration(
+                                                color: primaryColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50))),
+                                            child: const Icon(
+                                                size: 20,
+                                                Icons.phone,
+                                                color: white)),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -209,6 +215,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                               SizedBox(
                                 width: size.width / 4,
                                 child: CustomText(
+                                    textAlign: TextAlign.start,
                                     fontSize: 16,
                                     color: isDark ? greyShade100 : colorScheme.onBackground,
                                     text: element['name']),
@@ -216,6 +223,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                               SizedBox(
                                 width: size.width / 4,
                                 child: CustomText(
+                                    textAlign: TextAlign.start,
                                     fontSize: 16,
                                     color: isDark ? greyShade100 : colorScheme.onBackground,
                                     text: element['lastName']),
@@ -223,6 +231,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                               SizedBox(
                                 width: size.width / 5,
                                 child: CustomText(
+                                    textAlign: TextAlign.start,
                                     fontSize: 16,
                                     color: isDark ? greyShade100 : colorScheme.onBackground,
                                     text: element['city']),

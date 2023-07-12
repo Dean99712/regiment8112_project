@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
         this.onChanged,
         this.prefix,
         this.textInputAction,
+        this.validator,
         super.key});
 
   final TextEditingController? controller;
@@ -27,25 +28,29 @@ class CustomTextField extends StatelessWidget {
   final TextAlign? textAlign;
   final TextInputAction? textInputAction;
   final void Function(String)? onChanged;
+  final String? Function(String?)? validator;
+  // final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-
+    final colorScheme = Theme.of(context).colorScheme;
     var size = MediaQuery.of(context).size;
+
     return SizedBox(
       width: width,
-      height: isIos ? size.width / 8.8 : size.width / 6,
+      height: isIos ? size.width * 0.3 : size.width * 0.2,
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child: PlatformTextField(
+        child: PlatformTextFormField(
+          validator: validator,
             keyboardType: type,
             onChanged: onChanged,
             controller: controller,
             maxLength: maxLength,
             readOnly: readOnly,
-            cupertino: (_, __) => CupertinoTextFieldData(
+            cupertino: (_, __) => CupertinoTextFormFieldData(
               textInputAction: textInputAction,
               textAlign: textAlign,
               prefix: prefix,
@@ -58,9 +63,13 @@ class CustomTextField extends StatelessWidget {
               placeholder: text,
               placeholderStyle: GoogleFonts.heebo(color: primaryColor),
             ),
-            material: (_, __) => MaterialTextFieldData(
+            material: (_, __) => MaterialTextFormFieldData(
               decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.never,
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderSide: BorderSide(color: colorScheme.error, width: 1.0),
+                  ),
                   focusedBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     borderSide: BorderSide(color: primaryColor, width: 2.0),

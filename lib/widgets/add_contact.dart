@@ -1,26 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/data/plattons.dart';
+import 'package:regiment8112_project/providers/validatorProvider.dart';
 import 'package:regiment8112_project/services/user_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
+import 'package:regiment8112_project/utils/validators.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
-class AddContact extends StatefulWidget {
+class AddContact extends ConsumerStatefulWidget {
   const AddContact({super.key});
 
   @override
-  State<AddContact> createState() => _AddContactState();
+  ConsumerState<AddContact> createState() => _AddContactState();
 }
 
 final UserService _service = UserService();
 
-class _AddContactState extends State<AddContact> {
+class _AddContactState extends ConsumerState<AddContact> {
   String? _selectedVal = 'מחלקה 1';
   int _selectedValue = -1;
+  bool isError = false;
 
+  final _formField = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -36,23 +41,27 @@ class _AddContactState extends State<AddContact> {
   }
 
   void createUserCupertino() {
-    _service.addContact(
-        _nameController.text.trim(),
-        _lastNameController.text.trim(),
-        _phoneController.text.trim(),
-        _cityController.text.trim(),
-        platoon[_selectedValue]);
-    Navigator.pop(context);
+    if (_formField.currentState!.validate()) {
+      _service.addContact(
+          _nameController.text.trim(),
+          _lastNameController.text.trim(),
+          _phoneController.text.trim(),
+          _cityController.text.trim(),
+          platoon[_selectedValue]);
+      Navigator.pop(context);
+    }
   }
 
   void createUserMaterial() {
-    _service.addContact(
-        _nameController.text.trim(),
-        _lastNameController.text.trim(),
-        _phoneController.text.trim(),
-        _cityController.text.trim(),
-        _selectedVal!);
-    Navigator.pop(context);
+    if (_formField.currentState!.validate()) {
+      _service.addContact(
+          _nameController.text.trim(),
+          _lastNameController.text.trim(),
+          _phoneController.text.trim(),
+          _cityController.text.trim(),
+          _selectedVal!);
+      Navigator.pop(context);
+    }
   }
 
   Widget container(List<Widget> child) {
@@ -61,77 +70,79 @@ class _AddContactState extends State<AddContact> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Material(
-      child: Container(
-        height: size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              opacity: isDark ? 0.12 : 1,
-              image: AssetImage("assets/images/Group 126.png"),
-              fit: BoxFit.cover),
-          gradient: RadialGradient(
-            center: Alignment.center,
-            radius: 0.1,
-            colors: [colorScheme.background, colorScheme.background],
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
-          child: SingleChildScrollView(
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/svg/logo.png',
-                        width: 97,
-                        height: 97,
-                      )
-                    ],
-                  ),
-                  Text("הוסף איש קשר",
-                      style: GoogleFonts.rubikDirt(
-                          fontSize: 36, color: colorScheme.primary)),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: SizedBox(
-                      height: size.height / 2.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: child,
-                      ),
+      child: Form(
+        key: _formField,
+        child: Container(
+          height: size.height,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  opacity: isDark ? 0.12 : 1,
+                  image: AssetImage("assets/images/Group 126.png"),
+                  fit: BoxFit.cover),
+              color: colorScheme.background),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
+            child: SingleChildScrollView(
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/svg/logo.png',
+                          width: 97,
+                          height: 97,
+                        )
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: SizedBox(
-                      height: 52,
-                      width: size.width / 2.2,
-                      child: ElevatedButton.icon(
-                        label: const CustomText(
-                          fontSize: 16,
-                          text: "הוסף",
-                          color: white,
+                    Text("הוסף איש קשר",
+                        style: GoogleFonts.rubikDirt(
+                            fontSize: 36, color: colorScheme.primary)),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: SizedBox(
+                        height: size.height / 2.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: child,
                         ),
-                        icon: const Icon(Icons.add_outlined),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(isDark ? primaryColor : secondaryColor)),
-                        onPressed: () {
-                          if (Theme.of(context).platform ==
-                              TargetPlatform.iOS) {
-                            createUserCupertino();
-                          } else {
-                            createUserMaterial();
-                          }
-                        },
                       ),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: SizedBox(
+                        height: 52,
+                        width: size.width / 2.2,
+                        child: Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: ElevatedButton.icon(
+                            label: const CustomText(
+                              fontSize: 16,
+                              text: "הוסף",
+                              color: white,
+                            ),
+                            icon: const Icon(Icons.add_outlined),
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    isDark ? primaryColor : secondaryColor)),
+                            onPressed: () {
+                              if (Theme.of(context).platform ==
+                                  TargetPlatform.iOS) {
+                                createUserCupertino();
+                              } else {
+                                createUserMaterial();
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -143,7 +154,7 @@ class _AddContactState extends State<AddContact> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    var validateProvider = ref.watch(validatorProvider.notifier);
     return PlatformScaffold(
       material: (_, __) => MaterialScaffoldData(
           body: container([
@@ -154,16 +165,23 @@ class _AddContactState extends State<AddContact> {
               controller: _nameController,
               text: "שם פרטי",
               maxLength: null,
-              width: size.width * 0.41,
+              width: size.width * 0.42,
               textInputAction: TextInputAction.next,
+              validator: (value) {
+                return validateProvider.validator(value!, "שם אינו יכול להיות ריק!",
+                    "השם שהוזן אינו תקין!", nameValidator);
+              },
             ),
             CustomTextField(
-              controller: _lastNameController,
-              text: "שם משפחה",
-              maxLength: null,
-              width: size.width * 0.41,
-              textInputAction: TextInputAction.next,
-            ),
+                controller: _lastNameController,
+                text: "שם משפחה",
+                maxLength: null,
+                width: size.width * 0.42,
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  return validateProvider.validator(value!, "שם משפחה אינו יכול להיות ריק!",
+                      "שם המשפחה שהוזן אינו תקין!", nameValidator);
+                }),
           ],
         ),
         CustomTextField(
@@ -176,6 +194,11 @@ class _AddContactState extends State<AddContact> {
           controller: _phoneController,
           text: "מספר טלפון",
           textInputAction: TextInputAction.done,
+          type: TextInputType.phone,
+          validator: (value) {
+            return validateProvider.validator(value!, "אנא מלא מספר טלפון",
+                "נא הקש מספר טלפון תקין!", phoneValidator);
+          },
         ),
         SizedBox(
           width: double.infinity,
@@ -183,44 +206,60 @@ class _AddContactState extends State<AddContact> {
         )
       ])),
       cupertino: (_, __) => CupertinoPageScaffoldData(
-          body: container([
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+        body: container(
+          [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomTextField(
+                    validator: (value) {
+                      return validateProvider.validator(value!, "שם אינו יכול להיות ריק!",
+                          "שם שהוזן אינו תקין!", nameValidator);
+                    },
+                    controller: _nameController,
+                    text: "שם פרטי",
+                    width: size.width / 2.4),
+                CustomTextField(
+                    validator: (value) {
+                      return validateProvider.validator(value!, "שם משפחה אינו יכול להיות ריק!",
+                          "שם המשפחה שהוזן אינו תקין!", nameValidator);
+                    },
+                    controller: _lastNameController,
+                    text: "שם משפחה",
+                    width: size.width / 2.4),
+              ],
+            ),
             CustomTextField(
-                controller: _nameController,
-                text: "שם פרטי",
-                width: size.width / 2.4),
+              controller: _phoneController,
+              text: "מספר טלפון",
+              type: TextInputType.phone,
+              validator: (value) {
+                return validateProvider.validator(value!, "אנא מלא מספר טלפון",
+                    "נא הקש מספר טלפון תקין!", phoneValidator);
+              },
+            ),
+            CustomTextField(controller: _cityController, text: "עיר מגורים"),
             CustomTextField(
-                controller: _lastNameController,
-                text: "שם משפחה",
-                width: size.width / 2.4),
+              controller: null,
+              text:
+                  _selectedValue == -1 ? 'בחר מחלקה' : platoon[_selectedValue],
+              readOnly: true,
+              prefix: CupertinoButton(
+                child: const Icon(
+                  CupertinoIcons.chevron_down,
+                  color: primaryColor,
+                ),
+                onPressed: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => Container(child: pickerCupertino()),
+                  );
+                },
+              ),
+            ),
           ],
         ),
-        CustomTextField(
-          controller: _phoneController,
-          text: "מספר טלפון",
-          type: TextInputType.phone,
-        ),
-        CustomTextField(controller: _cityController, text: "עיר מגורים"),
-        CustomTextField(
-          controller: null,
-          text: _selectedValue == -1 ? 'בחר מחלקה' : platoon[_selectedValue],
-          readOnly: true,
-          prefix: CupertinoButton(
-            child: const Icon(
-              CupertinoIcons.chevron_down,
-              color: primaryColor,
-            ),
-            onPressed: () {
-              showCupertinoModalPopup(
-                context: context,
-                builder: (context) => Container(child: pickerCupertino()),
-              );
-            },
-          ),
-        ),
-      ])),
+      ),
     );
   }
 

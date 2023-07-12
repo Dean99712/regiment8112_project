@@ -53,6 +53,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
 
     final colorScheme = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return StreamBuilder(
         stream: _imagesList,
         builder: (context, snapshot) {
@@ -91,9 +92,9 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                               padding: const EdgeInsets.only(top: 15.0),
                               child: Container(
                                 color: snapshot.data!.isEmpty
-                                    ? Colors.black.withOpacity(0.2)
+                                    ? isDark ? Colors.black.withOpacity(0.2) : greyShade400
                                     : null,
-                                height: snapshot.data!.length == 2 ? size.height * 0.23 : size.height / 3.65,
+                                height: snapshot.data!.length == 2 ? size.height * 0.20 : size.height / 3.65,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: snapshot.data!.isEmpty
@@ -110,7 +111,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                   color: white),
                                               CustomText(
                                                 text:
-                                                    " היכנס על מנת להוסיף תמונות",
+                                                    "היכנס על מנת להוסיף תמונות",
                                                 fontSize: 12,
                                                 color: white.withOpacity(0.5),
                                               ),

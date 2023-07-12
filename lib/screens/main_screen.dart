@@ -42,7 +42,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return Scaffold(
       floatingActionButton: activeTab != 'news'
           ? ScrollingFabAnimated(
-              width: 175,
+              curve: Curves.easeInOut,
+              width: 180,
               icon: activeTab == 'news'
                   ? null
                   : Icon(Icons.person_add, color: white, size: 30),

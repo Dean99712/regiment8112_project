@@ -15,9 +15,12 @@ class SearchNotifier extends StateNotifier<String> {
         .collection("users")
         .where("name", isLessThan: '${value}ת')
         .where("name", isGreaterThanOrEqualTo: value)
+        // .where('phoneNumber', isLessThan: '${value}ת')
+        // .where('phoneNumber', isGreaterThanOrEqualTo: value)
         .snapshots();
 
-    return collection.map((event) => event.docs.map((e) => MyUser.fromSnapshot(e)).toList());
+    return collection
+        .map((event) => event.docs.map((e) => MyUser.fromSnapshot(e)).toList());
   }
 }
 

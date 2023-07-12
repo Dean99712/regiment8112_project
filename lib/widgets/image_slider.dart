@@ -6,6 +6,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
+import 'package:video_player/video_player.dart';
 import '../models/album.dart';
 import 'custom_text.dart';
 
@@ -15,12 +16,14 @@ class ImageGallery extends StatefulWidget {
       required this.images,
       required this.index,
       super.key,
-      this.scrollController});
+      this.scrollController,
+      this.videoController});
 
   final String? title;
   late int index;
   final List<Album> images;
   final ScrollController? scrollController;
+  final VideoPlayerController? videoController;
 
   @override
   State<ImageGallery> createState() => _ImageGalleryState();

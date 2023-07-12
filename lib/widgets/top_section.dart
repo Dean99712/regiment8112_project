@@ -34,8 +34,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
     final colorScheme = Theme.of(context).colorScheme;
     var searchProv = ref.read(searchProvider.notifier);
     Color isContactList = activeTab == 'contactsList'
-        ? secondaryColor
-        : primaryColor;
+        ? colorScheme.secondary : colorScheme.primary;
 
     return Column(
       children: [
