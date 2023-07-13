@@ -54,6 +54,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             builder: (context) => OtpScreen(
               verificationId: verificationCode,
               smsCode: smsCode,
+              phoneNumber: phoneNumber
             ),
           ),
         );
@@ -74,7 +75,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
-        padding: const EdgeInsets.all(60),
+        padding: const EdgeInsets.all(30),
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -92,6 +93,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     : [white, greyShade400])),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset("assets/svg/logo.png", height: 210, width: 210),
@@ -104,40 +106,42 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 style: GoogleFonts.rubikDirt(fontSize: 90, color: primaryColor),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 25.0),
-                child: Form(
-                  key: _formState,
-                  child: CustomTextField(
-                      type: TextInputType.phone,
-                      controller: null,
-                      text: "מספר טלפון",
-                      validator: (value) {
-                        return validateProvider.validator(
-                            value!,
-                            "מספר טלפון אינו יכול להיות ריק",
-                            "מספר טלפון אינו תקין",
-                            phoneValidator);
+                padding: const EdgeInsets.only(top: 50.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Form(
+                      key: _formState,
+                      child: CustomTextField(
+                          type: TextInputType.phone,
+                          controller: null,
+                          text: "מספר טלפון",
+                          validator: (value) {
+                            return validateProvider.validator(
+                                value!,
+                                "מספר טלפון אינו יכול להיות ריק",
+                                "מספר טלפון אינו תקין",
+                                phoneValidator);
+                          },
+                          onChanged: (value) {
+                            phone = value;
+                          }),
+                    ),
+                    CustomButton(
+                      text: "לקבלת קוד חד פעמי",
+                      function: () async {
+                        if (_formState.currentState!.validate()) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ));
+                          // authenticateUser(phone);
+                        }
                       },
-                      onChanged: (value) {
-                        phone = value;
-                      }),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CustomButton(
-                  text: "לקבלת קוד חד פעמי",
-                  function: () async {
-                    if (_formState.currentState!.validate()) {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainScreen(),
-                          ));
-                      // authenticateUser(phone);
-                    }
-                  },
-                  width: size.width < 380 ? size.width : size.width / 1.5,
+                      width: size.width < 380 ? size.width : size.width / 1.5,
+                    ),
+                  ],
                 ),
               ),
               Container(

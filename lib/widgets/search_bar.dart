@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/providers/search_provider.dart';
 import 'package:regiment8112_project/utils/colors.dart';
-
 import '../providers/filter_provider.dart';
 
 class CustomSearchBar extends ConsumerWidget {
@@ -23,10 +22,9 @@ class CustomSearchBar extends ConsumerWidget {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: CupertinoSearchTextField(
-            autofocus: true,
             onChanged: onChanged,
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            backgroundColor: white.withOpacity(0.3),
+            backgroundColor: isDark ? white.withOpacity(0.3) : greyShade100,
             placeholder: "חפש...",
           ),
         ),
@@ -35,12 +33,11 @@ class CustomSearchBar extends ConsumerWidget {
       return Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
-
           controller: controller,
           trailing: <Widget>[
             search.isNotEmpty
                 ? IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close, color: colorScheme.onBackground,),
                     onPressed: () {
                       controller.clear();
                       ref.read(searchProvider.notifier).state = '';

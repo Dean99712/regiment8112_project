@@ -73,7 +73,6 @@ class _AddContactState extends ConsumerState<AddContact> {
       child: Form(
         key: _formField,
         child: Container(
-          height: size.height,
           decoration: BoxDecoration(
               image: DecorationImage(
                   opacity: isDark ? 0.12 : 1,
@@ -103,13 +102,10 @@ class _AddContactState extends ConsumerState<AddContact> {
                         style: GoogleFonts.rubikDirt(
                             fontSize: 36, color: colorScheme.primary)),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: SizedBox(
-                        height: size.height / 2.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: child,
-                        ),
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: child,
                       ),
                     ),
                     Padding(
@@ -155,6 +151,7 @@ class _AddContactState extends ConsumerState<AddContact> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     var validateProvider = ref.watch(validatorProvider.notifier);
+
     return PlatformScaffold(
       material: (_, __) => MaterialScaffoldData(
           body: container([
@@ -212,6 +209,7 @@ class _AddContactState extends ConsumerState<AddContact> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomTextField(
+                    textInputAction: TextInputAction.next,
                     validator: (value) {
                       return validateProvider.validator(value!, "שם אינו יכול להיות ריק!",
                           "שם שהוזן אינו תקין!", nameValidator);
@@ -225,12 +223,14 @@ class _AddContactState extends ConsumerState<AddContact> {
                           "שם המשפחה שהוזן אינו תקין!", nameValidator);
                     },
                     controller: _lastNameController,
+                    textInputAction: TextInputAction.next,
                     text: "שם משפחה",
                     width: size.width / 2.4),
               ],
             ),
             CustomTextField(
               controller: _phoneController,
+              textInputAction: TextInputAction.next,
               text: "מספר טלפון",
               type: TextInputType.phone,
               validator: (value) {
@@ -241,15 +241,16 @@ class _AddContactState extends ConsumerState<AddContact> {
             CustomTextField(controller: _cityController, text: "עיר מגורים"),
             CustomTextField(
               controller: null,
+              textInputAction: TextInputAction.next,
               text:
                   _selectedValue == -1 ? 'בחר מחלקה' : platoon[_selectedValue],
               readOnly: true,
-              prefix: CupertinoButton(
+              prefix: GestureDetector(
                 child: const Icon(
                   CupertinoIcons.chevron_down,
                   color: primaryColor,
                 ),
-                onPressed: () {
+                onTap: () {
                   showCupertinoModalPopup(
                     context: context,
                     builder: (context) => Container(child: pickerCupertino()),

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:regiment8112_project/utils/theme_data.dart';
 import 'screens/login_screen.dart';
@@ -9,12 +7,13 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       themeMode: ThemeMode.system,
       theme: MyThemeData.lightTheme,
       darkTheme: MyThemeData.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
+      home: Scaffold(
         body: LoginPage(),
       ),
     );

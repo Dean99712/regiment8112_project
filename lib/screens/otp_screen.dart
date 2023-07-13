@@ -7,12 +7,15 @@ import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
+import '../widgets/custom_text.dart';
+
 class OtpScreen extends StatefulWidget {
   const OtpScreen(
-      {required this.smsCode, required this.verificationId, super.key});
+      {required this.smsCode, required this.verificationId,required this.phoneNumber, super.key});
 
   final String smsCode;
   final String verificationId;
+  final String phoneNumber;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -32,7 +35,121 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
+    final phone = widget.phoneNumber.substring(6);
+
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Container(
+          padding: const EdgeInsets.all(30),
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  opacity: isDark ? 0.12 : 0.5,
+                  image: AssetImage("assets/images/Group 126.png"),
+                  fit: BoxFit.cover),
+              gradient: RadialGradient(
+                  radius: 1,
+                  colors: isDark
+                      ? [
+                          greyShade400,
+                          greyShade700,
+                        ]
+                      : [white, greyShade400])),
+          child: Padding(
+            padding: const EdgeInsets.only(top:75.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset("assets/svg/logo.png", height: 210, width: 210),
+                  Text(
+                    'כניסה עם קוד חד פעמי ב-SMS',
+                    style: GoogleFonts.rubikDirt(fontSize: 24, color: primaryColor),
+                  ),
+                  CustomText(
+                    text: 'שלחנו לך קוד לנייד שמסתיים ב-$phone',
+                    color: primaryColor,
+                    fontSize: 16,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 75.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomTextField(
+                            maxLength: 6,
+                            controller: null,
+                            text: "קוד אימות",
+                            onChanged: (value) {
+                              smsCode = value;
+                            }),
+                        CustomButton(
+                          text: "כניסה",
+                          color: secondaryColor,
+                          function: () async {
+                            try {
+                              await _authService
+                                  .verifyOtp(smsCode, verificationId)
+                                  .whenComplete(() => Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MainScreen(),
+                                      ),
+                                      (route) => false));
+                            } catch (e) {
+                              print('$e wrong otp');
+                            }
+                          },
+                          width: size.width < 380 ? size.width : size.width / 1.5,
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: SizedBox(
+                      height: 70,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                              text: "לא הקוד שקיבלת?",
+                              color:
+                                  isDark ? greyShade200 : colorScheme.onBackground,
+                              fontSize: 12,
+                            ),
+                            Text(
+                              "תפנו לעזרה בקבוצת הוואטסאפ",
+                              style: GoogleFonts.heebo(
+                                  color: isDark
+                                      ? greyShade200
+                                      : colorScheme.onBackground,
+                                  fontSize: 12),
+                            ),
+                            Icon(
+                              FontAwesomeIcons.whatsapp,
+                              color:
+                                  isDark ? greyShade200 : colorScheme.onBackground,
+                            )
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+/*    return Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
           padding: const EdgeInsets.all(60),
@@ -119,6 +236,6 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           ),
         ),
-    );
+    );*/
   }
 }

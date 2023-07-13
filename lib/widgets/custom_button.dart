@@ -16,38 +16,32 @@ class CustomButton extends StatelessWidget {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     final size = MediaQuery.of(context).size;
     return isIos
-        ? Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: CupertinoButton(
-                color: color,
-                onPressed: function,
-                child: CustomText(
-                  fontSize: 16,
-                  color: white,
-                  text: text,
-                ),
-            ),
-          ),
-        )
-        : Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: width,
-            height: size.height / 17,
-            child: MaterialButton(
-              elevation: 0.0,
-                shape:
-                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                color: color,
-                onPressed: function,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CustomText(fontSize: 16, color: white, text: text),
-                ),
+        ? SizedBox(
+          width: width,
+          child: CupertinoButton(
+              color: color,
+              onPressed: function,
+              child: CustomText(
+                fontSize: 16,
+                color: white,
+                text: text,
               ),
           ),
+        )
+        : SizedBox(
+          width: width,
+          height: size.height / 17,
+          child: MaterialButton(
+            elevation: 0.0,
+              shape:
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              color: color,
+              onPressed: function,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CustomText(fontSize: 16, color: white, text: text),
+              ),
+            ),
         );
   }
 }

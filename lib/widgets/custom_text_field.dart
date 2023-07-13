@@ -40,7 +40,7 @@ class CustomTextField extends StatelessWidget {
 
     return SizedBox(
       width: width,
-      height: isIos ? size.width * 0.3 : size.width * 0.2,
+      height: isIos ? size.width * 0.23 : size.width * 0.2,
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: PlatformTextFormField(
@@ -56,7 +56,7 @@ class CustomTextField extends StatelessWidget {
               prefix: prefix,
               cursorColor: primaryColor,
               decoration: BoxDecoration(
-                  color: white.withOpacity(0.5),
+                  color: isDark ? white.withOpacity(0.5) : greyShade100,
                   borderRadius:
                   const BorderRadius.all(Radius.circular(10))),
               textDirection: TextDirection.rtl,
