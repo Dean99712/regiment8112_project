@@ -4,7 +4,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/data/plattons.dart';
+import 'package:regiment8112_project/providers/user_provider.dart';
 import 'package:regiment8112_project/providers/validatorProvider.dart';
+import 'package:regiment8112_project/screens/main_screen.dart';
 import 'package:regiment8112_project/services/user_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/utils/validators.dart';
@@ -42,25 +44,37 @@ class _AddContactState extends ConsumerState<AddContact> {
 
   void createUserCupertino() {
     if (_formField.currentState!.validate()) {
-      _service.addContact(
-          _nameController.text.trim(),
-          _lastNameController.text.trim(),
-          _phoneController.text.trim(),
-          _cityController.text.trim(),
-          platoon[_selectedValue]);
-      Navigator.pop(context);
+      ref.watch(userProvider.notifier).getUser().then((value) {
+        if (value == true) {
+        } else {
+          _service.addContact(
+              _nameController.text.trim(),
+              _lastNameController.text.trim(),
+              _phoneController.text.trim(),
+              _cityController.text.trim(),
+              platoon[_selectedValue]);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const MainScreen()));
+        }
+      });
     }
   }
 
   void createUserMaterial() {
     if (_formField.currentState!.validate()) {
-      _service.addContact(
-          _nameController.text.trim(),
-          _lastNameController.text.trim(),
-          _phoneController.text.trim(),
-          _cityController.text.trim(),
-          _selectedVal!);
-      Navigator.pop(context);
+      ref.watch(userProvider.notifier).getUser().then((value) {
+        if (value == true) {
+        } else {
+          _service.addContact(
+              _nameController.text.trim(),
+              _lastNameController.text.trim(),
+              _phoneController.text.trim(),
+              _cityController.text.trim(),
+              _selectedVal!);
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const MainScreen()));
+        }
+      });
     }
   }
 
@@ -98,9 +112,13 @@ class _AddContactState extends ConsumerState<AddContact> {
                         )
                       ],
                     ),
-                    Text("הוסף איש קשר",
+                    Text("הירשם על מנת להמשיך",
                         style: GoogleFonts.rubikDirt(
-                            fontSize: 36, color: colorScheme.primary)),
+                            fontSize: 32, color: colorScheme.primary)),
+                    CustomText(
+                        text:
+                            "בצע רישום חד פעמי ולאחר מכן תוכל להמשיך לאפליקציה",
+                        fontSize: 12),
                     Padding(
                       padding: const EdgeInsets.only(top: 25.0),
                       child: Column(
@@ -109,19 +127,19 @@ class _AddContactState extends ConsumerState<AddContact> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
+                      padding: const EdgeInsets.only(top: 50.0),
                       child: SizedBox(
                         height: 52,
                         width: size.width / 2.2,
                         child: Directionality(
-                          textDirection: TextDirection.ltr,
+                          textDirection: TextDirection.rtl,
                           child: ElevatedButton.icon(
+                            icon: Icon(Icons.adaptive.arrow_back),
                             label: const CustomText(
                               fontSize: 16,
-                              text: "הוסף",
+                              text: "המשך לאפליקציה",
                               color: white,
                             ),
-                            icon: const Icon(Icons.add_outlined),
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     isDark ? primaryColor : secondaryColor)),
@@ -165,8 +183,11 @@ class _AddContactState extends ConsumerState<AddContact> {
               width: size.width * 0.42,
               textInputAction: TextInputAction.next,
               validator: (value) {
-                return validateProvider.validator(value!, "שם אינו יכול להיות ריק!",
-                    "השם שהוזן אינו תקין!", nameValidator);
+                return validateProvider.validator(
+                    value!,
+                    "שם אינו יכול להיות ריק!",
+                    "השם שהוזן אינו תקין!",
+                    nameValidator);
               },
             ),
             CustomTextField(
@@ -176,8 +197,11 @@ class _AddContactState extends ConsumerState<AddContact> {
                 width: size.width * 0.42,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  return validateProvider.validator(value!, "שם משפחה אינו יכול להיות ריק!",
-                      "שם המשפחה שהוזן אינו תקין!", nameValidator);
+                  return validateProvider.validator(
+                      value!,
+                      "שם משפחה אינו יכול להיות ריק!",
+                      "שם המשפחה שהוזן אינו תקין!",
+                      nameValidator);
                 }),
           ],
         ),
@@ -211,16 +235,22 @@ class _AddContactState extends ConsumerState<AddContact> {
                 CustomTextField(
                     textInputAction: TextInputAction.next,
                     validator: (value) {
-                      return validateProvider.validator(value!, "שם אינו יכול להיות ריק!",
-                          "שם שהוזן אינו תקין!", nameValidator);
+                      return validateProvider.validator(
+                          value!,
+                          "שם אינו יכול להיות ריק!",
+                          "שם שהוזן אינו תקין!",
+                          nameValidator);
                     },
                     controller: _nameController,
                     text: "שם פרטי",
                     width: size.width / 2.4),
                 CustomTextField(
                     validator: (value) {
-                      return validateProvider.validator(value!, "שם משפחה אינו יכול להיות ריק!",
-                          "שם המשפחה שהוזן אינו תקין!", nameValidator);
+                      return validateProvider.validator(
+                          value!,
+                          "שם משפחה אינו יכול להיות ריק!",
+                          "שם המשפחה שהוזן אינו תקין!",
+                          nameValidator);
                     },
                     controller: _lastNameController,
                     textInputAction: TextInputAction.next,

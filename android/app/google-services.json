@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "142406398301-lmfk5gqm5920lj4qdvhu1rakgk8ndu61.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.regiment.regiment8112",
+            "certificate_hash": "8f17667e7d6431de24e75c54b94360e2e4dc3703"
+          }
+        },
+        {
           "client_id": "142406398301-590memrt9ocbn3cab8fac3ei3t0kdhvo.apps.googleusercontent.com",
           "client_type": 3
         }

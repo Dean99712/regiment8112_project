@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regiment8112_project/screens/main_screen.dart';
+import 'package:pinput/pinput.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
-import 'package:regiment8112_project/widgets/custom_text_field.dart';
-
 import '../widgets/custom_text.dart';
 
-class OtpScreen extends StatefulWidget {
+class OtpScreen extends ConsumerStatefulWidget {
   const OtpScreen(
-      {required this.smsCode, required this.verificationId,required this.phoneNumber, super.key});
+      {required this.smsCode,
+      required this.verificationId,
+      required this.phoneNumber,
+      super.key});
 
   final String smsCode;
   final String verificationId;
   final String phoneNumber;
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  ConsumerState<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends ConsumerState<OtpScreen> {
   String smsCode = '';
   String verificationId = '';
 
@@ -32,6 +34,15 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   final AuthService _authService = AuthService();
+
+  Future verifyOtp(BuildContext context, String smsCode) async {
+    _authService.verifyOtp(
+      context,
+      smsCode,
+      verificationId,
+      ref
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +73,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         ]
                       : [white, greyShade400])),
           child: Padding(
-            padding: const EdgeInsets.only(top:75.0),
+            padding: const EdgeInsets.only(top: 75.0),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -71,7 +82,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   Image.asset("assets/svg/logo.png", height: 210, width: 210),
                   Text(
                     'כניסה עם קוד חד פעמי ב-SMS',
-                    style: GoogleFonts.rubikDirt(fontSize: 24, color: primaryColor),
+                    style: GoogleFonts.rubikDirt(
+                        fontSize: 24, color: primaryColor),
                   ),
                   CustomText(
                     text: 'שלחנו לך קוד לנייד שמסתיים ב-$phone',
@@ -79,35 +91,45 @@ class _OtpScreenState extends State<OtpScreen> {
                     fontSize: 16,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 75.0),
+                    padding: const EdgeInsets.only(top: 35.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomTextField(
-                            maxLength: 6,
-                            controller: null,
-                            text: "קוד אימות",
-                            onChanged: (value) {
-                              smsCode = value;
-                            }),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Pinput(
+                              defaultPinTheme: PinTheme(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: greyShade100,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                  textStyle: TextStyle(fontSize: 18)),
+                              onChanged: (value) {
+                                smsCode = value;
+                              },
+                              onSubmitted: (value) {
+                                setState(() {
+                                  smsCode = value;
+                                });
+                              },
+                              length: 6,
+                              autofocus: true,
+                            ),
+                          ),
+                        ),
                         CustomButton(
                           text: "כניסה",
                           color: secondaryColor,
-                          function: () async {
-                            try {
-                              await _authService
-                                  .verifyOtp(smsCode, verificationId)
-                                  .whenComplete(() => Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const MainScreen(),
-                                      ),
-                                      (route) => false));
-                            } catch (e) {
-                              print('$e wrong otp');
-                            }
+                          function: () {
+                            verifyOtp(context, smsCode);
                           },
-                          width: size.width < 380 ? size.width : size.width / 1.5,
+                          width:
+                              size.width < 380 ? size.width : size.width / 1.5,
                         )
                       ],
                     ),
@@ -122,8 +144,9 @@ class _OtpScreenState extends State<OtpScreen> {
                           children: [
                             CustomText(
                               text: "לא הקוד שקיבלת?",
-                              color:
-                                  isDark ? greyShade200 : colorScheme.onBackground,
+                              color: isDark
+                                  ? greyShade200
+                                  : colorScheme.onBackground,
                               fontSize: 12,
                             ),
                             Text(
@@ -136,8 +159,9 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                             Icon(
                               FontAwesomeIcons.whatsapp,
-                              color:
-                                  isDark ? greyShade200 : colorScheme.onBackground,
+                              color: isDark
+                                  ? greyShade200
+                                  : colorScheme.onBackground,
                             )
                           ]),
                     ),

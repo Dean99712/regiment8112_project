@@ -72,9 +72,9 @@ class _AllImagesState extends ConsumerState<AllImages>
         maxHeightDiskCache: widget.itemCount == 1
             ? 1200
             : widget.itemCount == 3
-                ? 600
-                : 250,
-        fit: BoxFit.fill,
+                ? 750
+                : 350,
+        fit: BoxFit.cover,
         imageUrl: image.imageUrl,
         fadeInDuration: const Duration(milliseconds: 150),
         progressIndicatorBuilder: (context, url, progress) {

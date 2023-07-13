@@ -10,8 +10,6 @@ import 'package:regiment8112_project/utils/validators.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
 
-import 'main_screen.dart';
-
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -36,33 +34,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> authenticateUser(String phoneNumber) async {
     var phone = phoneNumber.substring(1);
-    await _auth.verifyPhoneNumber(
-      phoneNumber: '+972$phone',
-      verificationCompleted: (credential) async {
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          debugPrint('Error, invalid code');
-        }
-      },
-      codeSent: (verificationId, int? resendToken) {
-        verificationCode = verificationId;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpScreen(
-              verificationId: verificationCode,
-              smsCode: smsCode,
-              phoneNumber: phoneNumber
+      await _auth.verifyPhoneNumber(
+        phoneNumber: '+972$phone',
+        verificationCompleted: (credential) async {
+          await _auth.signInWithCredential(credential);
+        },
+        verificationFailed: (e) {
+          throw FirebaseAuthException(code: 'Message : ${e.message!}');
+        },
+        codeSent: (verificationId, int? resendToken) {
+          verificationCode = verificationId;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpScreen(
+                  verificationId: verificationId,
+                  smsCode: smsCode,
+                  phoneNumber: phoneNumber
+              ),
             ),
-          ),
-        );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        verificationId = verificationCode;
-      },
-    );
+          );
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          verificationId = verificationCode;
+        },
+      );
+
   }
 
   @override
@@ -131,12 +128,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       text: "לקבלת קוד חד פעמי",
                       function: () async {
                         if (_formState.currentState!.validate()) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ));
-                          // authenticateUser(phone);
+                          authenticateUser(phone);
                         }
                       },
                       width: size.width < 380 ? size.width : size.width / 1.5,

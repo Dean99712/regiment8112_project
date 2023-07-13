@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
+import 'package:regiment8112_project/providers/user_provider.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/add_contact.dart';
 import 'package:regiment8112_project/widgets/contacts.dart';
@@ -37,6 +38,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(context) {
+    final uid = ref.watch(userProvider);
+    print(uid);
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
