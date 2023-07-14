@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +22,7 @@ class ImagesScreen extends StatefulWidget {
 }
 
 class _ImagesScreenState extends State<ImagesScreen> {
+  int _currentPage = 1;
   int _numOfAxisCount = 3;
   bool isExtended = false;
   List<XFile> selectedImagesList = [];
@@ -49,6 +49,14 @@ class _ImagesScreenState extends State<ImagesScreen> {
   double _scrollControllerOffset = 0.0;
 
   _scrollListener() {
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+
+      setState(() {
+        _currentPage++;
+      });
+    }
     setState(() {
       _scrollControllerOffset = _scrollController.offset;
     });
@@ -59,6 +67,12 @@ class _ImagesScreenState extends State<ImagesScreen> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -132,6 +146,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
                 ],
                 body: AllImages(
                   _numOfAxisCount,
+                  _currentPage,
                   title: widget.title,
                   scrollOffset: _scrollControllerOffset,
                   scrollController: _scrollController,
@@ -224,6 +239,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
             ),
             body: AllImages(
               _numOfAxisCount,
+              _currentPage,
               title: widget.title,
               scrollOffset: _scrollControllerOffset,
               scrollController: _scrollController,

@@ -52,12 +52,11 @@ class StorageService {
     await collection.doc(uuid).set(album);
   }
 
-  Query<Map<String, dynamic>> getPhotosByAlbum(String childName, int limit) {
+  Query<Map<String, dynamic>> getPhotosByAlbum(String childName) {
     return _firestore
         .collectionGroup('album')
         .where('title', isEqualTo: childName)
-        .orderBy("createdAt", descending: true)
-        .limit(limit);
+        .orderBy("createdAt", descending: true);
   }
 
   CollectionReference<Map<String, dynamic>> getAllAlbums() {

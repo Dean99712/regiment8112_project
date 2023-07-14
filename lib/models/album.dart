@@ -14,6 +14,11 @@ class Album {
         imageUrl = snapshot['imageUrl'],
         createdAt = snapshot['createdAt'];
 
+  Album.fromQuerySnapshot(QueryDocumentSnapshot<Object?> snapshot)
+      : id = snapshot['id'],
+        title = snapshot['title'],
+        imageUrl = snapshot['imageUrl'],
+        createdAt = snapshot['createdAt'];
 
   Map<String, dynamic> toJson() =>
       {'id': id, 'title': title, 'imageUrl': imageUrl, 'createdAt': createdAt};
