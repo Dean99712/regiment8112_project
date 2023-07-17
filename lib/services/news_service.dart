@@ -16,4 +16,16 @@ class NewsService {
         .orderBy("created_at", descending: true)
         .get();
   }
+
+  Future addUpdate(String text) async {
+    var collection = _firestore.collection("updates");
+    final data = {"update": text, "created_at": Timestamp.now()};
+    return await collection.add(data);
+  }
+
+  Future addNews(String text) async {
+    var collection = _firestore.collection("news");
+    final data = {"news": text, "created_at": Timestamp.now()};
+    return await collection.add(data);
+  }
 }

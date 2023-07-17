@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:blurhash_dart/blurhash_dart.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image/image.dart' as img;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,23 +9,23 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/widgets/all_images.dart';
-import 'package:regiment8112_project/widgets/custom_text.dart';
+import 'package:regiment8112_project/providers/user_provider.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/images_manager.dart';
+import '../utils/colors.dart';
+import '../widgets/all_images.dart';
+import '../widgets/custom_text.dart';
 
-class ImagesScreen extends StatefulWidget {
+class ImagesScreen extends ConsumerStatefulWidget {
   const ImagesScreen({required this.title, super.key});
 
   final String title;
 
   @override
-  State<ImagesScreen> createState() => _ImagesScreenState();
+  ConsumerState<ImagesScreen> createState() => _ImagesScreenState();
 }
 
-class _ImagesScreenState extends State<ImagesScreen> {
-  int _currentPage = 1;
+class _ImagesScreenState extends ConsumerState<ImagesScreen> {
   int _numOfAxisCount = 3;
   bool isExtended = false;
   List<XFile> selectedImagesList = [];
@@ -41,7 +44,11 @@ class _ImagesScreenState extends State<ImagesScreen> {
       final ref = _storage.ref("images/albums/$childName/${item.name}");
       await ref.putFile(File(item.path));
       final imageUrl = await ref.getDownloadURL();
-      _storageService.addPhotosToAlbum(childName, imageUrl);
+
+      var bytes = await item.readAsBytes();
+      final hash = img.decodeImage(bytes);
+      var blurHash = await BlurHash.encode(hash!, numCompX: 1,numCompY: 1);
+      _storageService.addPhotosToAlbum(childName, imageUrl, blurHash.hash);
     }
   }
 
@@ -49,14 +56,6 @@ class _ImagesScreenState extends State<ImagesScreen> {
   double _scrollControllerOffset = 0.0;
 
   _scrollListener() {
-    if (_scrollController.offset >=
-        _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-
-      setState(() {
-        _currentPage++;
-      });
-    }
     setState(() {
       _scrollControllerOffset = _scrollController.offset;
     });
@@ -77,6 +76,8 @@ class _ImagesScreenState extends State<ImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isAdmin = ref.watch(userProvider);
+
     final colorScheme = Theme.of(context).colorScheme;
     return PlatformScaffold(
         cupertino: (_, __) => CupertinoPageScaffoldData(
@@ -134,8 +135,11 @@ class _ImagesScreenState extends State<ImagesScreen> {
                       },
                     ),
                     leading: CupertinoButton(
-                      child: const Icon(
+                      child: isAdmin ? const Icon(
                         CupertinoIcons.plus,
+                        color: primaryColor,
+                      ) : const Icon(
+                        CupertinoIcons.back,
                         color: primaryColor,
                       ),
                       onPressed: () {
@@ -146,7 +150,6 @@ class _ImagesScreenState extends State<ImagesScreen> {
                 ],
                 body: AllImages(
                   _numOfAxisCount,
-                  _currentPage,
                   title: widget.title,
                   scrollOffset: _scrollControllerOffset,
                   scrollController: _scrollController,
@@ -177,7 +180,9 @@ class _ImagesScreenState extends State<ImagesScreen> {
                                 color: secondaryColor,
                               ),
                               label: Text(
-                                  style: TextStyle(color: colorScheme.onBackground), "הגדל"))),
+                                  style: TextStyle(
+                                      color: colorScheme.onBackground),
+                                  "הגדל"))),
                       PopupMenuItem(
                           enabled: _numOfAxisCount != 6 ? true : false,
                           child: TextButton.icon(
@@ -193,7 +198,9 @@ class _ImagesScreenState extends State<ImagesScreen> {
                                 color: secondaryColor,
                               ),
                               label: Text(
-                                  style: TextStyle(color: colorScheme.onBackground), "הקטן")))
+                                  style: TextStyle(
+                                      color: colorScheme.onBackground),
+                                  "הקטן")))
                     ];
                   },
                   icon: const Icon(Icons.more_horiz),
@@ -221,7 +228,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
                       .withOpacity(0.1),
             ),
             extendBodyBehindAppBar: true,
-            floatingActionButton: ScrollingFabAnimated(
+            floatingActionButton: isAdmin ? ScrollingFabAnimated(
               width: 175,
               icon: const Icon(Icons.add_a_photo_sharp, color: white),
               text: const CustomText(
@@ -236,10 +243,9 @@ class _ImagesScreenState extends State<ImagesScreen> {
               elevation: 0.0,
               inverted: true,
               radius: 40.0,
-            ),
+            ) : null,
             body: AllImages(
               _numOfAxisCount,
-              _currentPage,
               title: widget.title,
               scrollOffset: _scrollControllerOffset,
               scrollController: _scrollController,

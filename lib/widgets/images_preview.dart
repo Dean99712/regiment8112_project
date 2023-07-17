@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:regiment8112_project/models/album.dart';
 import 'package:regiment8112_project/screens/images_screen.dart';
-import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../utils/colors.dart';
 import 'custom_text.dart';
+import 'image_slider_preview.dart';
 
 class ImagesPreview extends ConsumerStatefulWidget {
   const ImagesPreview({required this.text, required this.date, super.key});
@@ -164,22 +165,22 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                             ]),
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            String photo =
-                                                imagesList[index].imageUrl;
+                                            Album photo =
+                                                imagesList[index];
                                             return InkWell(
                                               onTap: () {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            ImageGallery(
+                                                            ImageSliderPreview(
                                                               images:
                                                                   imagesList,
                                                               index: index,
                                                             )));
                                               },
                                               child: CachedNetworkImage(
-                                                imageUrl: photo,
+                                                imageUrl: photo.imageUrl,
                                                 maxHeightDiskCache:
                                                     imagesList.length == 1
                                                         ? 1200
@@ -187,6 +188,12 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                 fadeInDuration: const Duration(
                                                     milliseconds: 150),
                                                 fit: BoxFit.fill,
+                                                progressIndicatorBuilder: (context, url, progress) {
+                                                  return BlurHash(
+                                                    hash: photo.hash,
+                                                    image: photo.imageUrl,
+                                                  );
+                                                },
                                               ),
                                             );
                                           },

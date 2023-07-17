@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/widgets/images_preview.dart';
@@ -11,7 +12,6 @@ class ImagesTab extends StatefulWidget {
 }
 
 class _ImagesTabState extends State<ImagesTab> {
-
   final StorageService _storage = StorageService();
 
   @override
@@ -20,31 +20,30 @@ class _ImagesTabState extends State<ImagesTab> {
     super.initState();
   }
 
-  Future<Iterable<QueryDocumentSnapshot<Map<String, dynamic>>>>
-      getDocuments() async {
-    var collection = await _storage.getAllAlbums().orderBy("createdAt", descending: true).get();
-    return await collection.docs.map((e) => e);
+  Query<Object?> getDocuments()  {
+    return _storage.getAllAlbums().orderBy("createdAt", descending: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getDocuments(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              var list = snapshot.data!.toList();
-              String albumName = list[index].data()["albumName"];
-              Timestamp createdAt = list[index].data()['createdAt'];
-              return ImagesPreview(
-                date: createdAt,
-                text: albumName,
-              );
-            },
-          );
+    return FirestoreQueryBuilder(
+      query: getDocuments(),
+      builder: (context, snapshot, child) {
+        if(snapshot.hasData) {
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: snapshot.docs.length,
+              itemBuilder: (context, index) {
+                var list = snapshot.docs.map((e) => e).toList();
+                return ImagesPreview(
+                  date: list[index].get('createdAt'),
+                  text: list[index].get('albumName'),
+                );
+              },
+            );
+          }
+        if(snapshot.isFetchingMore && snapshot.isFetching) {
+          return Center(child: CircularProgressIndicator(),);
         }
         return Container();
       },

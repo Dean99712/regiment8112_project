@@ -27,7 +27,7 @@ class AuthService {
 
       ref.watch(userProvider.notifier).getUser().then((value) {
         if(value == true) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainScreen()));
         } else {
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (context) => const AddContact()), (

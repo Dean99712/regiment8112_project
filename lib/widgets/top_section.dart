@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:regiment8112_project/providers/search_provider.dart';
-import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/next_summon.dart';
 import 'package:regiment8112_project/widgets/search_bar.dart';
 import 'custom_text.dart';
@@ -11,7 +10,6 @@ class TopSection extends ConsumerStatefulWidget {
   const TopSection(this.currentTab, this.updateActiveTab, {super.key});
 
   final String currentTab;
-
   final Function(String value) updateActiveTab;
 
   @override
@@ -20,7 +18,7 @@ class TopSection extends ConsumerStatefulWidget {
 
 class _TopSectionState extends ConsumerState<TopSection> {
   var activeTab = 'news';
-
+  final FocusNode focus = FocusNode();
   final _searchController = TextEditingController();
 
   @override
@@ -34,7 +32,8 @@ class _TopSectionState extends ConsumerState<TopSection> {
     final colorScheme = Theme.of(context).colorScheme;
     var searchProv = ref.read(searchProvider.notifier);
     Color isContactList = activeTab == 'contactsList'
-        ? colorScheme.secondary : colorScheme.primary;
+        ? colorScheme.secondary
+        : colorScheme.primary;
 
     return Column(
       children: [
@@ -53,9 +52,13 @@ class _TopSectionState extends ConsumerState<TopSection> {
                     widget.updateActiveTab(activeTab);
                   },
                   child: CustomText(
+                    fontWeight: activeTab == 'news'
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                       fontSize: 16,
-                      color:
-                          activeTab == 'news' ? colorScheme.secondary : colorScheme.primary,
+                      color: activeTab == 'news'
+                          ? colorScheme.secondary
+                          : colorScheme.primary,
                       text: "עדכונים וחדשות"),
                 ),
                 cupertino: (_, __) => CupertinoTextButtonData(onPressed: () {
@@ -66,8 +69,13 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   widget.updateActiveTab(activeTab);
                 }),
                 child: CustomText(
+                    fontWeight: activeTab == 'news'
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                     fontSize: 16,
-                    color: activeTab == 'news' ? colorScheme.secondary : colorScheme.primary,
+                    color: activeTab == 'news'
+                        ? colorScheme.secondary
+                        : colorScheme.primary,
                     text: "עדכונים וחדשות"),
               ),
             ),
@@ -88,9 +96,10 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   widget.updateActiveTab('contactsList');
                 },
                 child: CustomText(
-                    fontSize: 16,
-                    color: isContactList,
-                    text: "רשימת קשר"),
+                    fontWeight: activeTab != 'news'
+                        ? FontWeight.w600
+                        : FontWeight.w400,
+                    fontSize: 16, color: isContactList, text: "רשימת קשר"),
                 // )
               ),
               cupertino: (_, __) => CupertinoTextButtonData(
@@ -101,9 +110,10 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   widget.updateActiveTab('contactsList');
                 },
                 child: CustomText(
-                    fontSize: 16,
-                    color: isContactList,
-                    text: "רשימת קשר"),
+                    fontWeight: activeTab != 'news'
+                        ? FontWeight.w600
+                        : FontWeight.w400,
+                    fontSize: 16, color: isContactList, text: "רשימת קשר"),
               ),
             )
           ],

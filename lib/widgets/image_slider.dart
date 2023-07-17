@@ -64,14 +64,23 @@ class _ImageGalleryState extends State<ImageGallery> {
 
   @override
   Widget build(BuildContext context) {
-    var scrollOffset = (widget.index * widget.images.length) - 50;
+    final size = MediaQuery.of(context).size;
+    // var scrollOffset = widget.index / widget.images.length / size.height;
 
+    print(widget.images.length);
     final PageController pageController =
         PageController(initialPage: widget.index);
-
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
         navigationBar: CupertinoNavigationBar(
+          trailing: CupertinoContextMenu(
+            actions: [
+              CupertinoContextMenuAction(
+                  child: CupertinoButton(
+                      child: const Text("Press"), onPressed: () {}))
+            ],
+            child: Text(""),
+          ),
           backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
           leading: CupertinoButton(
             onPressed: () {
@@ -138,7 +147,6 @@ class _ImageGalleryState extends State<ImageGallery> {
           onPageChange: (index) {
             setState(() {
               widget.index = index;
-              widget.scrollController!.jumpTo(scrollOffset.toDouble());
             });
           },
         ),
@@ -164,42 +172,37 @@ class ImageSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
-    return Center(
-      child: SizedBox(
-        height: 550,
+    return PhotoViewGallery.builder(
+      onPageChanged: onPageChange,
+      itemCount: images.length,
+      builder: (context, index) => PhotoViewGalleryPageOptions.customChild(
         child: Hero(
           tag: images[index].imageUrl,
-          child: PhotoViewGallery.builder(
-            onPageChanged: onPageChange,
-            itemCount: images.length,
-            builder: (context, index) =>
-                PhotoViewGalleryPageOptions.customChild(
-              child: CachedNetworkImage(
-                maxHeightDiskCache: 1200,
-                fit: BoxFit.fitWidth,
-                imageUrl: images[index].imageUrl,
-                fadeInDuration: const Duration(milliseconds: 150),
-                progressIndicatorBuilder: (context, url, progress) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: primaryColor,
-                      backgroundColor: white.withOpacity(0.3),
-                    ),
-                  );
-                },
-              ),
-              minScale: PhotoViewComputedScale.contained,
-            ),
-            pageController:
-                isIos ? PageController(initialPage: index) : controller,
-            loadingBuilder: (context, event) => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-            enableRotation: true,
+          child: CachedNetworkImage(
+            maxHeightDiskCache: 1200,
+            fit: BoxFit.fitWidth,
+            imageUrl: images[index].imageUrl,
+            fadeInDuration: const Duration(milliseconds: 150),
+            progressIndicatorBuilder: (context, url, progress) {
+              return Center(
+                child: PlatformCircularProgressIndicator(
+                  material: (context, platform) =>
+                      MaterialProgressIndicatorData(
+                          color: primaryColor,
+                          strokeWidth: 2,
+                          backgroundColor: greyShade100.withOpacity(0.5)),
+                ),
+              );
+            },
           ),
         ),
+        minScale: PhotoViewComputedScale.contained,
       ),
+      pageController: isIos ? PageController(initialPage: index) : controller,
+      loadingBuilder: (context, event) => const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+      enableRotation: true,
     );
   }
 }

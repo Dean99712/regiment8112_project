@@ -1,3 +1,5 @@
+import 'package:blurhash_dart/blurhash_dart.dart';
+import 'package:image/image.dart' as img;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:regiment8112_project/models/album.dart';
@@ -15,9 +17,11 @@ class StorageService {
 
     for (var item in listResult.items) {
       String url = await item.getDownloadURL();
+      var bytes = await item.getData();
+      final hash = img.decodeImage(bytes!);
+      var blurHash = await BlurHash.encode(hash!, numCompX: 2, numCompY: 2);
       itemList.add(url);
-      // final name = item.name;
-      addPhotosToAlbum(childName, url);
+      addPhotosToAlbum(childName, url, blurHash.hash);
     }
     return itemList;
   }
@@ -31,7 +35,7 @@ class StorageService {
         .delete();
   }
 
-  Future addPhotosToAlbum(String childName, String url) async {
+  Future addPhotosToAlbum(String childName, String url, String hash) async {
     var parentCollection = _firestore.collection("albums").doc(childName);
 
     if (!parentCollection.id.contains(childName)) {
@@ -46,6 +50,7 @@ class StorageService {
             id: uuid,
             title: childName,
             imageUrl: url,
+            hash: hash,
             createdAt: Timestamp.now())
         .toJson();
 
@@ -66,5 +71,11 @@ class StorageService {
   Future<QuerySnapshot<Map<String, dynamic>>> getCollectionDocs(
       String childName) async {
     return await _firestore.collection(childName).get();
+  }
+
+  Future createAlbum(String childName) async {
+    var collection = _firestore.collection("albums").doc(childName);
+    final data = {"albumName": childName, "createdAt": Timestamp.now()};
+    return await collection.set(data);
   }
 }

@@ -1,41 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/tabs/tab.dart';
 import 'package:regiment8112_project/tabs/images_tab.dart';
 import 'package:regiment8112_project/tabs/news_tab.dart';
 import 'package:regiment8112_project/tabs/updates_tab.dart';
 
 class SwipeableTab extends StatefulWidget {
-  const SwipeableTab(this.scrollController, {Key? key}) : super(key: key);
+  const SwipeableTab(this.scrollController, {required this.tabs, required this.tabController, super.key});
 
   final ScrollController scrollController;
+  final TabController tabController;
+  final List<Widget> tabs;
 
   @override
   State<SwipeableTab> createState() => _SwipeableTabState();
 }
 
-class _SwipeableTabState extends State<SwipeableTab>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
-  List<Widget> myTabs = const [
-    MyTab(text: "חדשות"),
-    MyTab(text: "עדכוני פלוגה"),
-    MyTab(text: "תמונות")
-  ];
-
-  @override
-  void initState() {
-    tabController = TabController(length: myTabs.length, vsync: this);
-    tabController.addListener(() {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
+class _SwipeableTabState extends State<SwipeableTab> {
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +25,7 @@ class _SwipeableTabState extends State<SwipeableTab>
       child: Column(
         children: [
           TabBar(
-              controller: tabController,
+              controller: widget.tabController,
               unselectedLabelStyle:
                   const TextStyle(fontWeight: FontWeight.normal),
               labelStyle: const TextStyle(fontWeight: FontWeight.bold),
@@ -54,9 +33,9 @@ class _SwipeableTabState extends State<SwipeableTab>
               unselectedLabelColor: theme.primary,
               indicatorColor: theme.secondary,
               labelColor: theme.secondary,
-              tabs: myTabs),
+              tabs: widget.tabs),
           Expanded(
-            child: TabBarView(controller: tabController, children: [
+            child: TabBarView(controller: widget.tabController, children: [
               const NewsTab(),
               const UpdatesTab(),
               const ImagesTab(),

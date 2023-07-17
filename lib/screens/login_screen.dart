@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:regiment8112_project/providers/validatorProvider.dart';
 import 'package:regiment8112_project/screens/otp_screen.dart';
 import 'package:regiment8112_project/utils/colors.dart';
+import 'package:regiment8112_project/utils/ebutton_state.dart';
 import 'package:regiment8112_project/utils/validators.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
@@ -20,6 +21,7 @@ class LoginPage extends ConsumerStatefulWidget {
 final controller = TextEditingController();
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+  ButtonState state = ButtonState.init;
   String smsCode = '';
   String verificationCode = '';
   String phone = '';
@@ -44,7 +46,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         },
         codeSent: (verificationId, int? resendToken) {
           verificationCode = verificationId;
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => OtpScreen(
@@ -125,10 +127,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           }),
                     ),
                     CustomButton(
+                      state: state,
                       text: "לקבלת קוד חד פעמי",
                       function: () async {
                         if (_formState.currentState!.validate()) {
-                          authenticateUser(phone);
+                          setState(() => state = ButtonState.loading);
+                          await authenticateUser(phone);
                         }
                       },
                       width: size.width < 380 ? size.width : size.width / 1.5,
