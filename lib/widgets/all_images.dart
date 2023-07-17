@@ -16,7 +16,6 @@ class AllImages extends ConsumerStatefulWidget {
         required this.scrollOffset,
         required this.scrollController,
         super.key});
-
   final int? itemCount;
   final String title;
   final double? scrollOffset;
@@ -48,17 +47,10 @@ class _AllImagesState extends ConsumerState<AllImages>
 
   Widget buildImage(Album image) {
     return Hero(
-      transitionOnUserGestures: true,
-      tag: image.imageUrl,
-      child: HeroMode(
-        enabled: false,
-        child: CachedNetworkImage(
-          maxHeightDiskCache: widget.itemCount == 1
-              ? 1200
-              : widget.itemCount == 3
-              ? 350
-              : 255,
-          fit: BoxFit.cover,
+      flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
+        return CachedNetworkImage(
+          maxHeightDiskCache: 350,
+          fit: BoxFit.fitWidth,
           imageUrl: image.imageUrl,
           fadeInDuration: const Duration(milliseconds: 150),
           progressIndicatorBuilder: (context, url, progress) {
@@ -69,7 +61,27 @@ class _AllImagesState extends ConsumerState<AllImages>
                   color: primaryColor),
             );
           },
-        ),
+        );
+      },
+      transitionOnUserGestures: true,
+      tag: image.imageUrl,
+      child: CachedNetworkImage(
+        maxHeightDiskCache: widget.itemCount == 1
+            ? 1200
+            : widget.itemCount == 3
+            ? 350
+            : 255,
+        fit: BoxFit.cover,
+        imageUrl: image.imageUrl,
+        fadeInDuration: const Duration(milliseconds: 150),
+        progressIndicatorBuilder: (context, url, progress) {
+          return Center(
+            child: CircularProgressIndicator(
+                strokeWidth: 2,
+                value: progress.progress,
+                color: primaryColor),
+          );
+        },
       ),
     );
   }
@@ -147,6 +159,7 @@ class _AllImagesState extends ConsumerState<AllImages>
                                     isDestructiveAction: true,
                                     child: const Text("מחק תמונה זו"),
                                     onPressed: () async {
+                                      await _storageService.deleteDocument(widget.title, photos[index].id);
                                       Navigator.pop(context);
                                     },
                                   )

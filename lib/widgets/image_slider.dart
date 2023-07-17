@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import '../models/album.dart';
@@ -65,22 +66,15 @@ class _ImageGalleryState extends State<ImageGallery> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
     // var scrollOffset = widget.index / widget.images.length / size.height;
-
-    print(widget.images.length);
     final PageController pageController =
         PageController(initialPage: widget.index);
+
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
         navigationBar: CupertinoNavigationBar(
-          trailing: CupertinoContextMenu(
-            actions: [
-              CupertinoContextMenuAction(
-                  child: CupertinoButton(
-                      child: const Text("Press"), onPressed: () {}))
-            ],
-            child: Text(""),
-          ),
+          trailing: pullDownButton(context),
           backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
           leading: CupertinoButton(
             onPressed: () {
@@ -155,6 +149,30 @@ class _ImageGalleryState extends State<ImageGallery> {
   }
 }
 
+Widget pullDownButton(BuildContext context) {
+  return PullDownButton(
+    itemBuilder: (context) => [
+      PullDownMenuItem(
+        title: "שתף",
+        onTap: () {},
+        icon: CupertinoIcons.share,
+      ),
+      PullDownMenuItem(
+        onTap: () {},
+        title: 'מחק תמונה זו',
+        isDestructive: true,
+        icon: CupertinoIcons.delete,
+      ),
+    ],
+    animationBuilder: null,
+    position: PullDownMenuPosition.automatic,
+    buttonBuilder: (BuildContext context, Future<void> Function() showMenu) {
+      return CupertinoButton(
+          child: Icon(CupertinoIcons.ellipsis_circle), onPressed: showMenu);
+    },
+  );
+}
+
 class ImageSlider extends StatelessWidget {
   const ImageSlider(
       {required this.images,
@@ -177,6 +195,7 @@ class ImageSlider extends StatelessWidget {
       itemCount: images.length,
       builder: (context, index) => PhotoViewGalleryPageOptions.customChild(
         child: Hero(
+          transitionOnUserGestures: true,
           tag: images[index].imageUrl,
           child: CachedNetworkImage(
             maxHeightDiskCache: 1200,

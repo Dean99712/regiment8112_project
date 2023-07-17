@@ -9,6 +9,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 import 'package:regiment8112_project/providers/user_provider.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/images_manager.dart';
@@ -47,7 +48,7 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
 
       var bytes = await item.readAsBytes();
       final hash = img.decodeImage(bytes);
-      var blurHash = await BlurHash.encode(hash!, numCompX: 1,numCompY: 1);
+      var blurHash = await BlurHash.encode(hash!, numCompX: 1, numCompY: 1);
       _storageService.addPhotosToAlbum(childName, imageUrl, blurHash.hash);
     }
   }
@@ -74,6 +75,33 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
     super.dispose();
   }
 
+  Widget pullDownButton(BuildContext context, void Function() function,
+      void Function() function2) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: PullDownButton(
+        itemBuilder: (context) => [
+          PullDownMenuItem(
+            onTap: function,
+            title: 'הגדלה',
+            icon: CupertinoIcons.zoom_in,
+          ),
+          PullDownMenuItem(
+            title: 'הקטנה',
+            onTap: function2,
+            icon: CupertinoIcons.zoom_out,
+          )
+        ],
+        animationBuilder: null,
+        position: PullDownMenuPosition.automatic,
+        buttonBuilder: (BuildContext context, Future<void> Function() showMenu) {
+          return CupertinoButton(
+              child: Icon(CupertinoIcons.ellipsis_circle), onPressed: showMenu);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isAdmin = ref.watch(userProvider);
@@ -94,54 +122,29 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).colorScheme.onBackground),
                     ),
-                    trailing: CupertinoButton(
-                      child: const Icon(
-                        CupertinoIcons.ellipsis_circle,
-                        color: primaryColor,
-                      ),
-                      onPressed: () {
-                        showCupertinoModalPopup(
-                            context: context,
-                            builder: (context) => CupertinoActionSheet(
-                                  cancelButton: CupertinoButton(
-                                    child: const Text("בטל"),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  actions: [
-                                    CupertinoActionSheetAction(
-                                      onPressed: () {
-                                        if (_numOfAxisCount != 1) {
-                                          setState(() {
-                                            _numOfAxisCount -= 1;
-                                          });
-                                        }
-                                      },
-                                      child: const Text("הגדלה"),
-                                    ),
-                                    CupertinoActionSheetAction(
-                                      onPressed: () {
-                                        if (_numOfAxisCount != 6) {
-                                          setState(() {
-                                            _numOfAxisCount += 1;
-                                          });
-                                        }
-                                      },
-                                      child: const Text("הקטנה"),
-                                    ),
-                                  ],
-                                ));
-                      },
-                    ),
+                    trailing: pullDownButton(context, () {
+                      if (_numOfAxisCount != 1) {
+                        setState(() {
+                          _numOfAxisCount -= 1;
+                        });
+                      }
+                    }, () {
+                      if (_numOfAxisCount != 6) {
+                        setState(() {
+                          _numOfAxisCount += 1;
+                        });
+                      }
+                    }),
                     leading: CupertinoButton(
-                      child: isAdmin ? const Icon(
-                        CupertinoIcons.plus,
-                        color: primaryColor,
-                      ) : const Icon(
-                        CupertinoIcons.back,
-                        color: primaryColor,
-                      ),
+                      child: isAdmin
+                          ? const Icon(
+                              CupertinoIcons.plus,
+                              color: primaryColor,
+                            )
+                          : const Icon(
+                              CupertinoIcons.back,
+                              color: primaryColor,
+                            ),
                       onPressed: () {
                         selectedImages(widget.title);
                       },
@@ -228,22 +231,24 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                       .withOpacity(0.1),
             ),
             extendBodyBehindAppBar: true,
-            floatingActionButton: isAdmin ? ScrollingFabAnimated(
-              width: 175,
-              icon: const Icon(Icons.add_a_photo_sharp, color: white),
-              text: const CustomText(
-                  fontSize: 16, color: white, text: "הוסף תמונות"),
-              onPress: () {
-                selectedImages(widget.title);
-              },
-              scrollController: _scrollController,
-              animateIcon: false,
-              color: primaryColor,
-              duration: const Duration(milliseconds: 150),
-              elevation: 0.0,
-              inverted: true,
-              radius: 40.0,
-            ) : null,
+            floatingActionButton: isAdmin
+                ? ScrollingFabAnimated(
+                    width: 175,
+                    icon: const Icon(Icons.add_a_photo_sharp, color: white),
+                    text: const CustomText(
+                        fontSize: 16, color: white, text: "הוסף תמונות"),
+                    onPress: () {
+                      selectedImages(widget.title);
+                    },
+                    scrollController: _scrollController,
+                    animateIcon: false,
+                    color: primaryColor,
+                    duration: const Duration(milliseconds: 150),
+                    elevation: 0.0,
+                    inverted: true,
+                    radius: 40.0,
+                  )
+                : null,
             body: AllImages(
               _numOfAxisCount,
               title: widget.title,

@@ -66,6 +66,7 @@ dependencies:
   image: ^4.0.17
   blurhash_dart: ^1.2.1
   share_plus: ^7.0.2
+  pull_down_button: ^0.9.1
 
 
 dev_dependencies:
