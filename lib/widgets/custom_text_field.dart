@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
         this.onChanged,
         this.prefix,
         this.textInputAction,
+        this.autoFocus,
         this.validator,
         super.key});
 
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
   final double width;
   final bool readOnly;
   final Widget? prefix;
+  final bool? autoFocus;
   final TextAlign? textAlign;
   final TextInputAction? textInputAction;
   final void Function(String)? onChanged;
@@ -44,6 +46,7 @@ class CustomTextField extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: PlatformTextFormField(
+          autofocus: autoFocus,
           validator: validator,
             keyboardType: type,
             onChanged: onChanged,

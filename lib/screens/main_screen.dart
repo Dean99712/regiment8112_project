@@ -1,10 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/providers/user_provider.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/services/news_service.dart';
 import 'package:regiment8112_project/widgets/contacts.dart';
+import 'package:regiment8112_project/widgets/custom_button.dart';
+import 'package:regiment8112_project/widgets/custom_text_field.dart';
 import 'package:regiment8112_project/widgets/swipable_tab.dart';
 import 'package:regiment8112_project/widgets/top_section.dart';
 import '../tabs/tab.dart';
@@ -58,39 +63,33 @@ class _MainScreenState extends ConsumerState<MainScreen>
   }
 
   void openDialog(BuildContext context, String text, void Function() function) {
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     final colorScheme = Theme.of(context).colorScheme;
-
-     showDialog<String>(
-        context: context,
-        builder: (context) => Directionality(
-              textDirection: TextDirection.rtl,
-              child: AlertDialog(
-                title: Text(text),
-                content: TextField(
-                  onChanged: (value) {
-                    print(value);
-                    _controller.text = value;
-                  },
-                  autofocus: true,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: function,
-                    child: CustomText(
-                      text: "אשר",
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: CustomText(
-                        text: "בטל",
-                        color: colorScheme.error),
-                  )
+    CupertinoScaffold.showCupertinoModalBottomSheet(
+      context: context,
+      builder: (context) => Material(
+        child: Container(
+            color: colorScheme.background,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 45.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    IconButton(onPressed: () {Navigator.pop(context);}, icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
+                  ],),
+                  CustomText(text: text, fontSize: 24,),
+                  CustomTextField(controller: _controller, text: "", autoFocus: true),
+                  CustomButton(width: 165, text: "הוסף", function: function)
                 ],
               ),
-            ));
+            ),
+          ),
+      ),
+    );
   }
 
   @override
@@ -129,9 +128,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
                     switch (_tabController.index) {
                       case 0:
                         {
-                        openDialog(context, "הוסף חדשות", () async {
-                        Navigator.of(context).pop();
-                        await _newsService.addNews(_controller.text);
+                          openDialog(context, "הוסף חדשות", () async {
+                            Navigator.of(context).pop();
+                            await _newsService.addNews(_controller.text);
+                            _controller.clear();
                           });
                         }
                       case 1:
@@ -139,6 +139,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                           openDialog(context, "הוסף עדכון חדש", () async {
                             Navigator.of(context).pop();
                             await _newsService.addUpdate(_controller.text);
+                            _controller.clear();
                           });
                         }
                       case 2:
@@ -146,6 +147,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                           openDialog(context, "צור אלבום חדש", () async {
                             Navigator.of(context).pop();
                             await _storage.createAlbum(_controller.text);
+                            _controller.clear();
                           });
                         }
                     }

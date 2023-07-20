@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/providers/user_provider.dart';
 import 'package:regiment8112_project/screens/main_screen.dart';
 import 'package:regiment8112_project/widgets/add_contact.dart';
@@ -27,10 +29,10 @@ class AuthService {
 
       ref.watch(userProvider.notifier).getUser().then((value) {
         if(value == true) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainScreen()));
+          Navigator.pushReplacement(context, CupertinoPageRoute(fullscreenDialog: false, builder: (context) => CupertinoScaffold(body: const MainScreen())));
         } else {
           Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (context) => const AddContact()), (
+              MaterialPageRoute(builder: (context) => CupertinoScaffold(body: const AddContact())), (
                   route) => false);
         }
       });
