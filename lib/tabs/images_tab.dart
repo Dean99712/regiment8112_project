@@ -20,7 +20,7 @@ class _ImagesTabState extends State<ImagesTab> {
     super.initState();
   }
 
-  Query<Object?> getDocuments()  {
+  Query<Object?> getDocuments() {
     return _storage.getAllAlbums().orderBy("createdAt", descending: true);
   }
 
@@ -29,21 +29,23 @@ class _ImagesTabState extends State<ImagesTab> {
     return FirestoreQueryBuilder(
       query: getDocuments(),
       builder: (context, snapshot, child) {
-        if(snapshot.hasData) {
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: snapshot.docs.length,
-              itemBuilder: (context, index) {
-                var list = snapshot.docs.map((e) => e).toList();
-                return ImagesPreview(
-                  date: list[index].get('createdAt'),
-                  text: list[index].get('albumName'),
-                );
-              },
-            );
-          }
-        if(snapshot.isFetchingMore && snapshot.isFetching) {
-          return Center(child: CircularProgressIndicator(),);
+        if (snapshot.hasData) {
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: snapshot.docs.length,
+            itemBuilder: (context, index) {
+              var list = snapshot.docs.map((e) => e).toList();
+              return ImagesPreview(
+                date: list[index].get('createdAt'),
+                text: list[index].get('albumName'),
+              );
+            },
+          );
+        }
+        if (snapshot.isFetchingMore && snapshot.isFetching) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
         return Container();
       },

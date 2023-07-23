@@ -18,7 +18,6 @@ class TopSection extends ConsumerStatefulWidget {
 
 class _TopSectionState extends ConsumerState<TopSection> {
   var activeTab = 'news';
-  final FocusNode focus = FocusNode();
   final _searchController = TextEditingController();
 
   @override
@@ -52,9 +51,9 @@ class _TopSectionState extends ConsumerState<TopSection> {
                     widget.updateActiveTab(activeTab);
                   },
                   child: CustomText(
-                    fontWeight: activeTab == 'news'
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                      fontWeight: activeTab == 'news'
+                          ? FontWeight.w600
+                          : FontWeight.w400,
                       fontSize: 16,
                       color: activeTab == 'news'
                           ? colorScheme.secondary
@@ -69,9 +68,8 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   widget.updateActiveTab(activeTab);
                 }),
                 child: CustomText(
-                    fontWeight: activeTab == 'news'
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                    fontWeight:
+                        activeTab == 'news' ? FontWeight.w600 : FontWeight.w400,
                     fontSize: 16,
                     color: activeTab == 'news'
                         ? colorScheme.secondary
@@ -80,7 +78,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
               ),
             ),
             Hero(
-              tag: "logo image",
+              tag: "logo",
               child: Image.asset(
                 'assets/svg/logo.png',
                 width: 97,
@@ -96,10 +94,11 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   widget.updateActiveTab('contactsList');
                 },
                 child: CustomText(
-                    fontWeight: activeTab != 'news'
-                        ? FontWeight.w600
-                        : FontWeight.w400,
-                    fontSize: 16, color: isContactList, text: "רשימת קשר"),
+                    fontWeight:
+                        activeTab != 'news' ? FontWeight.w600 : FontWeight.w400,
+                    fontSize: 16,
+                    color: isContactList,
+                    text: "רשימת קשר"),
                 // )
               ),
               cupertino: (_, __) => CupertinoTextButtonData(
@@ -110,10 +109,11 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   widget.updateActiveTab('contactsList');
                 },
                 child: CustomText(
-                    fontWeight: activeTab != 'news'
-                        ? FontWeight.w600
-                        : FontWeight.w400,
-                    fontSize: 16, color: isContactList, text: "רשימת קשר"),
+                    fontWeight:
+                        activeTab != 'news' ? FontWeight.w600 : FontWeight.w400,
+                    fontSize: 16,
+                    color: isContactList,
+                    text: "רשימת קשר"),
               ),
             )
           ],

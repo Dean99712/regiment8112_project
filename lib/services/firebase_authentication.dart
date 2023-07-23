@@ -22,24 +22,39 @@ class AuthService {
 
   Future<void> verifyOtp(BuildContext context, String otp,
       String verificationCode, WidgetRef ref) async {
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
     try {
       PhoneAuthCredential credentials = PhoneAuthProvider.credential(
           verificationId: verificationCode, smsCode: otp);
       await _auth.signInWithCredential(credentials);
-
-      ref.watch(userProvider.notifier).getUser().then((value) {
-        if(value == true) {
-          Navigator.pushReplacement(context, CupertinoPageRoute(fullscreenDialog: false, builder: (context) => CupertinoScaffold(body: const MainScreen())));
-        } else {
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (context) => CupertinoScaffold(body: const AddContact())), (
-                  route) => false);
-        }
-      });
-
+      if(otp.isNotEmpty) {
+        ref.watch(userProvider.notifier).getUser().then((value) {
+          if (value == true) {
+            Navigator.pushReplacement(
+                context,
+                isIos
+                    ? CupertinoPageRoute(
+                    fullscreenDialog: false,
+                    builder: (context) =>
+                        CupertinoScaffold(body: const MainScreen()))
+                    : MaterialWithModalsPageRoute(
+                    builder: (context) => const MainScreen()));
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        CupertinoScaffold(body: const AddContact())),
+                    (route) => false);
+          }
+        });
+      } else {
+        final snackBar = SnackBar(content: Text("סתם בדיקה"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } on FirebaseAuthException catch (e) {
       print(e.message);
-      print("ERROR");
     }
   }
 }

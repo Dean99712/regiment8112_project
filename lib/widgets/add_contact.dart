@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/data/plattons.dart';
 import 'package:regiment8112_project/providers/user_provider.dart';
 import 'package:regiment8112_project/providers/validatorProvider.dart';
@@ -42,7 +43,7 @@ class _AddContactState extends ConsumerState<AddContact> {
     _phoneController.dispose();
   }
 
-  void createUserCupertino() {
+  void createUserCupertino(TargetPlatform platform) {
     if (_formField.currentState!.validate()) {
       ref.watch(userProvider.notifier).getUser().then((value) {
         if (value == true) {
@@ -53,14 +54,20 @@ class _AddContactState extends ConsumerState<AddContact> {
               _phoneController.text.trim(),
               _cityController.text.trim(),
               platoon[_selectedValue]);
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const MainScreen()));
+          Navigator.pushReplacement(
+              context,
+              platform == TargetPlatform.iOS
+                  ? CupertinoPageRoute(
+                      builder: (context) =>
+                          CupertinoScaffold(body: const MainScreen()))
+                  : MaterialWithModalsPageRoute(
+                      builder: (context) => const MainScreen()));
         }
       });
     }
   }
 
-  void createUserMaterial() {
+  void createUserMaterial(TargetPlatform platform) {
     if (_formField.currentState!.validate()) {
       ref.watch(userProvider.notifier).getUser().then((value) {
         if (value == true) {
@@ -72,7 +79,12 @@ class _AddContactState extends ConsumerState<AddContact> {
               _cityController.text.trim(),
               _selectedVal!);
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const MainScreen()));
+              platform == TargetPlatform.iOS
+                  ? CupertinoPageRoute(
+                  builder: (context) =>
+                      CupertinoScaffold(body: const MainScreen()))
+                  : MaterialWithModalsPageRoute(
+                  builder: (context) => const MainScreen()));
         }
       });
     }
@@ -82,6 +94,7 @@ class _AddContactState extends ConsumerState<AddContact> {
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
+    final platform = Theme.of(context).platform;
 
     return Material(
       child: Form(
@@ -146,9 +159,9 @@ class _AddContactState extends ConsumerState<AddContact> {
                             onPressed: () {
                               if (Theme.of(context).platform ==
                                   TargetPlatform.iOS) {
-                                createUserCupertino();
+                                createUserCupertino(platform);
                               } else {
-                                createUserMaterial();
+                                createUserMaterial(platform);
                               }
                             },
                           ),

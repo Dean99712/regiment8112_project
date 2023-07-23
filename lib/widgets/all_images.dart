@@ -188,8 +188,8 @@ class _AllImagesState extends ConsumerState<AllImages>
                       Navigator.push(
                           context,
                           PageRouteBuilder(
-                            transitionDuration:
-                            Duration(milliseconds: 300),
+                            // transitionDuration:
+                            // Duration(milliseconds: 400),
                             reverseTransitionDuration:
                             Duration(milliseconds: 450),
                             pageBuilder:
@@ -200,8 +200,8 @@ class _AllImagesState extends ConsumerState<AllImages>
                                   reverseCurve: Interval(0, 1),
                                   curve: Interval(0, 1));
 
-                              return FadeTransition(
-                                opacity: curvedAnimation,
+                              return ScaleTransition(
+                                scale: curvedAnimation,
                                 child: ImageGallery(
                                     images: photos,
                                     index: index,

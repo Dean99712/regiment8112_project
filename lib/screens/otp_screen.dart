@@ -6,16 +6,15 @@ import 'package:pinput/pinput.dart';
 import 'package:regiment8112_project/services/firebase_authentication.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
-import '../providers/validatorProvider.dart';
 import '../utils/ebutton_state.dart';
-import '../utils/validators.dart';
 import '../widgets/custom_text.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
-  const OtpScreen({required this.smsCode,
-    required this.verificationId,
-    required this.phoneNumber,
-    super.key});
+  const OtpScreen(
+      {required this.smsCode,
+      required this.verificationId,
+      required this.phoneNumber,
+      super.key});
 
   final String smsCode;
   final String verificationId;
@@ -26,7 +25,6 @@ class OtpScreen extends ConsumerStatefulWidget {
 }
 
 class _OtpScreenState extends ConsumerState<OtpScreen> {
-
   ButtonState state = ButtonState.init;
 
   String smsCode = '';
@@ -44,19 +42,18 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     _authService.verifyOtp(context, smsCode, verificationId, ref);
   }
 
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
+      String value, String emptyText, String text) {
+    final snackBar = SnackBar(content: Text("סתם בדיקה"));
+    return ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme
-        .of(context)
-        .brightness == Brightness.dark;
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
     final phone = widget.phoneNumber.substring(6);
-    final validateProvider = ref.watch(validatorProvider.notifier);
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -75,9 +72,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   radius: 1,
                   colors: isDark
                       ? [
-                    greyShade400,
-                    greyShade700,
-                  ]
+                          greyShade400,
+                          greyShade700,
+                        ]
                       : [white, greyShade400])),
           child: Padding(
             padding: const EdgeInsets.only(top: 75.0),
@@ -86,7 +83,10 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset("assets/svg/logo.png", height: 210, width: 210),
+                  Hero(
+                      tag: "logo",
+                      child: Image.asset("assets/svg/logo.png",
+                          height: 210, width: 210)),
                   Text(
                     'כניסה עם קוד חד פעמי ב-SMS',
                     style: GoogleFonts.rubikDirt(
@@ -107,21 +107,18 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                           child: Directionality(
                             textDirection: TextDirection.ltr,
                             child: Pinput(
-                              validator: (value) {
-                               return validateProvider.validator(value!, "navu mavu asf", "navu mavu asf", smsValidator);
-                              },
                               androidSmsAutofillMethod:
-                              AndroidSmsAutofillMethod.smsRetrieverApi,
+                                  AndroidSmsAutofillMethod.smsRetrieverApi,
                               keyboardType: TextInputType.number,
                               errorPinTheme: PinTheme(
                                   width: 50,
                                   height: 50,
                                   decoration: BoxDecoration(
                                     border:
-                                    Border.all(color: colorScheme.error),
+                                        Border.all(color: colorScheme.error),
                                     color: isDark ? greyShade400 : greyShade100,
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                                        BorderRadius.all(Radius.circular(10.0)),
                                   ),
                                   textStyle: TextStyle(
                                       fontSize: 18,
@@ -132,7 +129,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                   decoration: BoxDecoration(
                                     color: greyShade100,
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                                        BorderRadius.all(Radius.circular(10.0)),
                                   ),
                                   textStyle: TextStyle(fontSize: 18)),
                               onChanged: (value) {
@@ -153,11 +150,11 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                           text: "כניסה",
                           color: secondaryColor,
                           function: () async {
-                              setState(() => state = ButtonState.loading);
-                              await verifyOtp(context, smsCode);
+                            setState(() => state = ButtonState.loading);
+                            await verifyOtp(context, smsCode);
                           },
                           width:
-                          size.width < 380 ? size.width : size.width / 1.5,
+                              size.width < 380 ? size.width : size.width / 1.5,
                         )
                       ],
                     ),

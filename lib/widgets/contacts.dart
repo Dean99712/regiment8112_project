@@ -22,9 +22,9 @@ class Contacts extends ConsumerStatefulWidget {
 }
 
 class _ContactsState extends ConsumerState<Contacts> {
-  final UserService _user = UserService();
+  final UserService _userService = UserService();
 
-  late Stream<List<MyUser>> users;
+  late List<MyUser> users;
 
   @override
   void initState() {
@@ -32,8 +32,8 @@ class _ContactsState extends ConsumerState<Contacts> {
     super.initState();
   }
 
-  void getAllUsers() {
-    var collection = _user.getContacts();
+  void getAllUsers() async {
+    var collection = await _userService.getContacts();
 
     setState(() {
       users = collection;
@@ -45,7 +45,7 @@ class _ContactsState extends ConsumerState<Contacts> {
     final phone = phoneNumber.substring(1);
     final Uri url = Uri(scheme: 'tel', path: '+972$phone');
     if (await canLaunchUrl(url)) {
-       launchUrl(url);
+      launchUrl(url);
     } else {
       showDialog(
         context: context,
@@ -62,8 +62,8 @@ class _ContactsState extends ConsumerState<Contacts> {
   @override
   Widget build(BuildContext context) {
 
-    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     var query = ref.watch(searchProvider);
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     var isGrouped = ref.watch(isGroupedProvider);
     var size = MediaQuery.of(context).size;
     final userList = ref.watch(searchProvider.notifier).updateQuery(query);
@@ -73,10 +73,11 @@ class _ContactsState extends ConsumerState<Contacts> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/svg/boot.png'), opacity: isDark ? 0.5 : 0.75),
+            image: AssetImage('assets/svg/boot.png'),
+            opacity: isDark ? 0.5 : 0.75),
       ),
-      child: StreamBuilder(
-        stream: userList,
+      child: FutureBuilder(
+        future: userList,
         builder: (context, snapshot) {
           List<MyUser> users = snapshot.data ?? [];
           final usersJson = jsonEncode(users);
@@ -92,13 +93,13 @@ class _ContactsState extends ConsumerState<Contacts> {
               ),
             );
           }
-          return snapshot.data!.isEmpty
+          return users.isEmpty
               ? Center(
-                child: CustomText(
-                  text: "הרשימה ריקה",
-                  color: colorScheme.onBackground,
-                ),
-              )
+                  child: CustomText(
+                    text: "הרשימה ריקה",
+                    color: colorScheme.onBackground,
+                  ),
+                )
               : isGrouped
                   ? Directionality(
                       textDirection: TextDirection.rtl,
@@ -110,16 +111,19 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 : Colors.transparent;
 
                             return Container(
-                              color: isDark ? oddColor : (index % 2 == 0)
-                                  ? greyShade200
-                                  : Colors.transparent,
+                              color: isDark
+                                  ? oddColor
+                                  : (index % 2 == 0)
+                                      ? greyShade200
+                                      : Colors.transparent,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 25),
                                 child: SizedBox(
                                   height: size.height * 0.05,
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -128,15 +132,19 @@ class _ContactsState extends ConsumerState<Contacts> {
                                         child: CustomText(
                                             textAlign: TextAlign.start,
                                             fontSize: 16,
-                                            color: isDark ? greyShade100 : colorScheme.onBackground,
+                                            color: isDark
+                                                ? greyShade100
+                                                : colorScheme.onBackground,
                                             text: users[index].name),
                                       ),
                                       SizedBox(
                                         width: size.width / 4,
                                         child: CustomText(
-                                          textAlign: TextAlign.start,
+                                            textAlign: TextAlign.start,
                                             fontSize: 16,
-                                            color: isDark ? greyShade100 : colorScheme.onBackground,
+                                            color: isDark
+                                                ? greyShade100
+                                                : colorScheme.onBackground,
                                             text: users[index].lastName),
                                       ),
                                       SizedBox(
@@ -144,7 +152,9 @@ class _ContactsState extends ConsumerState<Contacts> {
                                         child: CustomText(
                                             textAlign: TextAlign.start,
                                             fontSize: 16,
-                                            color: isDark ? greyShade100 : colorScheme.onBackground,
+                                            color: isDark
+                                                ? greyShade100
+                                                : colorScheme.onBackground,
                                             text: users[index].city),
                                       ),
                                       GestureDetector(
@@ -189,7 +199,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                       order: GroupedListOrder.ASC,
                       groupSeparatorBuilder: (value) => Container(
                           width: double.infinity,
-                          color: isDark ?  greyShade600 : greyShade200,
+                          color: isDark ? greyShade600 : greyShade200,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Row(
@@ -217,7 +227,9 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 child: CustomText(
                                     textAlign: TextAlign.start,
                                     fontSize: 16,
-                                    color: isDark ? greyShade100 : colorScheme.onBackground,
+                                    color: isDark
+                                        ? greyShade100
+                                        : colorScheme.onBackground,
                                     text: element['name']),
                               ),
                               SizedBox(
@@ -225,7 +237,9 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 child: CustomText(
                                     textAlign: TextAlign.start,
                                     fontSize: 16,
-                                    color: isDark ? greyShade100 : colorScheme.onBackground,
+                                    color: isDark
+                                        ? greyShade100
+                                        : colorScheme.onBackground,
                                     text: element['lastName']),
                               ),
                               SizedBox(
@@ -233,7 +247,9 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 child: CustomText(
                                     textAlign: TextAlign.start,
                                     fontSize: 16,
-                                    color: isDark ? greyShade100 : colorScheme.onBackground,
+                                    color: isDark
+                                        ? greyShade100
+                                        : colorScheme.onBackground,
                                     text: element['city']),
                               ),
                               GestureDetector(

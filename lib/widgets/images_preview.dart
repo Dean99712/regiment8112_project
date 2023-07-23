@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -24,7 +25,7 @@ class ImagesPreview extends ConsumerStatefulWidget {
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-late Stream<List<Album>> _imagesList;
+late Query _imagesList;
 
 class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
   @override
@@ -37,15 +38,10 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
     var collection = _firestore
         .collectionGroup("album")
         .where("title", isEqualTo: childName)
-        .orderBy("createdAt", descending: true)
-        .limit(3)
-        .snapshots();
-
-    var albums = collection.map((snapshot) =>
-        snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
-
+        .orderBy("createdAt", descending: true);
+    
     setState(() {
-      _imagesList = albums;
+      _imagesList = collection;
     });
   }
 
@@ -55,14 +51,14 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
     final colorScheme = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return StreamBuilder(
-        stream: _imagesList,
-        builder: (context, snapshot) {
+    return FirestoreQueryBuilder(
+        query: _imagesList,
+        builder: (context, snapshot, child) {
           var date = DateTime.fromMillisecondsSinceEpoch(
               widget.date.millisecondsSinceEpoch);
           var formattedDate = intl.DateFormat('yMMM').format(date);
           if (snapshot.hasData) {
-            List<Album> imagesList = snapshot.data!;
+            List<Album> imagesList = snapshot.docs.map((e) => Album.fromQuerySnapshot(e)).toList();
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0)
                   .add(const EdgeInsets.only(bottom: 30.0)),
@@ -92,13 +88,13 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                             Padding(
                               padding: const EdgeInsets.only(top: 15.0),
                               child: Container(
-                                color: snapshot.data!.isEmpty
+                                color: snapshot.docs.isEmpty
                                     ? isDark ? Colors.black.withOpacity(0.2) : greyShade400
                                     : null,
-                                height: snapshot.data!.length == 2 ? size.height * 0.20 : size.height / 3.65,
+                                height: snapshot.docs.length == 2 ? size.height * 0.20 : size.height / 3.65,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  child: snapshot.data!.isEmpty
+                                  child: snapshot.docs.isEmpty
                                       ? Center(
                                           child: Column(
                                             mainAxisAlignment:
@@ -120,9 +116,9 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                           ),
                                         )
                                       : GridView.builder(
-                                          itemCount: snapshot.data!.isEmpty
+                                          itemCount: snapshot.docs.isEmpty
                                               ? 0
-                                              : snapshot.data!.length == 2
+                                              : snapshot.docs.length == 2
                                                   ? 2
                                                   : 3,
                                           physics:
@@ -131,22 +127,22 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                               SliverQuiltedGridDelegate(
                                                   mainAxisSpacing: 5,
                                                   crossAxisSpacing: 5,
-                                                  crossAxisCount: snapshot.data!
+                                                  crossAxisCount: snapshot.docs
                                                                   .length ==
                                                               1 &&
-                                                          snapshot.data!.isEmpty
+                                                          snapshot.docs.isEmpty
                                                       ? 1
-                                                      : snapshot.data!.length ==
+                                                      : snapshot.docs.length ==
                                                               2
                                                           ? 2
                                                           : 3,
                                                   pattern: snapshot
-                                                              .data!.length ==
+                                                              .docs.length ==
                                                           1
                                                       ? const [
                                                           QuiltedGridTile(3, 3),
                                                         ]
-                                                      : snapshot.data!.length ==
+                                                      : snapshot.docs.length ==
                                                               2
                                                           ? const [
                                                               QuiltedGridTile(
@@ -240,7 +236,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
               ),
             );
           }
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.isFetching) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 75.0),
               child: Center(

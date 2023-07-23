@@ -19,11 +19,9 @@ class UserService {
     await collection.doc(uid).set(data);
   }
 
-  Stream<List<MyUser>> getContacts() {
-    final collection = _firestore.collection("users").snapshots();
+  Future<List<MyUser>> getContacts() async {
+    final collection = await _firestore.collection("users").get();
 
-    var documents = collection.map((snapshot) =>
-        snapshot.docs.map((doc) => MyUser.fromSnapshot(doc)).toList());
-    return documents;
+    return collection.docs.map((doc) => MyUser.fromSnapshot(doc)).toList();
   }
 }

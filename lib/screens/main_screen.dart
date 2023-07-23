@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/providers/user_provider.dart';
+import 'package:regiment8112_project/providers/validatorProvider.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/services/news_service.dart';
+import 'package:regiment8112_project/utils/validators.dart';
 import 'package:regiment8112_project/widgets/contacts.dart';
 import 'package:regiment8112_project/widgets/custom_button.dart';
 import 'package:regiment8112_project/widgets/custom_text_field.dart';
@@ -62,40 +63,90 @@ class _MainScreenState extends ConsumerState<MainScreen>
     super.dispose();
   }
 
-  void openDialog(BuildContext context, String text, void Function() function) {
+  void openDialog(BuildContext context, String text, void Function() function,
+      GlobalKey<FormState> formState) {
     final isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    final colorScheme = Theme.of(context).colorScheme;
-    CupertinoScaffold.showCupertinoModalBottomSheet(
-      context: context,
-      builder: (context) => Material(
-        child: Container(
-            color: colorScheme.background,
+
+    final body = Material(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _controller.clear();
+                  },
+                  icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
+            ],
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 82,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 45.0),
+              padding: const EdgeInsets.symmetric(
+                  vertical: 45.0, horizontal: 30.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                    IconButton(onPressed: () {Navigator.pop(context);}, icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
-                  ],),
-                  CustomText(text: text, fontSize: 24,),
-                  CustomTextField(controller: _controller, text: "", autoFocus: true),
-                  CustomButton(width: 165, text: "הוסף", function: function)
+                  CustomText(
+                    text: text,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                 SizedBox(
+                   height: 450,
+                   child: Column(
+                     children: [
+                       Form(
+                         key: formState,
+                         child: CustomTextField(
+                             validator: (value) {
+                               return ref.read(validatorProvider.notifier).validator(
+                                   value!,
+                                   "תיבה אינה יכולה להיות ריקה!",
+                                   "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
+                                   nameValidator);
+                             },
+                             maxLength: null,
+                             controller: _controller,
+                             text: "",
+                             autoFocus: true),
+                       ),
+                       CustomButton(width: 165, text: "הוסף", function: function)
+                     ],
+                   ),
+                 )
                 ],
               ),
             ),
-          ),
+          )
+        ],
       ),
     );
+    isIos ?
+    CupertinoScaffold.showCupertinoModalBottomSheet(
+      expand: true,
+      duration: Duration(milliseconds: 350),
+      context: context,
+      builder: (context) => body)
+    : showMaterialModalBottomSheet(
+      barrierColor: Colors.black.withOpacity(0.7),
+      expand: false,
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        controller: ModalScrollController.of(context),
+        child: body,
+      ),
+    );;
   }
 
   @override
   Widget build(context) {
     bool isAdmin = ref.watch(userProvider);
-
+    final _formState = GlobalKey<FormState>();
     final tab = _tabController.index == 0
         ? 'news'
         : _tabController.index == 1
@@ -129,26 +180,32 @@ class _MainScreenState extends ConsumerState<MainScreen>
                       case 0:
                         {
                           openDialog(context, "הוסף חדשות", () async {
-                            Navigator.of(context).pop();
-                            await _newsService.addNews(_controller.text);
+                            if (_formState.currentState!.validate()) {
+                              Navigator.of(context).pop();
+                              await _newsService.addNews(_controller.text);
+                            }
                             _controller.clear();
-                          });
+                          }, _formState);
                         }
                       case 1:
                         {
                           openDialog(context, "הוסף עדכון חדש", () async {
-                            Navigator.of(context).pop();
-                            await _newsService.addUpdate(_controller.text);
+                            if (_formState.currentState!.validate()) {
+                              Navigator.of(context).pop();
+                              await _newsService.addUpdate(_controller.text);
+                            }
                             _controller.clear();
-                          });
+                          }, _formState);
                         }
                       case 2:
                         {
                           openDialog(context, "צור אלבום חדש", () async {
-                            Navigator.of(context).pop();
-                            await _storage.createAlbum(_controller.text);
+                            if (_formState.currentState!.validate()) {
+                              Navigator.of(context).pop();
+                              await _storage.createAlbum(_controller.text);
+                            }
                             _controller.clear();
-                          });
+                          }, _formState);
                         }
                     }
                   },

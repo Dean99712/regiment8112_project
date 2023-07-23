@@ -31,7 +31,6 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
-  // final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +82,7 @@ class CustomTextField extends StatelessWidget {
                   ),
                   labelText: text,
                   filled: true,
-                  fillColor: isDark ? white.withOpacity(0.3) : greyShade100),
+                  fillColor: isDark ? white.withOpacity(0.3) : greyShade10),
             )),
       ),
     );
