@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:pull_down_button/pull_down_button.dart';
@@ -12,13 +13,13 @@ import 'custom_text.dart';
 
 class ImageGallery extends StatefulWidget {
   ImageGallery(
-      {this.title,
+      {required this.title,
       required this.images,
       required this.index,
       super.key,
       this.scrollController});
 
-  final String? title;
+  final String title;
   late int index;
   final List<Album> images;
   final ScrollController? scrollController;
@@ -65,16 +66,15 @@ class _ImageGalleryState extends State<ImageGallery> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final colorScheme = Theme.of(context).colorScheme;
-    // var scrollOffset = widget.index / widget.images.length / size.height;
     final PageController pageController =
         PageController(initialPage: widget.index);
 
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
         navigationBar: CupertinoNavigationBar(
-          trailing: pullDownButton(context),
+          padding: EdgeInsetsDirectional.zero,
+          trailing: pullDownButton(
+              context, widget.title, widget.images, widget.index),
           backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
           leading: CupertinoButton(
             onPressed: () {
@@ -115,7 +115,7 @@ class _ImageGalleryState extends State<ImageGallery> {
                           displayAlert(context, "אתה עומד למחוק את התמונה",
                               "מחק את התמונה", () async {
                             await _service.deleteDocument(
-                                widget.title!, widget.images[widget.index].id);
+                                widget.title, widget.images[widget.index].id);
                             Navigator.pop(context);
                             Navigator.pop(context);
                           });
@@ -149,16 +149,43 @@ class _ImageGalleryState extends State<ImageGallery> {
   }
 }
 
-Widget pullDownButton(BuildContext context) {
+Widget pullDownButton(
+    BuildContext context, String title, List<Album> images, int index) {
+  final StorageService _service = StorageService();
+
   return PullDownButton(
     itemBuilder: (context) => [
       PullDownMenuItem(
         title: "שתף",
-        onTap: () {},
+        onTap: () {
+          CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => Container());
+        },
         icon: CupertinoIcons.share,
       ),
       PullDownMenuItem(
-        onTap: () {},
+        onTap: () {
+          showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: Text("אתה עומד למחוק את התמונה"),
+              actions: [
+                CupertinoDialogAction(
+                    onPressed: () async {
+                      await _service.deleteDocument(title, images[index].id);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    isDestructiveAction: true,
+                    child: Text("מחק")),
+                CupertinoDialogAction(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("מחק"))
+              ],
+            ),
+          );
+        },
         title: 'מחק תמונה זו',
         isDestructive: true,
         icon: CupertinoIcons.delete,

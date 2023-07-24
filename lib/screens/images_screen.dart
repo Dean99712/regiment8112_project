@@ -113,6 +113,7 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   CupertinoSliverNavigationBar(
+                    padding: EdgeInsetsDirectional.zero,
                     previousPageTitle: widget.title,
                     transitionBetweenRoutes: true,
                     stretch: true,

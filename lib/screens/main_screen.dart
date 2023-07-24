@@ -82,44 +82,47 @@ class _MainScreenState extends ConsumerState<MainScreen>
                   icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
             ],
           ),
-          Container(
-            height: MediaQuery.of(context).size.height - 82,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 45.0, horizontal: 30.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomText(
-                    text: text,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                 SizedBox(
-                   height: 450,
-                   child: Column(
-                     children: [
-                       Form(
-                         key: formState,
-                         child: CustomTextField(
-                             validator: (value) {
-                               return ref.read(validatorProvider.notifier).validator(
-                                   value!,
-                                   "תיבה אינה יכולה להיות ריקה!",
-                                   "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
-                                   nameValidator);
-                             },
-                             maxLength: null,
-                             controller: _controller,
-                             text: "",
-                             autoFocus: true),
+          Expanded(
+            child: Container(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 45.0, horizontal: 30.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomText(
+                      text: text,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                   Expanded(
+                     child: Container(
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           Form(
+                             key: formState,
+                             child: CustomTextField(
+                                 validator: (value) {
+                                   return ref.read(validatorProvider.notifier).validator(
+                                       value!,
+                                       "תיבה אינה יכולה להיות ריקה!",
+                                       "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
+                                       nameValidator);
+                                 },
+                                 maxLength: null,
+                                 controller: _controller,
+                                 text: "",
+                                 autoFocus: true),
+                           ),
+                           CustomButton(width: 165, text: "הוסף", function: function)
+                         ],
                        ),
-                       CustomButton(width: 165, text: "הוסף", function: function)
-                     ],
-                   ),
-                 )
-                ],
+                     ),
+                   )
+                  ],
+                ),
               ),
             ),
           )

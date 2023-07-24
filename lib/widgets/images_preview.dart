@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -48,6 +49,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
   @override
   Widget build(BuildContext context) {
 
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     final colorScheme = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -91,7 +93,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                 color: snapshot.docs.isEmpty
                                     ? isDark ? Colors.black.withOpacity(0.2) : greyShade400
                                     : null,
-                                height: snapshot.docs.length == 2 ? size.height * 0.20 : size.height / 3.65,
+                                height: snapshot.docs.length == 2 ? size.height * 0.2 : size.height / 3.75,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: snapshot.docs.isEmpty
@@ -208,7 +210,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                       onTap: () {
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            isIos ? CupertinoPageRoute(builder: (context) => ImagesScreen(title: widget.text)) : MaterialPageRoute(
                               builder: (context) =>
                                   ImagesScreen(title: widget.text),
                             ));

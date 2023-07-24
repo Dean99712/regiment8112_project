@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/utils/ebutton_state.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
@@ -26,17 +25,20 @@ class CustomButton extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return isIos
         ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: SizedBox(
               width: width,
               child: CupertinoButton(
                 color: color,
                 onPressed: function,
-                child: CustomText(
-                  fontSize: 16,
-                  color: white,
-                  text: text,
-                ),
+                child: state == ButtonState.loading
+                    ? SizedBox(
+                  height: 15,
+                  width: 15,
+                  child: CupertinoActivityIndicator(color: white, animating: true, radius: 10.0),
+
+                )
+                    : CustomText(fontSize: 16, color: white, text: text, fontWeight: FontWeight.w500,)
               ),
             ),
           )
@@ -57,13 +59,8 @@ class CustomButton extends StatelessWidget {
                       ? SizedBox(
                           height: 15,
                           width: 15,
-                          child: PlatformCircularProgressIndicator(
-                            cupertino: (_, __) =>
-                                CupertinoProgressIndicatorData(
-                                    radius: 15, color: white, animating: true),
-                            material: (_, __) => MaterialProgressIndicatorData(
-                                color: white, strokeWidth: 2),
-                          ),
+                          child: CircularProgressIndicator(color: white, strokeWidth: 2),
+
                         )
                       : CustomText(fontSize: 16, color: white, text: text),
                 ),

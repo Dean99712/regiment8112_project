@@ -47,8 +47,21 @@ class _ContactsState extends ConsumerState<Contacts> {
     if (await canLaunchUrl(url)) {
       launchUrl(url);
     } else {
-      showDialog(
+      showPlatformDialog(
         context: context,
+        cupertino: CupertinoDialogData(
+          builder: (context) => CupertinoAlertDialog(
+              title: Text("מצטערים, המכשיר שברשותך אינו נתמך"),
+              actions: [
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("ביטול"),
+                )
+              ]),
+        ),
         builder: (context) => AlertDialog(
           title: CustomText(
               fontSize: 16,
@@ -61,7 +74,6 @@ class _ContactsState extends ConsumerState<Contacts> {
 
   @override
   Widget build(BuildContext context) {
-
     var query = ref.watch(searchProvider);
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     var isGrouped = ref.watch(isGroupedProvider);
@@ -287,14 +299,17 @@ class _ContactsState extends ConsumerState<Contacts> {
     return CupertinoActionSheet(
         cancelButton: CupertinoButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text("ביטול"),
+          child: const Text("ביטול", style: TextStyle(color: CupertinoColors.destructiveRed),),
         ),
         actions: [
           CupertinoActionSheetAction(
             onPressed: () async {
               call(phone);
             },
-            child: Text('התקשר $phone'),
+            child: Text('התקשר $phone', style: TextStyle(
+              fontSize: 16,
+              color: CupertinoColors.activeBlue
+            ),),
           )
         ]);
   }
