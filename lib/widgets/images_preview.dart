@@ -161,10 +161,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                               QuiltedGridTile(
                                                                   1, 1),
                                                             ]),
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            Album photo =
-                                                imagesList[index];
+                                          itemBuilder: (BuildContext context, int index) {
                                             return InkWell(
                                               onTap: () {
                                                 Navigator.push(
@@ -178,7 +175,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                             )));
                                               },
                                               child: CachedNetworkImage(
-                                                imageUrl: photo.imageUrl,
+                                                imageUrl: imagesList[index].imageUrl,
                                                 maxHeightDiskCache:
                                                     imagesList.length == 1
                                                         ? 1200
@@ -188,8 +185,8 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                 fit: BoxFit.fill,
                                                 progressIndicatorBuilder: (context, url, progress) {
                                                   return BlurHash(
-                                                    hash: photo.hash,
-                                                    image: photo.imageUrl,
+                                                    hash: imagesList[index].hash,
+                                                    image: imagesList[index].imageUrl,
                                                   );
                                                 },
                                               ),

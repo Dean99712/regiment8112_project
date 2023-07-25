@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -172,14 +173,14 @@ class _AllImagesState extends ConsumerState<AllImages>
                               Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                          builder: (context) => CupertinoScaffold(
-                                            topRadius: Radius.zero,
-                                            body: ImageGallery(
-                                                images: photos,
-                                                index: index,
-                                                title: widget.title),
-                                          ),
-                                        ));
+                                    builder: (context) => CupertinoScaffold(
+                                      topRadius: Radius.zero,
+                                      body: ImageGallery(
+                                          images: photos,
+                                          index: index,
+                                          title: widget.title),
+                                    ),
+                                  ));
                             },
                             child: buildImage(photos[index])),
                       ))
@@ -187,30 +188,28 @@ class _AllImagesState extends ConsumerState<AllImages>
                       child: InkWell(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  // transitionDuration:
-                                  // Duration(milliseconds: 400),
-                                  reverseTransitionDuration:
-                                      Duration(milliseconds: 450),
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                    final curvedAnimation = CurvedAnimation(
-                                        parent: animation,
-                                        reverseCurve: Interval(0, 1),
-                                        curve: Interval(0, 1));
-
-                                    return ScaleTransition(
-                                      scale: curvedAnimation,
-                                      child: ImageGallery(
-                                          images: photos,
-                                          index: index,
-                                          title: widget.title,
-                                          scrollController:
-                                              widget.scrollController),
-                                    );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OpenContainer(
+                                  transitionDuration: Duration(milliseconds: 300),
+                                  openBuilder: (context, _) => ImageGallery(
+                                      images: photos,
+                                      index: index,
+                                      title: widget.title,
+                                      scrollController:
+                                          widget.scrollController),
+                                  closedBuilder: (context,
+                                      void Function() openContainer) {
+                                    return ImageGallery(
+                                        images: photos,
+                                        index: index,
+                                        title: widget.title,
+                                        scrollController:
+                                        widget.scrollController);
                                   },
-                                ));
+                                ),
+                              ),
+                            );
                           },
                           child: buildImage(photos[index])),
                     );

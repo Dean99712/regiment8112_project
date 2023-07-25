@@ -13,6 +13,7 @@ class ImagesTab extends StatefulWidget {
 
 class _ImagesTabState extends State<ImagesTab> {
   final StorageService _storage = StorageService();
+  late Query _query;
 
   @override
   void initState() {
@@ -20,29 +21,39 @@ class _ImagesTabState extends State<ImagesTab> {
     super.initState();
   }
 
-  Query<Object?> getDocuments() {
-    return _storage.getAllAlbums().orderBy("createdAt", descending: true);
+  void getDocuments() {
+    Query query = _storage.getAllAlbums().orderBy("createdAt", descending: true);
+    setState(() {
+      _query = query;
+    });
+  }
+
+  Future onRefresh() async{
+    return getDocuments();
   }
 
   @override
   Widget build(BuildContext context) {
     return FirestoreQueryBuilder(
-      query: getDocuments(),
+      query: _query,
       builder: (context, snapshot, child) {
         if (snapshot.hasData) {
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: snapshot.docs.length,
-            itemBuilder: (context, index) {
-              var list = snapshot.docs.map((e) => e).toList();
-              return ImagesPreview(
-                date: list[index].get('createdAt'),
-                text: list[index].get('albumName'),
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: onRefresh,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: snapshot.docs.length,
+              itemBuilder: (context, index) {
+                var list = snapshot.docs.map((e) => e).toList();
+                return ImagesPreview(
+                  date: list[index].get('createdAt'),
+                  text: list[index].get('albumName'),
+                );
+              },
+            ),
           );
         }
-        if (snapshot.isFetchingMore && snapshot.isFetching) {
+        if (snapshot.isFetching) {
           return Center(
             child: CircularProgressIndicator(),
           );

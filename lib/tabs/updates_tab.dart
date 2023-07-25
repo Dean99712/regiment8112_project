@@ -37,6 +37,16 @@ class _UpdatesTabState extends State<UpdatesTab> {
     });
   }
 
+  Future onRefresh() async {
+
+    var collection = await _service.getAllUpdates();
+    final updates =
+    collection.docs.map((e) => Updates.fromSnapshot(e)).toList();
+    setState(() {
+      _updates = updates;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -46,36 +56,41 @@ class _UpdatesTabState extends State<UpdatesTab> {
           direction: Axis.vertical,
           children: [
             Expanded(
-              child: !isLoading
-                  ? ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: _updates.length,
-                      itemBuilder: (context, index) {
-                        var timestamp =
-                            _updates[index].createdAt.millisecondsSinceEpoch;
-                        final date =
-                            DateTime.fromMillisecondsSinceEpoch(timestamp);
-                        final localDate =
-                            intl.DateFormat('yMd', 'en-US').format(date);
-                        final update = _updates[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 8),
-                          child: Bubble(
-                            date: localDate,
-                            text: update.update,
-                          ),
-                        );
-                      },
-                    )
-                  : Center(
-                      child: PlatformCircularProgressIndicator(
-                        cupertino: (_, __) => CupertinoProgressIndicatorData(
-                            radius: 15.0, color: primaryColor),
-                        material: (_, __) => MaterialProgressIndicatorData(
-                            color: secondaryColor),
+              child: RefreshIndicator(
+                onRefresh: onRefresh,
+                child: !isLoading
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        primary: false,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: _updates.length,
+                        itemBuilder: (context, index) {
+                          var timestamp =
+                              _updates[index].createdAt.millisecondsSinceEpoch;
+                          final date =
+                              DateTime.fromMillisecondsSinceEpoch(timestamp);
+                          final localDate =
+                              intl.DateFormat('yMd', 'en-US').format(date);
+                          final update = _updates[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            child: Bubble(
+                              date: localDate,
+                              text: update.update,
+                            ),
+                          );
+                        },
+                      )
+                    : Center(
+                        child: PlatformCircularProgressIndicator(
+                          cupertino: (_, __) => CupertinoProgressIndicatorData(
+                              radius: 15.0, color: primaryColor),
+                          material: (_, __) => MaterialProgressIndicatorData(
+                              color: secondaryColor),
+                        ),
                       ),
-                    ),
+              ),
             )
           ],
         ),

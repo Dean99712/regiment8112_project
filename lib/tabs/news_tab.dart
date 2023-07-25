@@ -25,6 +25,10 @@ class _NewsTabState extends State<NewsTab> {
     super.initState();
   }
 
+  Future onRefresh() async {
+    await _service.getAllNews();
+  }
+
   Future getNewsFromDatabase() async {
     setState(() {
       isLoading = true;
@@ -49,25 +53,30 @@ class _NewsTabState extends State<NewsTab> {
           children: [
             Expanded(
               child: !isLoading
-                  ? ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: newsList.length,
-                      itemBuilder: (context, index) {
-                        var timestamp =
-                            newsList[index].createdAt.millisecondsSinceEpoch;
-                        final date =
-                            DateTime.fromMillisecondsSinceEpoch(timestamp);
-                        final newDate =
-                            intl.DateFormat('yMd', 'en-US').format(date);
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 8),
-                          child: Bubble(
-                            date: newDate,
-                            text: newsList[index].news,
-                          ),
-                        );
-                      },
+                  ? RefreshIndicator(
+                      onRefresh: onRefresh,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        primary: false,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: newsList.length,
+                        itemBuilder: (context, index) {
+                          var timestamp =
+                              newsList[index].createdAt.millisecondsSinceEpoch;
+                          final date =
+                              DateTime.fromMillisecondsSinceEpoch(timestamp);
+                          final newDate =
+                              intl.DateFormat('yMd', 'en-US').format(date);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            child: Bubble(
+                              date: newDate,
+                              text: newsList[index].news,
+                            ),
+                          );
+                        },
+                      ),
                     )
                   : Center(
                       child: PlatformCircularProgressIndicator(

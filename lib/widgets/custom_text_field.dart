@@ -66,6 +66,7 @@ class CustomTextField extends StatelessWidget {
               placeholderStyle: GoogleFonts.heebo(color: primaryColor),
             ),
             material: (_, __) => MaterialTextFormFieldData(
+              expands: false,
               decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   errorBorder: OutlineInputBorder(

@@ -68,6 +68,7 @@ dependencies:
   share_plus: ^7.0.2
   pull_down_button: ^0.9.1
   modal_bottom_sheet: ^2.1.2
+  animations: ^2.0.7
 
 
 

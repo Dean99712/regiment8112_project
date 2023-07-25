@@ -63,24 +63,27 @@ class _MainScreenState extends ConsumerState<MainScreen>
     super.dispose();
   }
 
-  void openDialog(BuildContext context, String text, void Function() function,
-      GlobalKey<FormState> formState) {
+  void openDialog(BuildContext context, String text, String example,
+      void Function() function, GlobalKey<FormState> formState) {
     final isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     final body = Material(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _controller.clear();
-                  },
-                  icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
-            ],
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: isIos ? 0 : 15.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _controller.clear();
+                    },
+                    icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
+              ],
+            ),
           ),
           Expanded(
             child: Container(
@@ -96,31 +99,34 @@ class _MainScreenState extends ConsumerState<MainScreen>
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
-                   Expanded(
-                     child: Container(
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: [
-                           Form(
-                             key: formState,
-                             child: CustomTextField(
-                                 validator: (value) {
-                                   return ref.read(validatorProvider.notifier).validator(
-                                       value!,
-                                       "תיבה אינה יכולה להיות ריקה!",
-                                       "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
-                                       nameValidator);
-                                 },
-                                 maxLength: null,
-                                 controller: _controller,
-                                 text: "",
-                                 autoFocus: true),
-                           ),
-                           CustomButton(width: 165, text: "הוסף", function: function)
-                         ],
-                       ),
-                     ),
-                   )
+                    Expanded(
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Form(
+                              key: formState,
+                              child: CustomTextField(
+                                  validator: (value) {
+                                    return ref
+                                        .read(validatorProvider.notifier)
+                                        .validator(
+                                            value!,
+                                            "תיבה אינה יכולה להיות ריקה!",
+                                            "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
+                                            nameValidator);
+                                  },
+                                  maxLength: null,
+                                  controller: _controller,
+                                  text: example,
+                                  autoFocus: true),
+                            ),
+                            CustomButton(
+                                width: 165, text: "הוסף", function: function)
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -129,21 +135,20 @@ class _MainScreenState extends ConsumerState<MainScreen>
         ],
       ),
     );
-    isIos ?
-    CupertinoScaffold.showCupertinoModalBottomSheet(
-      expand: true,
-      duration: Duration(milliseconds: 350),
-      context: context,
-      builder: (context) => body)
-    : showMaterialModalBottomSheet(
-      barrierColor: Colors.black.withOpacity(0.7),
-      expand: false,
-      context: context,
-      builder: (context) => SingleChildScrollView(
-        controller: ModalScrollController.of(context),
-        child: body,
-      ),
-    );;
+    isIos
+        ? CupertinoScaffold.showCupertinoModalBottomSheet(
+            expand: true,
+            duration: Duration(milliseconds: 350),
+            context: context,
+            builder: (context) => body)
+        : showMaterialModalBottomSheet(
+            enableDrag: true,
+            barrierColor: Colors.black.withOpacity(0.7),
+            context: context,
+            builder: (context) => Container(
+              child: body,
+            ),
+          );
   }
 
   @override
@@ -182,7 +187,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
                     switch (_tabController.index) {
                       case 0:
                         {
-                          openDialog(context, "הוסף חדשות", () async {
+                          openDialog(context, "הוסף ידיעה חדשה",
+                              'לדוגמא:"מצאנו את הטלפון של יחיאל"', () async {
                             if (_formState.currentState!.validate()) {
                               Navigator.of(context).pop();
                               await _newsService.addNews(_controller.text);
@@ -192,7 +198,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
                         }
                       case 1:
                         {
-                          openDialog(context, "הוסף עדכון חדש", () async {
+                          openDialog(context, "הוסף עדכון חדש",
+                              'לדוגמא:"יש אימון בחודש הבא"', () async {
                             if (_formState.currentState!.validate()) {
                               Navigator.of(context).pop();
                               await _newsService.addUpdate(_controller.text);
@@ -202,7 +209,9 @@ class _MainScreenState extends ConsumerState<MainScreen>
                         }
                       case 2:
                         {
-                          openDialog(context, "צור אלבום חדש", () async {
+                          openDialog(
+                              context, "צור אלבום חדש", 'לדוגמא:"קו אביטל 23"',
+                              () async {
                             if (_formState.currentState!.validate()) {
                               Navigator.of(context).pop();
                               await _storage.createAlbum(_controller.text);

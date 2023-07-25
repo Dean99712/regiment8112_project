@@ -43,7 +43,7 @@ class AuthService {
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
+                MaterialWithModalsPageRoute(
                     builder: (context) =>
                         CupertinoScaffold(body: const AddContact())),
                     (route) => false);
