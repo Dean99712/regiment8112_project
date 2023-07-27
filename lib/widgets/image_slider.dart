@@ -8,6 +8,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models/album.dart';
 import 'custom_text.dart';
 
@@ -99,14 +100,15 @@ class _ImageGalleryState extends State<ImageGallery> {
             PopupMenuButton(
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        onTap: () {
-                          Future<void>.delayed(
-                            Duration.zero,
-                            () => showModalBottomSheet(
-                                context: context,
-                                barrierColor: Colors.black26,
-                                builder: (context) => Container()),
-                          );
+                        onTap: ()async {
+                          await Share.share("share");
+                          // Future<void>.delayed(
+                          //   Duration.zero,
+                          //   () => showModalBottomSheet(
+                          //       context: context,
+                          //       barrierColor: Colors.black26,
+                          //       builder: (context) => Container()),
+                          // );
                         },
                         child: const Text("שתף/ שתפי תמונה"),
                       ),
@@ -152,7 +154,6 @@ class _ImageGalleryState extends State<ImageGallery> {
 Widget pullDownButton(
     BuildContext context, String title, List<Album> images, int index) {
   final StorageService _service = StorageService();
-
   return PullDownButton(
     itemBuilder: (context) => [
       PullDownMenuItem(
@@ -223,10 +224,9 @@ class ImageSlider extends StatelessWidget {
       builder: (context, index) => PhotoViewGalleryPageOptions.customChild(
         child: Hero(
           transitionOnUserGestures: true,
-          tag: images[index].imageUrl,
+          tag: images[index].id,
           child: CachedNetworkImage(
             maxHeightDiskCache: 1200,
-            fit: BoxFit.fitWidth,
             imageUrl: images[index].imageUrl,
             fadeInDuration: const Duration(milliseconds: 150),
             progressIndicatorBuilder: (context, url, progress) {
