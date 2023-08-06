@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -51,6 +50,7 @@ class _AllImagesState extends ConsumerState<AllImages>
 
   Widget buildImage(Album image, void Function()? onclick) {
     return Hero(
+      transitionOnUserGestures: true,
       tag: image.id,
       flightShuttleBuilder: (flightContext, animation, flightDirection,
           fromHeroContext, toHeroContext) {

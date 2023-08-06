@@ -80,6 +80,7 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: PullDownButton(
+        position: PullDownMenuPosition.automatic,
         itemBuilder: (context) => [
           PullDownMenuItem(
             onTap: function,
@@ -93,7 +94,6 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
           )
         ],
         animationBuilder: null,
-        position: PullDownMenuPosition.automatic,
         buttonBuilder: (BuildContext context, Future<void> Function() showMenu) {
           return CupertinoButton(
               child: Icon(CupertinoIcons.ellipsis_circle), onPressed: showMenu);
@@ -113,6 +113,7 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   CupertinoSliverNavigationBar(
+                    backgroundColor: colorScheme.background.withOpacity(0.5),
                     padding: EdgeInsetsDirectional.zero,
                     previousPageTitle: widget.title,
                     transitionBetweenRoutes: true,
@@ -147,7 +148,8 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                               color: primaryColor,
                             ),
                       onPressed: () {
-                        selectedImages(widget.title);
+                        if(isAdmin) selectedImages(widget.title);
+                        if(!isAdmin) Navigator.pop(context);
                       },
                     ),
                   )

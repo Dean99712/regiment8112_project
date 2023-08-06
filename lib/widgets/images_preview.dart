@@ -8,6 +8,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/models/album.dart';
 import 'package:regiment8112_project/screens/images_screen.dart';
 import '../utils/colors.dart';
@@ -207,7 +208,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                       onTap: () {
                         Navigator.push(
                             context,
-                            isIos ? CupertinoPageRoute(builder: (context) => ImagesScreen(title: widget.text)) : MaterialPageRoute(
+                            isIos ? CupertinoPageRoute(builder: (context) => CupertinoScaffold(body: ImagesScreen(title: widget.text))) : MaterialPageRoute(
                               builder: (context) =>
                                   ImagesScreen(title: widget.text),
                             ));

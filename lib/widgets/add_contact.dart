@@ -100,6 +100,7 @@ class _AddContactState extends ConsumerState<AddContact> {
       child: Form(
         key: _formField,
         child: Container(
+          height: size.height,
           decoration: BoxDecoration(
               image: DecorationImage(
                   opacity: isDark ? 0.12 : 1,
@@ -142,8 +143,8 @@ class _AddContactState extends ConsumerState<AddContact> {
                     Padding(
                       padding: const EdgeInsets.only(top: 50.0),
                       child: SizedBox(
-                        height: 52,
-                        width: size.width / 2.2,
+                        height: 56,
+                        width: size.width / 2,
                         child: Directionality(
                           textDirection: TextDirection.rtl,
                           child: ElevatedButton.icon(
