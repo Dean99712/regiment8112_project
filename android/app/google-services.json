@@ -1,40 +1,48 @@
 {
   "project_info": {
-    "project_number": "241677351610",
-    "project_id": "regiment8112-8abfe",
-    "storage_bucket": "regiment8112-8abfe.appspot.com"
+    "project_number": "142406398301",
+    "project_id": "regiment8112-23cd0",
+    "storage_bucket": "regiment8112-23cd0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:241677351610:android:3607fc8bbb57eafbcb6083",
+        "mobilesdk_app_id": "1:142406398301:android:f271e3ea67a0c6307f38b4",
         "android_client_info": {
-          "package_name": "com.example.regiment8112_project"
+          "package_name": "com.regiment.regiment8112"
         }
       },
       "oauth_client": [
         {
-          "client_id": "241677351610-vq8tn9vr8ch1ingelrqf46n5s20md8hn.apps.googleusercontent.com",
+          "client_id": "142406398301-lmfk5gqm5920lj4qdvhu1rakgk8ndu61.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.regiment.regiment8112",
+            "certificate_hash": "8f17667e7d6431de24e75c54b94360e2e4dc3703"
+          }
+        },
+        {
+          "client_id": "142406398301-590memrt9ocbn3cab8fac3ei3t0kdhvo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA4kyIFfqeukJdN1yRJC5aFoc9ZFZ839F4"
+          "current_key": "AIzaSyBbTvb2oD56SQxGyFFRtiifQJIz5Y2uwvw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "241677351610-vq8tn9vr8ch1ingelrqf46n5s20md8hn.apps.googleusercontent.com",
+              "client_id": "142406398301-590memrt9ocbn3cab8fac3ei3t0kdhvo.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "241677351610-omsqfs1ablsq7jl5oci89a8a2sig1lnl.apps.googleusercontent.com",
+              "client_id": "142406398301-smcjf5oqe5koln1btp5hfg03u26t92nm.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.regiment8112Project"
+                "bundle_id": "com.regiment.regiment8112"
               }
             }
           ]

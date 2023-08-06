@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class News {
-  News(this.news, this.dateTime);
+  News(this.news, this.createdAt);
 
   final String news;
-  final DateTime dateTime;
+  final Timestamp createdAt;
+
+  News.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : news = snapshot['news'],
+        createdAt = snapshot['created_at'];
 }

@@ -1,39 +1,20 @@
 import 'package:flutter/material.dart';
-import 'widgets/main_screen.dart';
-import 'login_screen.dart';
+import 'package:regiment8112_project/utils/theme_data.dart';
+import 'screens/login_screen.dart';
 
-
-class Login extends StatefulWidget {
+class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  var activeScreen = 'start-screen';
-
-  void switchScreen() {
-    setState(() {
-      activeScreen = 'login-screen';
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
-      title: 'חרמ"ש מסייעת 8112',
+      themeMode: ThemeMode.system,
+      theme: MyThemeData.lightTheme,
+      darkTheme: MyThemeData.darkTheme,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Container(
-          child: activeScreen == 'start-screen'
-              ? LoginPage(switchScreen)
-              : const MainScreen([
-                  Color.fromRGBO(60, 58, 59, 1),
-                  Color.fromRGBO(60, 58, 59, 1)
-                ]),
-          // body: const LoginPage(),
-        ),
+        body: LoginPage(),
       ),
     );
   }

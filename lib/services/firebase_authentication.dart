@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:regiment8112_project/providers/user_provider.dart';
+import 'package:regiment8112_project/screens/main_screen.dart';
+import 'package:regiment8112_project/widgets/add_contact.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String verificationCode = '';
 
   Future signInAnon() async {
     try {
@@ -14,32 +20,41 @@ class AuthService {
     }
   }
 
-  Future<bool> verifyOtp(String otp) async {
-    var credentials = await _auth.signInWithCredential(
-        PhoneAuthProvider.credential(
-            verificationId: verificationCode, smsCode: otp));
-    return credentials.user != null ? true : false;
-  }
+  Future<void> verifyOtp(BuildContext context, String otp,
+      String verificationCode, WidgetRef ref) async {
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
-  Future<void> authenticateUser(String phoneNumber) async {
-    var phoneNum = phoneNumber.substring(1);
-    print('phone number : $phoneNum');
-    await _auth.verifyPhoneNumber(
-      phoneNumber: '+972$phoneNum',
-      verificationCompleted: (credential) async {
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          print('Error, invalid code');
-        }
-      },
-      codeSent: (verificationId, int? resendToken) {
-        verificationId = verificationCode;
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        verificationId = verificationCode;
-      },
-    );
+    try {
+      PhoneAuthCredential credentials = PhoneAuthProvider.credential(
+          verificationId: verificationCode, smsCode: otp);
+      await _auth.signInWithCredential(credentials);
+      if(otp.isNotEmpty) {
+        ref.watch(userProvider.notifier).getUser().then((value) {
+          if (value == true) {
+            Navigator.pushReplacement(
+                context,
+                isIos
+                    ? CupertinoPageRoute(
+                    fullscreenDialog: false,
+                    builder: (context) =>
+                        CupertinoScaffold(body: const MainScreen()))
+                    : MaterialWithModalsPageRoute(
+                    builder: (context) => const MainScreen()));
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialWithModalsPageRoute(
+                    builder: (context) =>
+                        CupertinoScaffold(body: const AddContact())),
+                    (route) => false);
+          }
+        });
+      } else {
+        final snackBar = SnackBar(content: Text("סתם בדיקה"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
   }
 }

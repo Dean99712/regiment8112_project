@@ -1,13 +1,13 @@
+import 'package:blurhash_dart/blurhash_dart.dart';
+import 'package:image/image.dart' as img;
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:regiment8112_project/models/album.dart';
+import 'package:uuid/uuid.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List> getPhotosDownloadUrl(String childName) async {
@@ -17,37 +17,65 @@ class StorageService {
 
     for (var item in listResult.items) {
       String url = await item.getDownloadURL();
+      var bytes = await item.getData();
+      final hash = img.decodeImage(bytes!);
+      var blurHash = await BlurHash.encode(hash!, numCompX: 2, numCompY: 2);
       itemList.add(url);
-      final metaData = await item.getMetadata();
-      if (metaData.contentType == 'application/octet-stream') {
-        final customMetaData = SettableMetadata(contentType: "image/jpeg");
-        item.updateMetadata(customMetaData);
-      }
-      addPhotosToAlbum(childName, url);
+      addPhotosToAlbum(childName, url, blurHash.hash);
     }
     return itemList;
   }
 
-  void addPhotosToAlbum(String childName, String url) async {
-    var collection =
-        _firestore.collection("albums").doc(childName).collection(childName);
-
-    var album = Album(title: childName, imageUrl: url, createdAt: DateTime.now().toString()).toJson();
-
-    return collection.doc().set(album);
+  Future deleteDocument(String childName, String id) async {
+    await _firestore
+        .collection("albums")
+        .doc(childName)
+        .collection("album")
+        .doc(id)
+        .delete();
   }
 
-  Query<Map<String, dynamic>> getPhotos(String childName) {
-    return _firestore.collectionGroup(childName);
+  Future addPhotosToAlbum(String childName, String url, String hash) async {
+    var parentCollection = _firestore.collection("albums").doc(childName);
+
+    if (!parentCollection.id.contains(childName)) {
+      final data = {"albumName": childName, "createdAt": Timestamp.now()};
+      parentCollection.set(data);
+    }
+
+    final collection = parentCollection.collection('album');
+
+    final uuid = Uuid().v4().replaceAll("-", "").substring(0, 20);
+    var album = Album(
+            id: uuid,
+            title: childName,
+            imageUrl: url,
+            hash: hash,
+            createdAt: Timestamp.now())
+        .toJson();
+
+    await collection.doc(uuid).set(album);
   }
 
-  void getAllAlbums(String childName) async {
-    final parentCollection = _firestore.collection("albums").snapshots();
-    parentCollection.forEach((element) {
-      final docs = element.docs;
-      docs.forEach((item) {
-        print(item.reference.path);
-      });
-    });
+  Query<Map<String, dynamic>> getPhotosByAlbum(String childName) {
+    return _firestore
+        .collectionGroup('album')
+        .where('title', isEqualTo: childName)
+        .orderBy("createdAt", descending: true);
+  }
+
+  CollectionReference<Map<String, dynamic>> getAllAlbums() {
+    return _firestore.collection("albums");
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getCollectionDocs(
+      String childName) async {
+    return await _firestore.collection(childName).get();
+  }
+
+  Future createAlbum(String childName) async {
+    var collection = _firestore.collection("albums").doc(childName);
+    final data = {"albumName": childName, "createdAt": Timestamp.now()};
+    return await collection.set(data);
   }
 }

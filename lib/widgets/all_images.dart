@@ -1,231 +1,217 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
-import 'package:regiment8112_project/services/images_manager.dart';
+import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
 import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../models/album.dart';
-import '../utils/colors.dart';
 
-class AllImages extends StatefulWidget {
-  const AllImages({required this.title, super.key});
+class AllImages extends ConsumerStatefulWidget {
+  const AllImages(this.itemCount,
+      {required this.title,
+        required this.scrollOffset,
+        required this.scrollController,
+        super.key});
 
+  final int? itemCount;
   final String title;
+  final double? scrollOffset;
+  final ScrollController scrollController;
 
   @override
-  State<AllImages> createState() => _AllImagesState();
+  ConsumerState<AllImages> createState() => _AllImagesState();
 }
 
-class _AllImagesState extends State<AllImages> {
-
-  List<XFile> _selectedImagesList = [];
-  List<Album> imagesList = [];
-  late Stream<List<Album>> _photosStream;
-
-  final ImagesService _imagesService = ImagesService();
+class _AllImagesState extends ConsumerState<AllImages>
+    with TickerProviderStateMixin {
+  List<XFile> selectedImagesList = [];
+  late Query _photosQuery;
   final StorageService _storageService = StorageService();
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   void initState() {
+    photosSnapshot(widget.title);
     super.initState();
-    getPhotosFromAlbum("קו אביטל 23");
-    photosSnapshot("קו אביטל 23");
   }
 
-  Future<List<Album>> getPhotosFromAlbum(String childName) async {
-    var photos = await _storageService.getPhotos(childName).limit(70).orderBy("createdAt", descending: false).get();
-
-    final albums = photos.docs.map((doc) => Album.fromSnapshot(doc)).toList();
-
+  Query<Map<String, dynamic>> photosSnapshot(String childName) {
+    var photosQuery = _storageService.getPhotosByAlbum(childName);
     setState(() {
-      imagesList = albums;
+      _photosQuery = photosQuery;
     });
-    return albums;
+    return photosQuery;
   }
 
-  Stream<List<Album>> photosSnapshot(String childName) {
-    var photos = _storageService.getPhotos(childName).snapshots();
-
-    final albums = photos.map((snapshot) =>
-        snapshot.docs.map((doc) => Album.fromSnapshot(doc)).toList());
-
-    setState(() {
-      _photosStream = albums;
-    });
-    return albums;
-  }
-
-  void selectedImages(String childName) async {
-    ImagePicker imagePicker = ImagePicker();
-    final images = await _imagesService.selectImages(imagePicker, childName);
-    setState(() {
-      _selectedImagesList = images;
-    });
-
-    for (var item in _selectedImagesList) {
-      final ref = _storage.ref("images/albums/$childName/${item.name}");
-      await ref.putFile(File(item.path));
-      final imageUrl = await ref.getDownloadURL();
-      _storageService.addPhotosToAlbum(childName, imageUrl);
-    }
+  Widget buildImage(Album image, void Function()? onclick) {
+    return Hero(
+      transitionOnUserGestures: true,
+      tag: image.id,
+      flightShuttleBuilder: (flightContext, animation, flightDirection,
+          fromHeroContext, toHeroContext) {
+        return CachedNetworkImage(
+          maxHeightDiskCache: 350,
+          fit: BoxFit.fitWidth,
+          imageUrl: image.imageUrl,
+        );
+      },
+      child: CachedNetworkImage(
+        maxHeightDiskCache: widget.itemCount == 1
+            ? 1200
+            : widget.itemCount == 3
+            ? 350
+            : 255,
+        fit: BoxFit.cover,
+        imageUrl: image.imageUrl,
+        fadeInDuration: const Duration(milliseconds: 150),
+        progressIndicatorBuilder: (context, url, progress) {
+          return Center(
+            child: CircularProgressIndicator(
+                strokeWidth: 2, value: progress.progress, color: primaryColor),
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: primaryColor,
-          elevation: 0.0,
-          onPressed: () {
-            selectedImages("קו אביטל 23");
-          },
-          child: const Icon(Icons.add_a_photo),
-        ),
-        body: Stack(
-          children: [
-            StreamBuilder(
-              stream: _photosStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return GridView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisSpacing: 2,
-                              mainAxisSpacing: 2,
-                              crossAxisCount: 4),
-                      itemCount: 50,
-                      itemBuilder: (context, index) {
-                        var photos = snapshot.data!;
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ImageGallery(images: photos, index: index),
-                              ),
-                            );
-                          },
-                          child: Hero(
-                            tag: photos[index].imageUrl,
-                            child: CachedNetworkImage(
-                              maxHeightDiskCache: 150,
-                              fit: BoxFit.fill,
-                              imageUrl: photos[index].imageUrl,
-                              fadeInDuration: const Duration(milliseconds: 150),
-                            ),
-                          ),
-                        );
-                      });
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: PlatformCircularProgressIndicator(
-                      material: (_, __) => MaterialProgressIndicatorData(
-                        color: secondaryColor,
+    bool isIOS = Theme
+        .of(context)
+        .platform == TargetPlatform.iOS;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
+    return FirestoreQueryBuilder(
+      query: _photosQuery,
+      pageSize: 27,
+      builder: (context, snapshot, child) {
+        if (snapshot.hasData) {
+          var photos =
+          snapshot.docs.map((e) => Album.fromQuerySnapshot(e)).toList();
+          return photos.isEmpty ? Center(child: CustomText(text: "אלבום ריק",
+              textAlign: TextAlign.center,
+              color: colorScheme.onBackground,
+              fontSize: 16)) : GridView.builder(
+            controller: isIOS ? null : widget.scrollController,
+            physics: const BouncingScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+                crossAxisCount: widget.itemCount!),
+            itemCount: photos.length,
+            itemBuilder: (context, index) {
+              if (snapshot.hasMore && index + 1 != snapshot.docs.length) {
+                snapshot.fetchMore();
+              }
+              var color = Theme
+                  .of(context)
+                  .colorScheme;
+              return isIOS
+                  ? CupertinoContextMenu(
+                  actions: [
+                    CupertinoContextMenuAction(
+                        isDefaultAction: true,
+                        trailingIcon: const IconData(0xf4ca,
+                            fontFamily: CupertinoIcons.iconFont,
+                            fontPackage: CupertinoIcons.iconFontPackage),
+                        child: Text(
+                          "שתף",
+                          style: TextStyle(color: color.onBackground),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) => Container());
+                        }),
+                    CupertinoContextMenuAction(
+                      isDestructiveAction: true,
+                      trailingIcon: const IconData(0xf4c4,
+                          fontPackage: CupertinoIcons.iconFontPackage,
+                          fontFamily: CupertinoIcons.iconFont),
+                      child: const Text(
+                        "מחק תמונה זו",
                       ),
-                      cupertino: (_, __) =>
-                          CupertinoProgressIndicatorData(animating: true),
-                    ),
-                  );
-                }
-                return Center(
-                  child: Container(
-                    child: const Text("No results"),
-                  ),
-                );
-              },
-            ),
-
-            // FirestoreQueryBuilder<Map<String, dynamic>>(
-            //   query: _storageService.getPhotos("קו אביטל 23"),
-            //   pageSize: 70,
-            //   builder: (context, snapshot, child) {
-            //     return GridView.builder(
-            //         physics: const BouncingScrollPhysics(),
-            //         gridDelegate:
-            //             const SliverGridDelegateWithFixedCrossAxisCount(
-            //                 crossAxisCount: 4),
-            //         itemCount: snapshot.docs.length,
-            //         itemBuilder: (context, index) {
-            //           String photo = snapshot.docs[index]['imageUrl'];
-            //
-            //           if (snapshot.hasMore) {
-            //             snapshot.fetchMore();
-            //           }
-            //           return GestureDetector(
-            //               onTap: () {
-            //                 // Navigator.push(context,
-            //                 //   MaterialPageRoute(builder: (context) => ,);
-            //               },
-            //               child: photo.contains("jpg") ||
-            //                       photo.contains("jpeg")
-            //                   ? CachedNetworkImage(
-            //                       maxHeightDiskCache: 250,
-            //                       fit: BoxFit.fill,
-            //                       imageUrl: photo,
-            //                       fadeInDuration:
-            //                           const Duration(milliseconds: 150),
-            //                     )
-            //                   : photo.contains("HEIC")
-            //                       ? Container()
-            //                       : Container());
-            //         });
-            //   },
-            // ),
-            Positioned(
-              top: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: PlatformAppBar(
-                cupertino: (_, __) => CupertinoNavigationBarData(
-                  transitionBetweenRoutes: true,
-                  title: const CustomText(
-                    fontSize: 18,
-                    color: primaryColor,
-                    text: "כל התמונות",
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                material: (_, __) => MaterialAppBarData(
-                    backgroundColor: primaryColor,
-                    title: GestureDetector(
-                      onTap: () {
+                      onPressed: () {
                         Navigator.pop(context);
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (context) =>
+                              CupertinoActionSheet(
+                                message: const Text(
+                                    "פעולה זו תמחוק את התמונה לצמיתות",
+                                    style: TextStyle(fontSize: 10)),
+                                cancelButton: CupertinoButton(
+                                    child: const Text("ביטול"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                                actions: [
+                                  CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    child: const Text("מחק תמונה זו"),
+                                    onPressed: () async {
+                                      await _storageService.deleteDocument(
+                                          widget.title, photos[index].id);
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
+                              ),
+                        );
                       },
-                      child: const CustomText(
-                        fontSize: 16,
-                        color: white,
-                        text: "חזרה",
-                      ),
-                    )),
-                leading: GestureDetector(
+                    )
+                  ],
+                  child: Material(
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) =>
+                                    CupertinoScaffold(
+                                      topRadius: Radius.zero,
+                                      body: ImageGallery(
+                                          images: photos,
+                                          index: index,
+                                          title: widget.title),
+                                    ),
+                              ));
+                        },
+                        child: buildImage(photos[index], null)),
+                  ))
+                  : Material(
+                child: InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ImageGallery(
+                                  title: widget.title,
+                                  images: photos,
+                                  index: index),
+                        ));
                   },
-                  // onTap: widget.switchScreen,
-                  child: Icon(
-                    Icons.adaptive.arrow_back,
-                    color: isIos ? primaryColor : white,
-                    size: 18,
-                  ),
+                  child: buildImage(photos[index], null),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
+              );
+            },
+          );
+        }
+        if (snapshot.isFetching) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

@@ -1,25 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Album {
+  final String id;
   final String title;
   final String imageUrl;
-  final String createdAt;
+  final String hash;
+  final Timestamp createdAt;
 
-  Album({required this.title, required this.imageUrl, required this.createdAt});
+  Album(
+      {required this.id,
+      required this.title,
+      required this.imageUrl,
+      required this.hash,
+      required this.createdAt});
 
   Album.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : title = snapshot['title'],
+      : id = snapshot['id'],
+        title = snapshot['title'],
         imageUrl = snapshot['imageUrl'],
-        createdAt = snapshot['createdAt'].toString();
+        hash = snapshot['hash'],
+        createdAt = snapshot['createdAt'];
 
-  // factory Album.fromSnapshot(DocumentSnapshot snapshot) {
-  //   Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-  //   // List<String> imageUrls = List.from(data['imageUrl']);
-  //   return Album(
-  //     title: data['title'],
-  //     imageUrl: data['imageUrl'],
-  //   );
-  // }
-  Map<String, dynamic> toJson() =>
-      {'title': title, 'imageUrl': imageUrl, 'createdAt': createdAt};
+  Album.fromQuerySnapshot(QueryDocumentSnapshot<Object?> snapshot)
+      : id = snapshot['id'],
+        title = snapshot['title'],
+        imageUrl = snapshot['imageUrl'],
+        hash = snapshot['hash'],
+        createdAt = snapshot['createdAt'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'imageUrl': imageUrl,
+        'hash': hash,
+        'createdAt': createdAt
+      };
 }
