@@ -1,4 +1,7 @@
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../models/album.dart';
 
 class ImagesService {
 
@@ -10,5 +13,11 @@ class ImagesService {
       imageFilesList.addAll(selectedImages);
     }
     return imageFilesList;
+  }
+
+  Future<List<XFile>> shareImages(Album photo) async {
+    var file = await DefaultCacheManager().getSingleFile(photo.imageUrl);
+    XFile result = await XFile(file.path);
+    return [result];
   }
 }

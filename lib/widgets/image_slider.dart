@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:regiment8112_project/services/firebase_storage_service.dart';
+import 'package:regiment8112_project/services/images_manager.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:share_plus/share_plus.dart';
 import '../models/album.dart';
@@ -30,6 +30,7 @@ class ImageGallery extends StatefulWidget {
 }
 
 class _ImageGalleryState extends State<ImageGallery> {
+  final ImagesService _imagesService = ImagesService();
   final StorageService _service = StorageService();
 
   void displayAlert(BuildContext context, String title, String text,
@@ -69,13 +70,15 @@ class _ImageGalleryState extends State<ImageGallery> {
   Widget build(BuildContext context) {
     final PageController pageController =
         PageController(initialPage: widget.index);
+    String title = widget.title;
+    List<Album> images = widget.images;
+    int index = widget.index;
 
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
         navigationBar: CupertinoNavigationBar(
           padding: EdgeInsetsDirectional.zero,
-          trailing: pullDownButton(
-              context, widget.title, widget.images, widget.index),
+          trailing: pullDownButton(context, title, images, index),
           backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
           leading: CupertinoButton(
             onPressed: () {
@@ -88,8 +91,8 @@ class _ImageGalleryState extends State<ImageGallery> {
           ),
         ),
         body: ImageSlider(
-          images: widget.images,
-          index: widget.index,
+          images: images,
+          index: index,
         ),
       ),
       material: (_, __) => MaterialScaffoldData(
@@ -100,15 +103,11 @@ class _ImageGalleryState extends State<ImageGallery> {
             PopupMenuButton(
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        onTap: ()async {
-                          await Share.share("share");
-                          // Future<void>.delayed(
-                          //   Duration.zero,
-                          //   () => showModalBottomSheet(
-                          //       context: context,
-                          //       barrierColor: Colors.black26,
-                          //       builder: (context) => Container()),
-                          // );
+                        onTap: () async {
+                          List<XFile> photo =
+                              await _imagesService.shareImages(images[index]);
+                          await Share.shareXFiles(photo,
+                              text: photo[0].name, subject: "שתף תמונה");
                         },
                         child: const Text("שתף/ שתפי תמונה"),
                       ),
@@ -117,7 +116,7 @@ class _ImageGalleryState extends State<ImageGallery> {
                           displayAlert(context, "אתה עומד למחוק את התמונה",
                               "מחק את התמונה", () async {
                             await _service.deleteDocument(
-                                widget.title, widget.images[widget.index].id);
+                                title, images[index].id);
                             Navigator.pop(context);
                             Navigator.pop(context);
                           });
@@ -137,12 +136,12 @@ class _ImageGalleryState extends State<ImageGallery> {
           backgroundColor: Colors.transparent,
         ),
         body: ImageSlider(
-          images: widget.images,
-          index: widget.index,
+          images: images,
+          index: index,
           controller: pageController,
           onPageChange: (index) {
             setState(() {
-              widget.index = index;
+              index = index;
             });
           },
         ),
@@ -154,12 +153,18 @@ class _ImageGalleryState extends State<ImageGallery> {
 Widget pullDownButton(
     BuildContext context, String title, List<Album> images, int index) {
   final StorageService _service = StorageService();
+  final ImagesService _imagesService = ImagesService();
+
   return PullDownButton(
     itemBuilder: (context) => [
       PullDownMenuItem(
         title: "שתף",
-        onTap: () {
-          CupertinoScaffold.showCupertinoModalBottomSheet(context: context, builder: (context) => Container());
+        onTap: () async {
+          List<XFile> photo = await _imagesService.shareImages(images[index]);
+          await Share.shareXFiles(photo,
+              text: photo[0].name, subject: "שתף תמונה");
+          // CupertinoScaffold.showCupertinoModalBottomSheet(
+          //     context: context, builder: (context) => Container());
         },
         icon: CupertinoIcons.share,
       ),
