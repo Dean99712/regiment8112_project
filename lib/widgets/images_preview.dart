@@ -30,6 +30,7 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 late Query _imagesList;
 
 class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
+
   @override
   void initState() {
     getPhotosFromAlbum(widget.text);
@@ -41,8 +42,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
         .collectionGroup("album")
         .where("title", isEqualTo: childName)
         .orderBy("createdAt", descending: true);
-    
-    setState(() {
+    if(mounted) setState(() {
       _imagesList = collection;
     });
   }
@@ -54,6 +54,7 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
     final colorScheme = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return FirestoreQueryBuilder(
         query: _imagesList,
         builder: (context, snapshot, child) {

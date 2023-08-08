@@ -6,8 +6,8 @@ import 'package:regiment8112_project/models/album.dart';
 import 'package:uuid/uuid.dart';
 
 class StorageService {
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List> getPhotosDownloadUrl(String childName) async {

@@ -76,7 +76,7 @@ android {
         }
     }
 
-    namespace 'com.example.regiment8112_project'
+    namespace 'com.regiment.regiment8112'
 }
 
 flutter {

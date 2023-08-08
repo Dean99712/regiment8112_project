@@ -22,13 +22,14 @@ class _ImagesTabState extends State<ImagesTab> {
   }
 
   void getDocuments() {
-    Query query = _storage.getAllAlbums().orderBy("createdAt", descending: true);
-    setState(() {
-      _query = query;
-    });
+    Query query =
+        _storage.getAllAlbums().orderBy("createdAt", descending: true);
+    if (mounted) setState(() {
+        _query = query;
+      });
   }
 
-  Future onRefresh() async{
+  Future onRefresh() async {
     return getDocuments();
   }
 
@@ -44,10 +45,9 @@ class _ImagesTabState extends State<ImagesTab> {
               physics: const BouncingScrollPhysics(),
               itemCount: snapshot.docs.length,
               itemBuilder: (context, index) {
-                var list = snapshot.docs.map((e) => e).toList();
                 return ImagesPreview(
-                  date: list[index].get('createdAt'),
-                  text: list[index].get('albumName'),
+                  text: snapshot.docs[index].get("albumName"),
+                  date: snapshot.docs[index].get("createdAt"),
                 );
               },
             ),
