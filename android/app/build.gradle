@@ -52,6 +52,7 @@ android {
     }
 
     defaultConfig {
+
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.regiment.regiment8112"
         // You can update the following values to match your application needs.
@@ -61,7 +62,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -73,6 +73,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+
         }
     }
 
