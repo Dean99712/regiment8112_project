@@ -42,7 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           await _auth.signInWithCredential(credential);
         },
         verificationFailed: (e) {
-          throw FirebaseAuthException(code: 'Message : ${e.message!}');
+          throw FirebaseAuthException(code: 'Message : ${e.message!} $verificationCode $smsCode');
         },
         codeSent: (verificationId, int? resendToken) {
           verificationCode = verificationId;
