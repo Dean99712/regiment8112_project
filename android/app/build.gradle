@@ -76,7 +76,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-
     namespace 'com.example.regiment8112_project'
 }
 

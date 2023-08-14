@@ -10,14 +10,14 @@ import 'firebase_options.dart';
 void main() async {
 WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: 'Regiment8112',
+    name: 'regiment8112',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-await FirebaseAppCheck.instance.activate(
-  webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-  androidProvider: AndroidProvider.playIntegrity,
-  appleProvider: AppleProvider.appAttest,
-);
+// await FirebaseAppCheck.instance.activate(
+//   webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+//   androidProvider: AndroidProvider.playIntegrity,
+//   appleProvider: AppleProvider.appAttest,
+// );
   Intl.defaultLocale = 'he';
   initializeDateFormatting('he', null);
   runApp(const ProviderScope(child: Login()));
