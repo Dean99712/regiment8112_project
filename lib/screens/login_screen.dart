@@ -123,7 +123,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 phoneValidator);
                           },
                           onChanged: (value) {
-                            phone = value;
+                            print(value);
+                            setState(() {
+                              phone = value;
+                            });
+                            print(phone);
                           }),
                     ),
                     CustomButton(

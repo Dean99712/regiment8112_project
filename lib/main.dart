@@ -9,7 +9,7 @@ import 'firebase_options.dart';
 void main() async {
 WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: 'Regiment8112',
+    name: 'regiment 8112',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Intl.defaultLocale = 'he';
