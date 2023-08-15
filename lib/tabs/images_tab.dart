@@ -22,7 +22,7 @@ class _ImagesTabState extends State<ImagesTab> {
   }
 
   void getDocuments() {
-    Query query = _storage.getAllAlbums().orderBy("createdAt", descending: true);
+    Query query = _storage.getAllAlbums().orderBy("createdAt", descending: true).limit(3);
     setState(() {
       _query = query;
     });
