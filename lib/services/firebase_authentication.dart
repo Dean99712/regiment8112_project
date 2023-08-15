@@ -28,25 +28,27 @@ class AuthService {
       PhoneAuthCredential credentials = PhoneAuthProvider.credential(
           verificationId: verificationCode, smsCode: otp);
       await _auth.signInWithCredential(credentials);
-      if(otp.isNotEmpty) {
+      if (otp.isNotEmpty) {
         ref.watch(userProvider.notifier).getUser().then((value) {
           if (value == true) {
             Navigator.pushReplacement(
-                context,
-                isIos
-                    ? CupertinoPageRoute(
-                    fullscreenDialog: false,
-                    builder: (context) =>
-                        CupertinoScaffold(body: const MainScreen()))
-                    : MaterialWithModalsPageRoute(
-                    builder: (context) => const MainScreen()));
+              context,
+              isIos
+                  ? CupertinoPageRoute(
+                      fullscreenDialog: false,
+                      builder: (context) =>
+                          CupertinoScaffold(body: const MainScreen()))
+                  : MaterialWithModalsPageRoute(
+                      builder: (context) => const MainScreen(),
+                    ),
+            );
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialWithModalsPageRoute(
                     builder: (context) =>
                         CupertinoScaffold(body: const AddContact())),
-                    (route) => false);
+                (route) => false);
           }
         });
       } else {

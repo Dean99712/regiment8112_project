@@ -10,7 +10,7 @@ import 'package:regiment8112_project/providers/search_provider.dart';
 import 'package:regiment8112_project/services/user_service.dart';
 import 'package:regiment8112_project/utils/colors.dart';
 import 'package:regiment8112_project/widgets/custom_text.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Contacts extends ConsumerStatefulWidget {
   const Contacts(this.scrollController, {super.key});
@@ -40,12 +40,13 @@ class _ContactsState extends ConsumerState<Contacts> {
     });
   }
 
-  Future call(String phoneNumber) async {
+  Future call(String phoneNumber, bool platform) async {
     final colorScheme = Theme.of(context).colorScheme;
     final phone = phoneNumber.substring(1);
-    final Uri url = Uri(scheme: 'tel', path: '+972$phone');
-    if (await canLaunchUrl(url)) {
-      launchUrl(url);
+    String url = platform == TargetPlatform.iOS ? 'tel://+972$phone' : 'tel:+972$phone';
+    // final Uri url = Uri(scheme: 'tel', path: '+972$phone');
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
     } else {
       showPlatformDialog(
         context: context,
@@ -178,7 +179,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                                   caller(users[index].lastName),
                                             );
                                           } else {
-                                            call(users[index].phoneNumber);
+                                            call(users[index].phoneNumber, isIos);
                                           }
                                         },
                                         child: Container(
@@ -273,7 +274,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                           caller(element['phoneNumber']),
                                     );
                                   } else {
-                                    call(element['phoneNumber']);
+                                    call(element['phoneNumber'], isIos);
                                   }
                                 },
                                 child: Container(
@@ -296,6 +297,7 @@ class _ContactsState extends ConsumerState<Contacts> {
   }
 
   Widget caller(String phone) {
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return CupertinoActionSheet(
         cancelButton: CupertinoButton(
           onPressed: () => Navigator.pop(context),
@@ -304,7 +306,7 @@ class _ContactsState extends ConsumerState<Contacts> {
         actions: [
           CupertinoActionSheetAction(
             onPressed: () async {
-              call(phone);
+              call(phone, isIos);
             },
             child: Text('התקשר $phone', style: TextStyle(
               fontSize: 16,

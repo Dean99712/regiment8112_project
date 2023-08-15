@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -153,6 +154,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   Widget build(context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    print(auth.currentUser!.uid);
     bool isAdmin = ref.watch(userProvider);
     final _formState = GlobalKey<FormState>();
     final tab = _tabController.index == 0
