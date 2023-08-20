@@ -53,7 +53,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                   child: CustomText(
                       fontWeight: activeTab == 'news'
                           ? FontWeight.w600
-                          : FontWeight.w400,
+                          : FontWeight.w500,
                       fontSize: 16,
                       color: activeTab == 'news'
                           ? colorScheme.secondary
@@ -95,7 +95,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                 },
                 child: CustomText(
                     fontWeight:
-                        activeTab != 'news' ? FontWeight.w600 : FontWeight.w400,
+                        activeTab != 'news' ? FontWeight.w600 : FontWeight.w500,
                     fontSize: 16,
                     color: isContactList,
                     text: "רשימת קשר"),
@@ -110,7 +110,7 @@ class _TopSectionState extends ConsumerState<TopSection> {
                 },
                 child: CustomText(
                     fontWeight:
-                        activeTab != 'news' ? FontWeight.w600 : FontWeight.w400,
+                        activeTab != 'news' ? FontWeight.w600 : FontWeight.w500,
                     fontSize: 16,
                     color: isContactList,
                     text: "רשימת קשר"),

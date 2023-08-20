@@ -17,7 +17,15 @@ class Bubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CustomText(fontSize: 12, color: colorScheme.onBackground, text: date,),
+          CustomText(
+            fontSize: 12,
+            color: colorScheme.onBackground,
+            text: date,
+            fontWeight: FontWeight.w500,
+          ),
+          SizedBox(
+            height: 5,
+          ),
           Directionality(
             textDirection: TextDirection.rtl,
             child: Container(
@@ -25,7 +33,11 @@ class Bubble extends StatelessWidget {
               decoration: BoxDecoration(
                   color: isDark ? greyShade400 : greyShade100,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: CustomText(fontSize: 16, color: colorScheme.onBackground, text: text,textAlign: TextAlign.start),
+              child: CustomText(
+                  fontSize: 16,
+                  color: colorScheme.onBackground,
+                  text: text,
+                  textAlign: TextAlign.start),
             ),
           )
         ],

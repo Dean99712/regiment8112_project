@@ -41,7 +41,7 @@ class NextSummon extends StatelessWidget {
                 children: [
                   Text(
                     "הזימון הבא",
-                    style: GoogleFonts.heebo(color: colorScheme.onBackground),
+                    style: GoogleFonts.heebo(color: colorScheme.onBackground, fontWeight: FontWeight.w500),
                   ),
                   Text(
                     "18.09 - 25.09",

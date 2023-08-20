@@ -144,6 +144,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                         width: size.width / 4,
                                         child: CustomText(
                                             textAlign: TextAlign.start,
+                                            fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                             color: isDark
                                                 ? greyShade100
@@ -154,6 +155,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                         width: size.width / 4,
                                         child: CustomText(
                                             textAlign: TextAlign.start,
+                                            fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                             color: isDark
                                                 ? greyShade100
@@ -164,6 +166,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                         width: size.width / 5,
                                         child: CustomText(
                                             textAlign: TextAlign.start,
+                                            fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                             color: isDark
                                                 ? greyShade100
@@ -240,6 +243,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 child: CustomText(
                                     textAlign: TextAlign.start,
                                     fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                     color: isDark
                                         ? greyShade100
                                         : colorScheme.onBackground,
@@ -250,6 +254,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 child: CustomText(
                                     textAlign: TextAlign.start,
                                     fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                     color: isDark
                                         ? greyShade100
                                         : colorScheme.onBackground,
@@ -260,6 +265,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 child: CustomText(
                                     textAlign: TextAlign.start,
                                     fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                     color: isDark
                                         ? greyShade100
                                         : colorScheme.onBackground,

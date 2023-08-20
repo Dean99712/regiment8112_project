@@ -45,6 +45,7 @@ class _ImagesTabState extends State<ImagesTab> {
               itemCount: snapshot.docs.length,
               itemBuilder: (context, index) {
                 var list = snapshot.docs.map((e) => e).toList();
+                print(list[index].get('albumName'));
                 return ImagesPreview(
                   date: list[index].get('createdAt'),
                   text: list[index].get('albumName'),
