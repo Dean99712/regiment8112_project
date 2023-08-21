@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:510080137101:android:5e5a256e158947b4792fc4",
+        "mobilesdk_app_id": "1:510080137101:android:6dfd6dd241ce7b62792fc4",
         "android_client_info": {
           "package_name": "com.regiment.regiment8112_project"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "510080137101-r72lctgh7b6cfqpoavcj1s1t9o0npc7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.regiment.regiment8112_project",
+            "certificate_hash": "4e7603af80949b42a9c7759a20ac6dfbf90385c5"
+          }
+        },
         {
           "client_id": "510080137101-k53db082eqra51uuuenkurdkkr7to4kt.apps.googleusercontent.com",
           "client_type": 3
