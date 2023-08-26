@@ -1,6 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.regiment.regiment8112">
     <application
-        android:label="חרמ״ש מזסייעת 8112"
+        android:label="חרמש מסייעת 8112"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

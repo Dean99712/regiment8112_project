@@ -154,7 +154,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   Widget build(context) {
-
+    FirebaseAuth auth = FirebaseAuth.instance;
+    print(auth.currentUser!.uid);
     bool isAdmin = ref.watch(userProvider);
     final _formState = GlobalKey<FormState>();
     final tab = _tabController.index == 0
