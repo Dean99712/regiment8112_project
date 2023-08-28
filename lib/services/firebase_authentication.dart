@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112_project/providers/user_provider.dart';
 import 'package:regiment8112_project/screens/main_screen.dart';
+import 'package:regiment8112_project/utils/ebutton_state.dart';
 import 'package:regiment8112_project/widgets/add_contact.dart';
+import 'package:regiment8112_project/widgets/custom_text.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,10 +22,9 @@ class AuthService {
     }
   }
 
-  Future<void> verifyOtp(BuildContext context, String otp,
-      String verificationCode, WidgetRef ref) async {
-    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
+  Future<void> verifyOtp(BuildContext context, String otp,String verificationCode, Function onError, WidgetRef ref) async {
 
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     try {
       PhoneAuthCredential credentials = PhoneAuthProvider.credential(
           verificationId: verificationCode, smsCode: otp);
@@ -51,12 +52,9 @@ class AuthService {
                 (route) => false);
           }
         });
-      } else {
-        final snackBar = SnackBar(content: Text("סתם בדיקה"));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
+    } on FirebaseAuthException {
+      onError();
     }
   }
 }

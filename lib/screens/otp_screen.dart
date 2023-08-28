@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,8 +17,10 @@ class OtpScreen extends ConsumerStatefulWidget {
       {required this.smsCode,
       required this.verificationId,
       required this.phoneNumber,
+      required this.resendToken,
       super.key});
 
+  final int resendToken;
   final String smsCode;
   final String verificationId;
   final String phoneNumber;
@@ -29,7 +34,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   String smsCode = '';
   String verificationId = '';
-
+  FocusNode focus = FocusNode();
   @override
   void initState() {
     verificationId = widget.verificationId;
@@ -37,15 +42,74 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   }
 
   final AuthService _authService = AuthService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+  void resendCode() async {
+    var phone = widget.phoneNumber.substring(1,);
+    await _auth.verifyPhoneNumber(
+      phoneNumber: '+972$phone',
+      timeout: Duration(seconds: 60),
+      verificationCompleted: (credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (e) {
+        setState(() => state = ButtonState.init);
+        throw FirebaseAuthException(
+            code: 'Message : ${e.message!} $verificationId $smsCode');
+      },
+      codeAutoRetrievalTimeout: (String verificationCode) {
+        verificationId = verificationCode;
+      }, codeSent: (String verificationId, int? forceResendingToken) {  },
+    );
+  }
+
+  void onError() {
+    print(widget.phoneNumber);
+    var colorScheme = Theme.of(context).colorScheme;
+    setState(() => state = ButtonState.init);
+    if (smsCode.isEmpty) {
+      final snackBar = SnackBar(
+        content: CustomText(
+          text: "קוד אינו יכול להישאר ריק!",
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+          textAlign: TextAlign.right,
+          color: colorScheme.background,
+        ),
+        backgroundColor: colorScheme.onBackground,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else if (!verificationId.contains(smsCode)) {
+      final snackBar = SnackBar(
+        content: CustomText(
+          text: "קוד שגוי, אנא נסה שנית",
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+          textAlign: TextAlign.right,
+          color: colorScheme.background,
+        ),
+        backgroundColor: colorScheme.onBackground,
+        action: SnackBarAction(label: "דחה", onPressed: () {}),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+      FocusScope.of(context).requestFocus(focus);
+  }
 
   Future verifyOtp(BuildContext context, String smsCode) async {
-    _authService.verifyOtp(context, smsCode, verificationId, ref);
+    _authService.verifyOtp(context, smsCode, verificationId, onError, ref);
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
       String value, String emptyText, String text) {
     final snackBar = SnackBar(content: Text("סתם בדיקה"));
     return ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void startTimer() {
+    const onSec = Duration(seconds: 1);
+    Timer timer = Timer.periodic(onSec, (timer) {});
+    print("Resend Token ${widget.resendToken}");
   }
 
   @override
@@ -107,22 +171,22 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                           child: Directionality(
                             textDirection: TextDirection.ltr,
                             child: Pinput(
+                              focusNode: focus,
                               androidSmsAutofillMethod:
                                   AndroidSmsAutofillMethod.smsRetrieverApi,
                               keyboardType: TextInputType.number,
                               errorPinTheme: PinTheme(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: colorScheme.error),
-                                    color: isDark ? greyShade400 : greyShade100,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                                  textStyle: TextStyle(
-                                      fontSize: 18,
-                                      color: colorScheme.onBackground)),
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: colorScheme.error),
+                                  color: isDark ? greyShade400 : greyShade100,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                                textStyle: TextStyle(
+                                    fontSize: 18, color: greyShade700),
+                              ),
                               defaultPinTheme: PinTheme(
                                   width: 50,
                                   height: 50,
@@ -131,7 +195,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10.0)),
                                   ),
-                                  textStyle: TextStyle(fontSize: 18)),
+                                  textStyle: TextStyle(
+                                      fontSize: 18, color: Colors.black)),
                               onChanged: (value) {
                                 smsCode = value;
                               },
@@ -162,18 +227,39 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   Container(
                     padding: const EdgeInsets.only(top: 24),
                     child: SizedBox(
-                      height: 70,
+                      height: 91,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CustomText(
-                              text: "לא הקוד שקיבלת?",
-                              color: isDark
-                                  ? greyShade200
-                                  : colorScheme.onBackground,
-                              fontSize: 12,
+                            Column(
+                              children: [
+                                CustomText(
+                                  text: "לא הקוד שקיבלת?",
+                                  color: isDark
+                                      ? greyShade200
+                                      : colorScheme.onBackground,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                InkWell(
+                                  child: CustomText(
+                                    text: "שלחו לי SMS נוסף",
+                                    color: isDark
+                                        ? greyShade200
+                                        : colorScheme.onBackground,
+                                    fontSize: 12,
+                                  ),
+                                  onTap: () {
+                                    print(verificationId);
+                                  },
+                                ),
+                              ],
                             ),
+                            SizedBox(height: 5),
                             Text(
                               "תפנו לעזרה בקבוצת הוואטסאפ",
                               style: GoogleFonts.heebo(

@@ -24,6 +24,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   ButtonState state = ButtonState.init;
   String smsCode = '';
   String verificationCode = '';
+  int? _resendToken;
   String phone = '';
   final _formState = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -36,32 +37,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   Future<void> authenticateUser(String phoneNumber) async {
     var phone = phoneNumber.substring(1);
-      await _auth.verifyPhoneNumber(
-        phoneNumber: '+972$phone',
-        verificationCompleted: (credential) async {
-          await _auth.signInWithCredential(credential);
-        },
-        verificationFailed: (e) {
-          throw FirebaseAuthException(code: 'Message : ${e.message!} $verificationCode $smsCode');
-        },
-        codeSent: (verificationId, int? resendToken) {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: '+972$phone',
+      timeout: Duration(seconds: 60),
+      verificationCompleted: (credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (e) {
+          setState(() => state = ButtonState.init);
+        throw FirebaseAuthException(
+            code: 'Message : ${e.message!} $verificationCode $smsCode');
+      },
+      codeSent: (verificationId, int? resendToken) {
           verificationCode = verificationId;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OtpScreen(
-                  verificationId: verificationId,
-                  smsCode: smsCode,
-                  phoneNumber: phoneNumber
-              ),
-            ),
-          );
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          verificationId = verificationCode;
-        },
-      );
-
+         _resendToken = resendToken;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpScreen(
+                verificationId: verificationId,
+                smsCode: smsCode,
+                phoneNumber: phoneNumber,
+                resendToken: _resendToken!),
+          ),
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        verificationId = verificationCode;
+      },
+    );
   }
 
   @override

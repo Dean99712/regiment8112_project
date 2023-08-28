@@ -1,4 +1,5 @@
 import 'package:blurhash_dart/blurhash_dart.dart';
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -73,9 +74,15 @@ class StorageService {
     return await _firestore.collection(childName).get();
   }
 
-  Future createAlbum(String childName) async {
+  Future createAlbum( BuildContext context, String childName) async {
     var collection = _firestore.collection("albums").doc(childName);
     final data = {"albumName": childName, "createdAt": Timestamp.now()};
-    return await collection.set(data);
+    if(collection.collection("albums").where(childName) == childName) {
+      var snackBar = SnackBar(content: Text("שם של אלבום זה כבר קיים, אנא בחר שם חדש"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      return await collection.set(data);
+    }
   }
 }
+

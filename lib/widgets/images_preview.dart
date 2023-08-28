@@ -41,10 +41,9 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
         .collectionGroup("album")
         .where("title", isEqualTo: childName)
         .orderBy("createdAt", descending: true);
-    
-    setState(() {
-      _imagesList = collection;
-    });
+      setState(() {
+        _imagesList = collection;
+      });
   }
 
   @override
