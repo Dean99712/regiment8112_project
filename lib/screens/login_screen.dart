@@ -46,7 +46,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       verificationFailed: (e) {
           setState(() => state = ButtonState.init);
         throw FirebaseAuthException(
-            code: 'Message : ${e.message!} $verificationCode $smsCode');
+            code: 'Message : ${e.message}');
       },
       codeSent: (verificationId, int? resendToken) {
           verificationCode = verificationId;

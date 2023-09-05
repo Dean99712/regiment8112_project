@@ -10,15 +10,12 @@ import 'login.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-    name: "חרמש מסייעת 8112"
-  );
+      options: DefaultFirebaseOptions.currentPlatform,
+      name: "חרמש מסייעת 8112");
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.debug
-  );
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.debug);
   Intl.defaultLocale = 'he';
   initializeDateFormatting('he', null);
   runApp(const ProviderScope(child: Login()));
 }
-
