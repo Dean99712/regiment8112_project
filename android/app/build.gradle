@@ -58,7 +58,7 @@ android {
             }
         }
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.regiment.regiment8112"
+        applicationId "com.regiment_project.project_regiment8112"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 30
@@ -84,7 +84,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    namespace 'com.regiment.regiment8112'
+    namespace 'com.regiment_project.project_regiment8112'
 }
 
 flutter {

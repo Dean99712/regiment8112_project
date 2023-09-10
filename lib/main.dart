@@ -13,7 +13,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
       name: "חרמש מסייעת 8112");
   await FirebaseAppCheck.instance.activate(
-      androidProvider: AndroidProvider.playIntegrity,
+      androidProvider: AndroidProvider.debug,
       appleProvider: AppleProvider.debug);
   Intl.defaultLocale = 'he';
   initializeDateFormatting('he', null);
