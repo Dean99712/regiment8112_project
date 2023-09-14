@@ -50,8 +50,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBrQkwoWzug_VBR3BqP8MWQmI1P8sDTCDU',
-    appId: '1:510080137101:android:365da36c48fd1861792fc4',
+    apiKey: 'AIzaSyA8ztn6RtCb-YbCEBInYXkvEO834Bge_38',
+    appId: '1:510080137101:android:a09854bb09a4a418792fc4',
     messagingSenderId: '510080137101',
     projectId: 'project-regiment8112',
     storageBucket: 'project-regiment8112.appspot.com',
@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyA4mLvfN8ppl_Kxz3s7Qte7qexT1iaaBG0',
-    appId: '1:510080137101:ios:72ad4ab721f1ed70792fc4',
+    appId: '1:510080137101:ios:e8896c1d5688a065792fc4',
     messagingSenderId: '510080137101',
     projectId: 'project-regiment8112',
     storageBucket: 'project-regiment8112.appspot.com',
