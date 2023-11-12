@@ -1,4 +1,4 @@
-name: regiment8112_project
+name: regiment8112
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -36,17 +36,17 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   cloud_firestore: ^4.8.2
-  google_fonts: ^4.0.4
+  google_fonts: ^6.1.0
   flutter_web_auth: ^0.5.0
   web_socket_channel: ^2.4.0
   firebase_storage: ^11.2.4
   firebase_core: ^2.14.0
   photo_view: ^0.14.0
-  flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.13.1
   flutter_riverpod: ^2.3.6
-  uuid: ^3.0.7
+  uuid: ^4.1.0
   flutter_platform_widgets: ^3.3.5
-  image_picker: ^1.0.0
+  image_picker: ^1.0.4
   flutter_cache_manager: ^3.3.1
   flutter_scrolling_fab_animated: ^0.1.4
   flutter_phone_direct_caller: ^2.1.1
@@ -55,11 +55,11 @@ dependencies:
   grouped_list: ^5.1.2
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.11
-  flutter_staggered_grid_view: ^0.6.2
+  flutter_staggered_grid_view: ^0.7.0
   flutter_svg: ^2.0.7
   font_awesome_flutter: ^10.5.0
   video_player: ^2.7.0
-  pinput: ^2.2.31
+  pinput: ^3.0.1
   firebase_ui_firestore: ^1.5.4
   image: ^4.0.17
   blurhash_dart: ^1.2.1
@@ -68,9 +68,8 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   animations: ^2.0.7
   firebase_auth: ^4.7.2
-  firebase_app_check: ^0.1.5+1
-
-
+  firebase_app_check: ^0.2.1+2
+  change_app_package_name: ^1.1.0
 
 dev_dependencies:
   flutter_test:

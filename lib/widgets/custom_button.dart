@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/utils/ebutton_state.dart';
-import 'package:regiment8112_project/widgets/custom_text.dart';
+import '../utils/colors.dart';
+import '../utils/ebutton_state.dart';
+import 'custom_text.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton(

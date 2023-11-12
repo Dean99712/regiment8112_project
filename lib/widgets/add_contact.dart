@@ -4,15 +4,16 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:regiment8112_project/data/plattons.dart';
-import 'package:regiment8112_project/providers/user_provider.dart';
-import 'package:regiment8112_project/providers/validatorProvider.dart';
-import 'package:regiment8112_project/screens/main_screen.dart';
-import 'package:regiment8112_project/services/user_service.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/utils/validators.dart';
-import 'package:regiment8112_project/widgets/custom_text.dart';
-import 'package:regiment8112_project/widgets/custom_text_field.dart';
+
+import '../data/plattons.dart';
+import '../providers/user_provider.dart';
+import '../providers/validatorProvider.dart';
+import '../screens/main_screen.dart';
+import '../services/user_service.dart';
+import '../utils/colors.dart';
+import '../utils/validators.dart';
+import 'custom_text.dart';
+import 'custom_text_field.dart';
 
 class AddContact extends ConsumerStatefulWidget {
   const AddContact({super.key});

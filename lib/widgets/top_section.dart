@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:regiment8112_project/providers/search_provider.dart';
-import 'package:regiment8112_project/widgets/next_summon.dart';
-import 'package:regiment8112_project/widgets/search_bar.dart';
+import 'package:regiment8112/widgets/search_bar.dart';
+import '../providers/search_provider.dart';
 import 'custom_text.dart';
+import 'next_summon.dart';
 
 class TopSection extends ConsumerStatefulWidget {
   const TopSection(this.currentTab, this.updateActiveTab, {super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/utils/theme_data.dart';
+import 'package:regiment8112/utils/theme_data.dart';
 import 'screens/login_screen.dart';
 
 class Login extends StatelessWidget {

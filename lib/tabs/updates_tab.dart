@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:regiment8112_project/models/updates.dart';
-import 'package:regiment8112_project/services/news_service.dart';
+import '../models/updates.dart';
+import '../services/news_service.dart';
 import '../utils/colors.dart';
 import '../widgets/bubble.dart';
 

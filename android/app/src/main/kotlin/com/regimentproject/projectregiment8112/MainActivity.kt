@@ -1,4 +1,4 @@
-package com.regiment_project.project_regiment8112
+package com.regimentproject.projectregiment8112
 
 
 import io.flutter.embedding.android.FlutterActivity

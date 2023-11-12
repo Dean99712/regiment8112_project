@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "510080137101",
-    "project_id": "project-regiment8112",
-    "storage_bucket": "project-regiment8112.appspot.com"
+    "project_number": "247893223873",
+    "project_id": "regiment-project-8112",
+    "storage_bucket": "regiment-project-8112.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:510080137101:android:a09854bb09a4a418792fc4",
+        "mobilesdk_app_id": "1:247893223873:android:169c3f46e3e3669d596740",
         "android_client_info": {
-          "package_name": "com.regiment_project.project_regiment8112"
+          "package_name": "com.regimentproject.projectregiment8112"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "510080137101-ktpu243qq3qfc9h020v4b81bsjke7f4v.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.regiment_project.project_regiment8112",
-            "certificate_hash": "c8958a124960a424e0632463ac3ce82127f4463f"
-          }
-        },
-        {
-          "client_id": "510080137101-urmpv2bk4kbdh6397pe1fkklac59nuv9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.regiment_project.project_regiment8112",
-            "certificate_hash": "a9b3057651268b4ebc0cfcc821c78c5c5cbcc5ca"
-          }
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA8ztn6RtCb-YbCEBInYXkvEO834Bge_38"
+          "current_key": "AIzaSyARV9RWIKxdCBRForKOPUFCwWQBA2Y_M_k"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "510080137101-ajlj96jiahf9j2dkc78p7v1li6svg2uj.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.regiment.regiment8112"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

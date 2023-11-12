@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:regiment8112_project/models/album.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/album.dart';
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;

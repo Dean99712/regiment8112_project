@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/tabs/images_tab.dart';
-import 'package:regiment8112_project/tabs/news_tab.dart';
-import 'package:regiment8112_project/tabs/updates_tab.dart';
+
+import '../tabs/images_tab.dart';
+import '../tabs/news_tab.dart';
+import '../tabs/updates_tab.dart';
 
 class SwipeableTab extends StatefulWidget {
   const SwipeableTab(this.scrollController, {required this.tabs, required this.tabController, super.key});

@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA8ztn6RtCb-YbCEBInYXkvEO834Bge_38',
-    appId: '1:510080137101:android:a09854bb09a4a418792fc4',
-    messagingSenderId: '510080137101',
-    projectId: 'project-regiment8112',
-    storageBucket: 'project-regiment8112.appspot.com',
+    apiKey: 'AIzaSyARV9RWIKxdCBRForKOPUFCwWQBA2Y_M_k',
+    appId: '1:247893223873:android:169c3f46e3e3669d596740',
+    messagingSenderId: '247893223873',
+    projectId: 'regiment-project-8112',
+    storageBucket: 'regiment-project-8112.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA4mLvfN8ppl_Kxz3s7Qte7qexT1iaaBG0',
-    appId: '1:510080137101:ios:e8896c1d5688a065792fc4',
-    messagingSenderId: '510080137101',
-    projectId: 'project-regiment8112',
-    storageBucket: 'project-regiment8112.appspot.com',
-    iosClientId: '510080137101-ajlj96jiahf9j2dkc78p7v1li6svg2uj.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD7uPYMwpwJq4-klB8F0nsjHXszbz3oFCU',
+    appId: '1:247893223873:ios:68f04897444e1cac596740',
+    messagingSenderId: '247893223873',
+    projectId: 'regiment-project-8112',
+    storageBucket: 'regiment-project-8112.appspot.com',
     iosBundleId: 'com.regiment.regiment8112',
   );
 }

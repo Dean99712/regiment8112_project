@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:regiment8112_project/services/firebase_storage_service.dart';
-import 'package:regiment8112_project/widgets/images_preview.dart';
+
+import '../services/firebase_storage_service.dart';
+import '../widgets/images_preview.dart';
 
 class ImagesTab extends StatefulWidget {
   const ImagesTab({super.key});

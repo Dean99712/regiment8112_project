@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:regiment8112_project/services/firebase_storage_service.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/widgets/custom_text.dart';
-import 'package:regiment8112_project/widgets/image_slider.dart';
 import '../models/album.dart';
+import '../services/firebase_storage_service.dart';
+import '../utils/colors.dart';
+import 'custom_text.dart';
+import 'image_slider.dart';
 
 class AllImages extends ConsumerStatefulWidget {
   const AllImages(this.itemCount,

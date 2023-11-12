@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regiment8112_project/providers/validatorProvider.dart';
-import 'package:regiment8112_project/screens/otp_screen.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/utils/ebutton_state.dart';
-import 'package:regiment8112_project/utils/validators.dart';
-import 'package:regiment8112_project/widgets/custom_button.dart';
-import 'package:regiment8112_project/widgets/custom_text_field.dart';
+import '../providers/validatorProvider.dart';
+import '../utils/colors.dart';
+import '../utils/ebutton_state.dart';
+import '../utils/validators.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_text_field.dart';
+import 'otp_screen.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

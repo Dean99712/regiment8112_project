@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:regiment8112_project/models/user.dart';
-import 'package:regiment8112_project/providers/filter_provider.dart';
-import 'package:regiment8112_project/providers/search_provider.dart';
-import 'package:regiment8112_project/services/user_service.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../models/user.dart';
+import '../providers/filter_provider.dart';
+import '../providers/search_provider.dart';
+import '../services/user_service.dart';
+import '../utils/colors.dart';
+import 'custom_text.dart';
 
 class Contacts extends ConsumerStatefulWidget {
   const Contacts(this.scrollController, {super.key});

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regiment8112_project/utils/colors.dart';
+
+import '../utils/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField(

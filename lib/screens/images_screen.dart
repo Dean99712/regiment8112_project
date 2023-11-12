@@ -10,7 +10,7 @@ import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.da
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pull_down_button/pull_down_button.dart';
-import 'package:regiment8112_project/providers/user_provider.dart';
+import '../providers/user_provider.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/images_manager.dart';
 import '../utils/colors.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/widgets/bubble.dart';
 import '../models/news.dart';
 import '../services/news_service.dart';
+import '../utils/colors.dart';
+import '../widgets/bubble.dart';
 
 class NewsTab extends StatefulWidget {
   const NewsTab({super.key});

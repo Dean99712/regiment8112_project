@@ -1,15 +1,14 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:regiment8112_project/services/firebase_authentication.dart';
-import 'package:regiment8112_project/utils/colors.dart';
-import 'package:regiment8112_project/widgets/custom_button.dart';
+import '../services/firebase_authentication.dart';
+import '../utils/colors.dart';
 import '../utils/ebutton_state.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {

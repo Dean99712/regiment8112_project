@@ -5,11 +5,11 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:pull_down_button/pull_down_button.dart';
-import 'package:regiment8112_project/services/firebase_storage_service.dart';
-import 'package:regiment8112_project/services/images_manager.dart';
-import 'package:regiment8112_project/utils/colors.dart';
 import 'package:share_plus/share_plus.dart';
 import '../models/album.dart';
+import '../services/firebase_storage_service.dart';
+import '../services/images_manager.dart';
+import '../utils/colors.dart';
 import 'custom_text.dart';
 
 class ImageGallery extends StatefulWidget {

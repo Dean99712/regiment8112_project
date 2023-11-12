@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regiment8112_project/providers/search_provider.dart';
-import 'package:regiment8112_project/utils/colors.dart';
 import '../providers/filter_provider.dart';
+import '../providers/search_provider.dart';
+import '../utils/colors.dart';
 
 class CustomSearchBar extends ConsumerStatefulWidget {
   const CustomSearchBar({required this.controller, this.onChanged, super.key});
