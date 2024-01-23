@@ -2,18 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>898801329724-odjimp4uk62e4lg9oirev6v4t10op4tg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.898801329724-odjimp4uk62e4lg9oirev6v4t10op4tg</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>898801329724-1o36strdqh4f7qd43ddjppb8690s8o7f.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD7uPYMwpwJq4-klB8F0nsjHXszbz3oFCU</string>
+	<string>AIzaSyDXf8sFjz2LEIwktVuOC-2L3H9rsNr8rZY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>247893223873</string>
+	<string>898801329724</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.regiment.regiment8112</string>
+	<string>com.mesayahat.regiment8112</string>
 	<key>PROJECT_ID</key>
-	<string>regiment-project-8112</string>
+	<string>regiment-8112-2748f</string>
 	<key>STORAGE_BUCKET</key>
-	<string>regiment-project-8112.appspot.com</string>
+	<string>regiment-8112-2748f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:247893223873:ios:68f04897444e1cac596740</string>
+	<string>1:898801329724:ios:90b6ec613e9abc90b5c539</string>
 </dict>
 </plist>

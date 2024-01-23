@@ -1,26 +1,51 @@
 {
   "project_info": {
-    "project_number": "247893223873",
-    "project_id": "regiment-project-8112",
-    "storage_bucket": "regiment-project-8112.appspot.com"
+    "project_number": "898801329724",
+    "project_id": "regiment-8112-2748f",
+    "storage_bucket": "regiment-8112-2748f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:247893223873:android:169c3f46e3e3669d596740",
+        "mobilesdk_app_id": "1:898801329724:android:108a6ee6beb81fecb5c539",
         "android_client_info": {
-          "package_name": "com.regimentproject.projectregiment8112"
+          "package_name": "com.mesayahat.regiment8112"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "898801329724-1o36strdqh4f7qd43ddjppb8690s8o7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mesayahat.regiment8112",
+            "certificate_hash": "6df9738476b72df32872922ce678b6822a761f04"
+          }
+        },
+        {
+          "client_id": "898801329724-tmhigvk6jvceig5ka88nl58hp5cdgm87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyARV9RWIKxdCBRForKOPUFCwWQBA2Y_M_k"
+          "current_key": "AIzaSyD71kBI7UZFKFqnvDnGmGtHVmK8pfCHtFY"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898801329724-tmhigvk6jvceig5ka88nl58hp5cdgm87.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "898801329724-odjimp4uk62e4lg9oirev6v4t10op4tg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mesayahat.regiment8112"
+              }
+            }
+          ]
         }
       }
     }

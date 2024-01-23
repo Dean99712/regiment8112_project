@@ -34,6 +34,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   String smsCode = '';
   String verificationId = '';
   FocusNode focus = FocusNode();
+
   @override
   void initState() {
     verificationId = widget.verificationId;
