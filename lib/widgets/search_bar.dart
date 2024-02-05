@@ -43,26 +43,31 @@ class _CustomSearchBarState extends ConsumerState<CustomSearchBar> {
         },
         child: Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PlatformSearchField(
-                controller: widget.controller,
-                onChanged: widget.onChanged,
-                focusNode: focus,
-                radius: _radius,
-                elevation: _elevation,
-              ),
-              IconButton(
-                color: primaryColor,
-                enableFeedback: true,
-                icon: const Icon(Icons.filter_list_outlined),
-                onPressed: () {
-                  ref.read(isGroupedProvider.notifier).state = !isGrouped;
-                },
-              )
-            ],
+          child: SizedBox(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 45,
+                  child: PlatformSearchField(
+                    controller: widget.controller,
+                    onChanged: widget.onChanged,
+                    focusNode: focus,
+                    radius: _radius,
+                    elevation: _elevation,
+                  ),
+                ),
+                IconButton(
+                  color: primaryColor,
+                  enableFeedback: true,
+                  icon: const Icon(Icons.filter_list_outlined),
+                  onPressed: () {
+                    ref.read(isGroupedProvider.notifier).state = !isGrouped;
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

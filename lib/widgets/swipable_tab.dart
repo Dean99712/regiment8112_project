@@ -5,7 +5,9 @@ import '../tabs/news_tab.dart';
 import '../tabs/updates_tab.dart';
 
 class SwipeableTab extends StatefulWidget {
-  const SwipeableTab(this.scrollController, {required this.tabs, required this.tabController, super.key});
+  const SwipeableTab(
+      this.scrollController,
+      {required this.tabs, required this.tabController, super.key});
 
   final ScrollController scrollController;
   final TabController tabController;
@@ -36,10 +38,10 @@ class _SwipeableTabState extends State<SwipeableTab> {
               labelColor: theme.secondary,
               tabs: widget.tabs),
           Expanded(
-            child: TabBarView(controller: widget.tabController, children: [
-              const NewsTab(),
-              const UpdatesTab(),
-              const ImagesTab(),
+            child: TabBarView(controller: widget.tabController, children: const [
+              NewsTab(),
+              UpdatesTab(),
+              ImagesTab(),
             ]),
           ),
         ],

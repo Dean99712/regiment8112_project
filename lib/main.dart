@@ -11,10 +11,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-      name: "חרמש מסייעת 8112");
+    name: "מסייעת"
+  );
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.debug
+    appleProvider: AppleProvider.debug,
   );
   Intl.defaultLocale = 'he';
   initializeDateFormatting('he', null);

@@ -5,7 +5,6 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 import '../models/user.dart';
 import '../providers/filter_provider.dart';
 import '../providers/search_provider.dart';
@@ -44,23 +43,23 @@ class _ContactsState extends ConsumerState<Contacts> {
   Future call(String phoneNumber, bool platform) async {
     final colorScheme = Theme.of(context).colorScheme;
     final phone = phoneNumber.substring(1);
-    String url = platform == TargetPlatform.iOS ? 'tel://+972$phone' : 'tel:+972$phone';
-    // final Uri url = Uri(scheme: 'tel', path: '+972$phone');
+    String url =
+        platform == TargetPlatform.iOS ? 'tel://+972$phone' : 'tel:+972$phone';
     if (await canLaunchUrlString(url)) {
       await launchUrlString(url);
     } else {
-      showPlatformDialog(
+      await showPlatformDialog(
         context: context,
         cupertino: CupertinoDialogData(
           builder: (context) => CupertinoAlertDialog(
-              title: Text("מצטערים, המכשיר שברשותך אינו נתמך"),
+              title: const Text("מצטערים, המכשיר שברשותך אינו נתמך"),
               actions: [
                 CupertinoDialogAction(
                   isDestructiveAction: true,
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("ביטול"),
+                  child: const Text("ביטול"),
                 )
               ]),
         ),
@@ -85,10 +84,11 @@ class _ContactsState extends ConsumerState<Contacts> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/svg/boot.png'),
-            opacity: isDark ? 0.5 : 0.75),
+            opacity: 0.3),
+            // opacity: isDark ? 0.5 : 0.75),
       ),
       child: FutureBuilder(
         future: userList,
@@ -132,7 +132,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                       : Colors.transparent,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 25),
+                                    vertical: 5.0, horizontal: 25),
                                 child: SizedBox(
                                   height: size.height * 0.05,
                                   child: Row(
@@ -177,13 +177,16 @@ class _ContactsState extends ConsumerState<Contacts> {
                                       GestureDetector(
                                         onTap: () async {
                                           if (isIos) {
-                                            showCupertinoModalPopup(
-                                              context: context,
-                                              builder: (context) =>
-                                                  caller(users[index].lastName),
-                                            );
+                                            call(users[index].phoneNumber,
+                                                isIos);
+                                            // showCupertinoModalPopup(
+                                            //   context: context,
+                                            //   builder: (context) =>
+                                            //       caller(users[index].lastName),
+                                            // );
                                           } else {
-                                            call(users[index].phoneNumber, isIos);
+                                            call(users[index].phoneNumber,
+                                                isIos);
                                           }
                                         },
                                         child: Container(
@@ -275,11 +278,12 @@ class _ContactsState extends ConsumerState<Contacts> {
                               GestureDetector(
                                 onTap: () async {
                                   if (isIos) {
-                                    showCupertinoModalPopup(
-                                      context: context,
-                                      builder: (context) =>
-                                          caller(element['phoneNumber']),
-                                    );
+                                    call(element['phoneNumber'], isIos);
+                                    // showCupertinoModalPopup(
+                                    //   context: context,
+                                    //   builder: (context) =>
+                                    //       caller(element['phoneNumber']),
+                                    // );
                                   } else {
                                     call(element['phoneNumber'], isIos);
                                   }
@@ -303,23 +307,27 @@ class _ContactsState extends ConsumerState<Contacts> {
     );
   }
 
-  Widget caller(String phone) {
-    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    return CupertinoActionSheet(
-        cancelButton: CupertinoButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text("ביטול", style: TextStyle(color: CupertinoColors.destructiveRed),),
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              call(phone, isIos);
-            },
-            child: Text('התקשר $phone', style: TextStyle(
-              fontSize: 16,
-              color: CupertinoColors.activeBlue
-            ),),
-          )
-        ]);
-  }
+  // Widget caller(String phone) {
+  //   bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+  //   return CupertinoActionSheet(
+  //       cancelButton: CupertinoButton(
+  //         onPressed: () => Navigator.pop(context),
+  //         child: const Text(
+  //           "ביטוללל",
+  //           style: TextStyle(color: CupertinoColors.destructiveRed),
+  //         ),
+  //       ),
+  //       actions: [
+  //         CupertinoActionSheetAction(
+  //           onPressed: () async {
+  //             call(phone, isIos);
+  //           },
+  //           child: Text(
+  //             'התקשר $phone',
+  //             style: const TextStyle(
+  //                 fontSize: 16, color: CupertinoColors.activeBlue),
+  //           ),
+  //         )
+  //       ]);
+  // }
 }

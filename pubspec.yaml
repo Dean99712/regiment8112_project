@@ -33,25 +33,21 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.6
 
-  cloud_firestore: ^4.8.2
+  cloud_firestore: ^4.14.0
   google_fonts: ^6.1.0
   flutter_web_auth: ^0.5.0
   web_socket_channel: ^2.4.0
-  firebase_storage: ^11.2.4
-  firebase_core: ^2.24.0
+  firebase_storage: ^11.6.0
   photo_view: ^0.14.0
   flutter_launcher_icons: ^0.13.1
   flutter_riverpod: ^2.3.6
   uuid: ^4.1.0
-  flutter_platform_widgets: ^3.3.5
   image_picker: ^1.0.4
   flutter_cache_manager: ^3.3.1
   flutter_scrolling_fab_animated: ^0.1.4
-  flutter_phone_direct_caller: ^2.1.1
   intl: ^0.18.0
-  flutter_blurhash: ^0.7.0
   grouped_list: ^5.1.2
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.11
@@ -68,10 +64,16 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   animations: ^2.0.7
   change_app_package_name: ^1.1.0
-  firebase_auth: ^4.15.0
-  firebase_app_check: ^0.2.1+6
+  flutter_blurhash: ^0.8.2
+  flutter_platform_widgets: ^6.0.2
+  flutter_phone_direct_caller: ^2.1.1
+  firebase_app_check: ^0.2.1+8
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  kosher_dart: ^2.0.16
 
 dev_dependencies:
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
 

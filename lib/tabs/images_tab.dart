@@ -58,7 +58,7 @@ class _ImagesTabState extends State<ImagesTab> {
           );
         }
         if (snapshot.isFetching || snapshot.isFetchingMore) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

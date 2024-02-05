@@ -60,7 +60,7 @@ class _AddContactState extends ConsumerState<AddContact> {
               platform == TargetPlatform.iOS
                   ? CupertinoPageRoute(
                       builder: (context) =>
-                          CupertinoScaffold(body: const MainScreen()))
+                          const CupertinoScaffold(body: MainScreen()))
                   : MaterialWithModalsPageRoute(
                       builder: (context) => const MainScreen()));
         }
@@ -83,7 +83,7 @@ class _AddContactState extends ConsumerState<AddContact> {
               platform == TargetPlatform.iOS
                   ? CupertinoPageRoute(
                   builder: (context) =>
-                      CupertinoScaffold(body: const MainScreen()))
+                      const CupertinoScaffold(body: MainScreen()))
                   : MaterialWithModalsPageRoute(
                   builder: (context) => const MainScreen()));
         }
@@ -103,8 +103,8 @@ class _AddContactState extends ConsumerState<AddContact> {
         child: Container(
           height: size.height,
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  opacity: isDark ? 0.12 : 1,
+              image: const DecorationImage(
+                  opacity: 0.12,
                   image: AssetImage("assets/images/Group 126.png"),
                   fit: BoxFit.cover),
               color: colorScheme.background),
@@ -130,7 +130,7 @@ class _AddContactState extends ConsumerState<AddContact> {
                     Text("הירשם על מנת להמשיך",
                         style: GoogleFonts.rubikDirt(
                             fontSize: 32, color: colorScheme.primary)),
-                    CustomText(
+                    const CustomText(
                         text:
                             "בצע רישום חד פעמי ולאחר מכן תוכל להמשיך לאפליקציה",
                         fontSize: 12),
@@ -149,11 +149,11 @@ class _AddContactState extends ConsumerState<AddContact> {
                         child: Directionality(
                           textDirection: TextDirection.rtl,
                           child: ElevatedButton.icon(
-                            icon: Icon(Icons.adaptive.arrow_back),
-                            label: const CustomText(
+                            icon: Icon(Icons.adaptive.arrow_back, color: colorScheme.background,),
+                            label: CustomText(
                               fontSize: 16,
                               text: "המשך לאפליקציה",
-                              color: white,
+                              color: colorScheme.background,
                             ),
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(

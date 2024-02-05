@@ -12,26 +12,26 @@ class SearchNotifier extends StateNotifier<String> {
     var nameCollection = await _firestore
         .collection("users")
         .orderBy("name")
-        .where("name", isLessThan: '${value}ת')
+        .where("name", isLessThan: '$valueת')
         .where("name", isGreaterThanOrEqualTo: value)
         .get();
 
     var phoneCollection = await _firestore
         .collection("users")
-        .where('phoneNumber', isLessThan: '${value}ת')
+        .where('phoneNumber', isLessThan: '$valueת')
         .where('phoneNumber', isGreaterThanOrEqualTo: value)
         .get();
 
     var lastNameCollection = await _firestore
         .collection("users")
-        .where("lastName", isLessThan: '${value}ת')
-        .where("lastName", isGreaterThanOrEqualTo: '$value')
+        .where("lastName", isLessThan: '$valueת')
+        .where("lastName", isGreaterThanOrEqualTo: value)
         .get();
 
     var citiesCollection = await _firestore
         .collection("users")
-        .where("city", isLessThan: '${value}ת')
-        .where("city", isGreaterThanOrEqualTo: '$value')
+        .where("city", isLessThan: '$valueת')
+        .where("city", isGreaterThanOrEqualTo: value)
         .get();
 
     if (nameCollection.docs.isNotEmpty) {

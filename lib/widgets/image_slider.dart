@@ -36,6 +36,7 @@ class _ImageGalleryState extends State<ImageGallery> {
   void displayAlert(BuildContext context, String title, String text,
       void Function() function) {
     final theme = Theme.of(context).colorScheme;
+
     Future<void>.delayed(
       Duration.zero,
       () => showDialog(
@@ -58,7 +59,8 @@ class _ImageGalleryState extends State<ImageGallery> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: CustomText(text: "ביטול", color: Colors.blueAccent))
+                  child: const CustomText(
+                      text: "ביטול", color: CupertinoColors.activeBlue))
             ],
           ),
         ),
@@ -79,7 +81,7 @@ class _ImageGalleryState extends State<ImageGallery> {
         navigationBar: CupertinoNavigationBar(
           padding: EdgeInsetsDirectional.zero,
           trailing: pullDownButton(context, title, images, index),
-          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.3),
           leading: CupertinoButton(
             onPressed: () {
               Navigator.pop(context);
@@ -152,43 +154,47 @@ class _ImageGalleryState extends State<ImageGallery> {
 
 Widget pullDownButton(
     BuildContext context, String title, List<Album> images, int index) {
-  final StorageService _service = StorageService();
-  final ImagesService _imagesService = ImagesService();
+  final StorageService service = StorageService();
+  final ImagesService imagesService = ImagesService();
 
   return PullDownButton(
     itemBuilder: (context) => [
       PullDownMenuItem(
         title: "שתף",
         onTap: () async {
-          List<XFile> photo = await _imagesService.shareImages(images[index]);
+          List<XFile> photo = await imagesService.shareImages(images[index]);
           await Share.shareXFiles(photo,
               text: photo[0].name, subject: "שתף תמונה");
-          // CupertinoScaffold.showCupertinoModalBottomSheet(
-          //     context: context, builder: (context) => Container());
         },
         icon: CupertinoIcons.share,
       ),
       PullDownMenuItem(
         onTap: () {
-          showCupertinoDialog(
+          showCupertinoModalPopup(
             context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: Text("אתה עומד למחוק את התמונה"),
+            builder: (context) => CupertinoActionSheet(
+              message: const Text("פעולה זו תמחוק את התמונה לצמיתות"),
               actions: [
-                CupertinoDialogAction(
-                    onPressed: () async {
-                      await _service.deleteDocument(title, images[index].id);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    isDestructiveAction: true,
-                    child: Text("מחק")),
-                CupertinoDialogAction(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("מחק"))
+                CupertinoActionSheetAction(
+                  onPressed: () async {
+                    await service.deleteDocument(
+                        title, images[index].id);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  isDestructiveAction: true,
+                  child: const Text("מחיקת התמונה"),
+                )
               ],
+              cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "ביטול",
+                  style: TextStyle(color: CupertinoColors.activeBlue),
+                ),
+              ),
             ),
           );
         },
@@ -201,12 +207,13 @@ Widget pullDownButton(
     position: PullDownMenuPosition.automatic,
     buttonBuilder: (BuildContext context, Future<void> Function() showMenu) {
       return CupertinoButton(
-          child: Icon(CupertinoIcons.ellipsis_circle), onPressed: showMenu);
+          onPressed: showMenu,
+          child: const Icon(CupertinoIcons.ellipsis_circle));
     },
   );
 }
 
-class ImageSlider extends StatelessWidget {
+class ImageSlider extends StatefulWidget {
   const ImageSlider(
       {required this.images,
       required this.index,
@@ -220,40 +227,74 @@ class ImageSlider extends StatelessWidget {
   final void Function(int)? onPageChange;
 
   @override
+  State<ImageSlider> createState() => _ImageSliderState();
+}
+
+class _ImageSliderState extends State<ImageSlider> {
+  TapDownDetails? tapDownDetails;
+  late TransformationController transformationController;
+
+  @override
   Widget build(BuildContext context) {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     return PhotoViewGallery.builder(
-      onPageChanged: onPageChange,
-      itemCount: images.length,
+      onPageChanged: widget.onPageChange,
+      itemCount: widget.images.length,
       builder: (context, index) => PhotoViewGalleryPageOptions.customChild(
         child: Hero(
           transitionOnUserGestures: true,
-          tag: images[index].id,
-          child: CachedNetworkImage(
-            maxHeightDiskCache: 1200,
-            imageUrl: images[index].imageUrl,
-            fadeInDuration: const Duration(milliseconds: 150),
-            progressIndicatorBuilder: (context, url, progress) {
-              return Center(
-                child: PlatformCircularProgressIndicator(
-                  material: (context, platform) =>
-                      MaterialProgressIndicatorData(
-                          color: primaryColor,
-                          strokeWidth: 2,
-                          backgroundColor: greyShade100.withOpacity(0.5)),
-                ),
-              );
+          tag: widget.images[index].id,
+          child: GestureDetector(
+            onDoubleTap: () {
+              const double scale = 3;
+              final zoomed = Matrix4.identity()..scale(scale);
+              final value = zoomed;
+              transformationController.value = value;
             },
+            child: InteractiveViewer(
+              transformationController: transformationController,
+              clipBehavior: Clip.none,
+              scaleEnabled: true,
+              child: CachedNetworkImage(
+                maxHeightDiskCache: 1200,
+                imageUrl: widget.images[index].imageUrl,
+                fadeInDuration: const Duration(milliseconds: 150),
+                progressIndicatorBuilder: (context, url, progress) {
+                  return Center(
+                    child: PlatformCircularProgressIndicator(
+                      material: (context, platform) =>
+                          MaterialProgressIndicatorData(
+                              color: primaryColor,
+                              strokeWidth: 2,
+                              backgroundColor: greyShade100.withOpacity(0.5)),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ),
         minScale: PhotoViewComputedScale.contained,
       ),
-      pageController: isIos ? PageController(initialPage: index) : controller,
+      pageController:
+          isIos ? PageController(initialPage: widget.index) : widget.controller,
       loadingBuilder: (context, event) => const Center(
         child: CircularProgressIndicator.adaptive(),
       ),
-      enableRotation: true,
+      enableRotation: false,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    transformationController = TransformationController();
+  }
+
+  @override
+  void dispose() {
+    transformationController.dispose();
+    super.dispose();
   }
 }

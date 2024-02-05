@@ -21,7 +21,7 @@ class StorageService {
       String url = await item.getDownloadURL();
       var bytes = await item.getData();
       final hash = img.decodeImage(bytes!);
-      var blurHash = await BlurHash.encode(hash!, numCompX: 2, numCompY: 2);
+      var blurHash = BlurHash.encode(hash!, numCompX: 2, numCompY: 2);
       itemList.add(url);
       addPhotosToAlbum(childName, url, blurHash.hash);
     }
@@ -47,7 +47,7 @@ class StorageService {
 
     final collection = parentCollection.collection('album');
 
-    final uuid = Uuid().v4().replaceAll("-", "").substring(0, 20);
+    final uuid = const Uuid().v4().replaceAll("-", "").substring(0, 20);
     var album = Album(
             id: uuid,
             title: childName,
@@ -79,7 +79,7 @@ class StorageService {
     var collection = _firestore.collection("albums").doc(childName);
     final data = {"albumName": childName, "createdAt": Timestamp.now()};
     if(collection.collection("albums").where(childName) == childName) {
-      var snackBar = SnackBar(content: Text("שם של אלבום זה כבר קיים, אנא בחר שם חדש"));
+      var snackBar = const SnackBar(content: Text("שם של אלבום זה כבר קיים, אנא בחר שם חדש"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       return await collection.set(data);

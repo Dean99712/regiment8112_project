@@ -98,16 +98,17 @@ class _NewsTabState extends State<NewsTab> {
             // width: double.infinity,
             child: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: theme.brightness == Brightness.dark
-                    ? [
-                        theme.colorScheme.background,
-                        theme.colorScheme.background.withOpacity(0)
-                      ]
-                    : [greyShade100, greyShade100.withOpacity(0)],
-              )),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: theme.brightness == Brightness.dark
+                      ? [
+                          theme.colorScheme.background,
+                          theme.colorScheme.background.withOpacity(0)
+                        ]
+                      : [greyShade100, greyShade100.withOpacity(0)],
+                ),
+              ),
             ),
           ),
         ),

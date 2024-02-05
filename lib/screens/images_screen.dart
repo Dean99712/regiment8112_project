@@ -48,7 +48,7 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
 
       var bytes = await item.readAsBytes();
       final hash = img.decodeImage(bytes);
-      var blurHash = await BlurHash.encode(hash!, numCompX: 1, numCompY: 1);
+      var blurHash = BlurHash.encode(hash!, numCompX: 1, numCompY: 1);
       _storageService.addPhotosToAlbum(childName, imageUrl, blurHash.hash);
     }
   }
@@ -94,9 +94,11 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
           )
         ],
         animationBuilder: null,
-        buttonBuilder: (BuildContext context, Future<void> Function() showMenu) {
+        buttonBuilder:
+            (BuildContext context, Future<void> Function() showMenu) {
           return CupertinoButton(
-              child: Icon(CupertinoIcons.ellipsis_circle), onPressed: showMenu);
+              onPressed: showMenu,
+              child: const Icon(CupertinoIcons.ellipsis_circle),);
         },
       ),
     );
@@ -148,8 +150,8 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                               color: primaryColor,
                             ),
                       onPressed: () {
-                        if(isAdmin) selectedImages(widget.title);
-                        if(!isAdmin) Navigator.pop(context);
+                        if (isAdmin) selectedImages(widget.title);
+                        if (!isAdmin) Navigator.pop(context);
                       },
                     ),
                   )
@@ -172,41 +174,43 @@ class _ImagesScreenState extends ConsumerState<ImagesScreen> {
                   itemBuilder: (BuildContext context) {
                     return [
                       PopupMenuItem(
-                          enabled: _numOfAxisCount != 1 ? true : false,
-                          child: TextButton.icon(
-                              onPressed: () {
-                                if (_numOfAxisCount != 1) {
-                                  setState(() {
-                                    _numOfAxisCount -= 1;
-                                  });
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.zoom_in,
-                                color: secondaryColor,
-                              ),
-                              label: Text(
-                                  style: TextStyle(
-                                      color: colorScheme.onBackground),
-                                  "הגדל"))),
+                        enabled: _numOfAxisCount != 1 ? true : false,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            if (_numOfAxisCount != 1) {
+                              setState(() {
+                                _numOfAxisCount -= 1;
+                              });
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.zoom_in,
+                            color: secondaryColor,
+                          ),
+                          label: Text(
+                              style: TextStyle(color: colorScheme.background),
+                              "הגדל"),
+                        ),
+                      ),
                       PopupMenuItem(
-                          enabled: _numOfAxisCount != 6 ? true : false,
-                          child: TextButton.icon(
-                              onPressed: () {
-                                if (_numOfAxisCount != 6) {
-                                  setState(() {
-                                    _numOfAxisCount += 1;
-                                  });
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.zoom_out,
-                                color: secondaryColor,
-                              ),
-                              label: Text(
-                                  style: TextStyle(
-                                      color: colorScheme.onBackground),
-                                  "הקטן")))
+                        enabled: _numOfAxisCount != 6 ? true : false,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            if (_numOfAxisCount != 6) {
+                              setState(() {
+                                _numOfAxisCount += 1;
+                              });
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.zoom_out,
+                            color: secondaryColor,
+                          ),
+                          label: Text(
+                              style: TextStyle(color: colorScheme.background),
+                              "הקטן"),
+                        ),
+                      )
                     ];
                   },
                   icon: const Icon(Icons.more_horiz),

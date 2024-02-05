@@ -7,7 +7,7 @@ import '../utils/colors.dart';
 import '../widgets/bubble.dart';
 
 class UpdatesTab extends StatefulWidget {
-  const UpdatesTab({Key? key}) : super(key: key);
+  const UpdatesTab({super.key});
 
   @override
   State<UpdatesTab> createState() => _UpdatesTabState();

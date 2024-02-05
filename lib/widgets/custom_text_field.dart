@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
         this.prefix,
         this.textInputAction,
         this.autoFocus,
+        this.color,
         this.validator,
         super.key});
 
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final double width;
   final bool readOnly;
+  final Color? color;
   final Widget? prefix;
   final bool? autoFocus;
   final TextAlign? textAlign;
@@ -71,7 +73,7 @@ class CustomTextField extends StatelessWidget {
               decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0),),
                     borderSide: BorderSide(color: colorScheme.error, width: 1.0),
                   ),
                   focusedBorder: const OutlineInputBorder(
@@ -83,6 +85,7 @@ class CustomTextField extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   labelText: text,
+                  labelStyle: TextStyle(color: color),
                   filled: true,
                   fillColor: isDark ? white.withOpacity(0.3) : greyShade10),
             )),

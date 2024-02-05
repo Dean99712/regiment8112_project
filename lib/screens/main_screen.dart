@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
@@ -86,49 +86,47 @@ class _MainScreenState extends ConsumerState<MainScreen>
             ),
           ),
           Expanded(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 45.0, horizontal: 30.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomText(
-                      text: text,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Form(
-                              key: formState,
-                              child: CustomTextField(
-                                  validator: (value) {
-                                    return ref
-                                        .read(validatorProvider.notifier)
-                                        .validator(
-                                            value!,
-                                            "תיבה אינה יכולה להיות ריקה!",
-                                            "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
-                                            nameValidator);
-                                  },
-                                  maxLength: null,
-                                  controller: _controller,
-                                  text: example,
-                                  autoFocus: true),
-                            ),
-                            CustomButton(
-                                width: 165, text: "הוסף", function: function)
-                          ],
-                        ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 45.0, horizontal: 30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomText(
+                    text: text,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Form(
+                            key: formState,
+                            child: CustomTextField(
+                                validator: (value) {
+                                  return ref
+                                      .read(validatorProvider.notifier)
+                                      .validator(
+                                          value!,
+                                          "תיבה אינה יכולה להיות ריקה!",
+                                          "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
+                                          nameValidator);
+                                },
+                                maxLength: null,
+                                controller: _controller,
+                                text: example,
+                                autoFocus: true),
+                          ),
+                          CustomButton(
+                              width: 165, text: "הוסף", function: function)
+                        ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
           )
@@ -138,7 +136,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     isIos
         ? CupertinoScaffold.showCupertinoModalBottomSheet(
             expand: true,
-            duration: Duration(milliseconds: 350),
+            duration: const Duration(milliseconds: 350),
             context: context,
             builder: (context) => body)
         : showMaterialModalBottomSheet(
@@ -155,7 +153,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
   Widget build(context) {
 
     bool isAdmin = ref.watch(userProvider);
-    final _formState = GlobalKey<FormState>();
+    final formState = GlobalKey<FormState>();
     final tab = _tabController.index == 0
         ? 'news'
         : _tabController.index == 1
@@ -170,10 +168,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
                   curve: Curves.easeInOut,
                   width: 180,
                   icon: tab == 'news'
-                      ? Icon(Icons.newspaper_sharp, color: white, size: 30)
+                      ? const Icon(Icons.newspaper_sharp, color: white, size: 30)
                       : tab == 'updates'
-                          ? Icon(Icons.add_alert, color: white, size: 30)
-                          : Icon(Icons.add_photo_alternate,
+                          ? const Icon(Icons.add_alert, color: white, size: 30)
+                          : const Icon(Icons.add_photo_alternate,
                               color: white, size: 30),
                   text: CustomText(
                     fontSize: 16,
@@ -190,35 +188,37 @@ class _MainScreenState extends ConsumerState<MainScreen>
                         {
                           openDialog(context, "הוסף ידיעה חדשה",
                               'לדוגמא:"מצאנו את הטלפון של יחיאל"', () async {
-                            if (_formState.currentState!.validate()) {
+                            if (formState.currentState!.validate()) {
                               Navigator.of(context).pop();
                               await _newsService.addNews(_controller.text);
                             }
                             _controller.clear();
-                          }, _formState);
+                          }, formState);
                         }
+                        break;
                       case 1:
                         {
                           openDialog(context, "הוסף עדכון חדש",
                               'לדוגמא:"יש אימון בחודש הבא"', () async {
-                            if (_formState.currentState!.validate()) {
+                            if (formState.currentState!.validate()) {
                               Navigator.of(context).pop();
                               await _newsService.addUpdate(_controller.text);
                             }
                             _controller.clear();
-                          }, _formState);
+                          }, formState);
                         }
+                        break;
                       case 2:
                         {
                           openDialog(
                               context, "צור אלבום חדש", 'לדוגמא:"קו אביטל 23"',
                               () async {
-                            if (_formState.currentState!.validate()) {
+                            if (formState.currentState!.validate()) {
                               Navigator.of(context).pop();
                               await _storage.createAlbum(context, _controller.text);
                             }
                             _controller.clear();
-                          }, _formState);
+                          }, formState);
                         }
                     }
                   },
@@ -235,8 +235,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              opacity: isDark ? 0.12 : 1,
-              image: AssetImage("assets/images/Group 126.png"),
+              opacity: isDark ? 0.12 : 0.30,
+              image: const AssetImage("assets/images/Group 126.png"),
               fit: BoxFit.cover),
           color: colorScheme.background,
         ),

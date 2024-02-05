@@ -37,7 +37,7 @@ class AuthService {
                   ? CupertinoPageRoute(
                       fullscreenDialog: false,
                       builder: (context) =>
-                          CupertinoScaffold(body: const MainScreen()))
+                          const CupertinoScaffold(body: MainScreen()))
                   : MaterialWithModalsPageRoute(
                       builder: (context) => const MainScreen(),
                     ),
@@ -47,7 +47,7 @@ class AuthService {
                 context,
                 MaterialWithModalsPageRoute(
                     builder: (context) =>
-                        CupertinoScaffold(body: const AddContact())),
+                        const CupertinoScaffold(body: AddContact())),
                 (route) => false);
           }
         });

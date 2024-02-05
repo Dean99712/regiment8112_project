@@ -12,7 +12,7 @@ class Bubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -23,7 +23,7 @@ class Bubble extends StatelessWidget {
             text: date,
             fontWeight: FontWeight.w500,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Directionality(
@@ -32,12 +32,14 @@ class Bubble extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                   color: isDark ? greyShade400 : greyShade100,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: CustomText(
                   fontSize: 16,
                   color: colorScheme.onBackground,
                   text: text,
-                  textAlign: TextAlign.start),
+                  textAlign: TextAlign.start,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           )
         ],

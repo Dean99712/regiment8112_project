@@ -14,15 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "898801329724-1o36strdqh4f7qd43ddjppb8690s8o7f.apps.googleusercontent.com",
+          "client_id": "898801329724-kf1ipelbvcq9l26i4286csocpoj8hopr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mesayahat.regiment8112",
-            "certificate_hash": "6df9738476b72df32872922ce678b6822a761f04"
+            "certificate_hash": "06e353fc567de971ed6ce3f7ef25af78b1e2f033"
           }
         },
         {
-          "client_id": "898801329724-tmhigvk6jvceig5ka88nl58hp5cdgm87.apps.googleusercontent.com",
+          "client_id": "898801329724-45dv31j9duik31sp8ha1d5dppr95n6m7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,11 +35,11 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "898801329724-tmhigvk6jvceig5ka88nl58hp5cdgm87.apps.googleusercontent.com",
+              "client_id": "898801329724-45dv31j9duik31sp8ha1d5dppr95n6m7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "898801329724-odjimp4uk62e4lg9oirev6v4t10op4tg.apps.googleusercontent.com",
+              "client_id": "898801329724-d97fe82f14v52jgpq157g3k1j5ml2brd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.mesayahat.regiment8112"

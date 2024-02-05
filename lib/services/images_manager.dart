@@ -1,10 +1,8 @@
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../models/album.dart';
 
 class ImagesService {
-
   Future<List<XFile>> selectImages(
       ImagePicker imagePicker, String childName) async {
     List<XFile> imageFilesList = [];
@@ -16,8 +14,16 @@ class ImagesService {
   }
 
   Future<List<XFile>> shareImages(Album photo) async {
-    var file = await DefaultCacheManager().getSingleFile(photo.imageUrl);
-    XFile result = await XFile(file.path);
+    final storage = FirebaseStorage.instance.ref();
+    print(photo.imageUrl);
+    storage.child(photo.imageUrl);
+
+    //TODO
+    // final storage = FirebaseStorage.instance.ref();
+    // final Uint8List? imageData = await storage.getData(1024 * 1024);
+    // print(imageData!);
+    var file = XFile(photo.imageUrl);
+    XFile result = XFile(file.path);
     return [result];
   }
 }

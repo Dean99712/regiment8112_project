@@ -32,7 +32,7 @@ class CustomButton extends StatelessWidget {
                 color: color,
                 onPressed: function,
                 child: state == ButtonState.loading
-                    ? SizedBox(
+                    ? const SizedBox(
                   height: 15,
                   width: 15,
                   child: CupertinoActivityIndicator(color: white, animating: true, radius: 10.0),
@@ -56,7 +56,7 @@ class CustomButton extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: state == ButtonState.loading
-                      ? SizedBox(
+                      ? const SizedBox(
                           height: 15,
                           width: 15,
                           child: CircularProgressIndicator(color: white, strokeWidth: 2),
