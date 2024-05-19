@@ -72,9 +72,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
           fontWeight: FontWeight.w400,
           fontSize: 14,
           textAlign: TextAlign.right,
-          color: colorScheme.background,
+          color: colorScheme.surface,
         ),
-        backgroundColor: colorScheme.onBackground,
+        backgroundColor: colorScheme.onSurface,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (!verificationId.contains(smsCode)) {
@@ -84,9 +84,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
           fontWeight: FontWeight.w400,
           fontSize: 14,
           textAlign: TextAlign.right,
-          color: colorScheme.background,
+          color: colorScheme.surface,
         ),
-        backgroundColor: colorScheme.onBackground,
+        backgroundColor: colorScheme.onSurface,
         action: SnackBarAction(label: "דחה", onPressed: () {}),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -100,7 +100,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
       String value, String emptyText, String text) {
-    const snackBar = SnackBar(content: Text("סתם בדיקה"));
+    const snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
     return ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -198,8 +198,12 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                     ),
                                     textStyle: TextStyle(
                                         fontSize: 18, color: Colors.black)),
-                                onChanged: (value) {
+                                onChanged: (value) async {
                                   smsCode = value;
+                                  if(smsCode.length == 6) {
+                                    setState(() => state = ButtonState.loading);
+                                    await verifyOtp(context, smsCode);
+                                  }
                                 },
                                 onSubmitted: (value) {
                                   setState(() {
@@ -239,7 +243,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                     text: "לא הקוד שקיבלת?",
                                     color: isDark
                                         ? greyShade200
-                                        : colorScheme.onBackground,
+                                        : colorScheme.onSurface,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -251,7 +255,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                       text: "שלחו לי SMS נוסף",
                                       color: isDark
                                           ? greyShade200
-                                          : colorScheme.onBackground,
+                                          : colorScheme.onSurface,
                                       fontSize: 12,
                                     ),
                                     onTap: () {
@@ -266,14 +270,14 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                 style: GoogleFonts.heebo(
                                     color: isDark
                                         ? greyShade200
-                                        : colorScheme.onBackground,
+                                        : colorScheme.onSurface,
                                     fontSize: 12),
                               ),
                               Icon(
                                 FontAwesomeIcons.whatsapp,
                                 color: isDark
                                     ? greyShade200
-                                    : colorScheme.onBackground,
+                                    : colorScheme.onSurface,
                               )
                             ]),
                       ),

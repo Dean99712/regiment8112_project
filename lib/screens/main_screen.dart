@@ -1,4 +1,4 @@
- import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
@@ -66,7 +66,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
   void openDialog(BuildContext context, String text, String example,
       void Function() function, GlobalKey<FormState> formState) {
     final isIos = Theme.of(context).platform == TargetPlatform.iOS;
-
+    final colorScheme = Theme.of(context).colorScheme;
     final body = Material(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,18 +77,22 @@ class _MainScreenState extends ConsumerState<MainScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _controller.clear();
-                    },
-                    icon: Icon(isIos ? CupertinoIcons.xmark : Icons.close))
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _controller.clear();
+                  },
+                  icon: Icon(
+                    isIos ? CupertinoIcons.clear_circled : Icons.close,
+                    color: colorScheme.onSurface,
+                  ),
+                )
               ],
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 45.0, horizontal: 30.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 45.0, horizontal: 30.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -99,31 +103,29 @@ class _MainScreenState extends ConsumerState<MainScreen>
                     fontWeight: FontWeight.w600,
                   ),
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Form(
-                            key: formState,
-                            child: CustomTextField(
-                                validator: (value) {
-                                  return ref
-                                      .read(validatorProvider.notifier)
-                                      .validator(
-                                          value!,
-                                          "תיבה אינה יכולה להיות ריקה!",
-                                          "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
-                                          nameValidator);
-                                },
-                                maxLength: null,
-                                controller: _controller,
-                                text: example,
-                                autoFocus: true),
-                          ),
-                          CustomButton(
-                              width: 165, text: "הוסף", function: function)
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Form(
+                          key: formState,
+                          child: CustomTextField(
+                              validator: (value) {
+                                return ref
+                                    .read(validatorProvider.notifier)
+                                    .validator(
+                                        value!,
+                                        "תיבה אינה יכולה להיות ריקה!",
+                                        "טקסט אינו יכול להכיל ספרות באנגלית או מספרים",
+                                        nameValidator);
+                              },
+                              maxLength: null,
+                              controller: _controller,
+                              text: example,
+                              autoFocus: true),
+                        ),
+                        CustomButton(
+                            width: 165, text: "הוסף", function: function)
+                      ],
                     ),
                   )
                 ],
@@ -151,7 +153,6 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   Widget build(context) {
-
     bool isAdmin = ref.watch(userProvider);
     final formState = GlobalKey<FormState>();
     final tab = _tabController.index == 0
@@ -168,7 +169,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
                   curve: Curves.easeInOut,
                   width: 180,
                   icon: tab == 'news'
-                      ? const Icon(Icons.newspaper_sharp, color: white, size: 30)
+                      ? const Icon(Icons.newspaper_sharp,
+                          color: white, size: 30)
                       : tab == 'updates'
                           ? const Icon(Icons.add_alert, color: white, size: 30)
                           : const Icon(Icons.add_photo_alternate,
@@ -215,7 +217,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
                               () async {
                             if (formState.currentState!.validate()) {
                               Navigator.of(context).pop();
-                              await _storage.createAlbum(context, _controller.text);
+                              await _storage.createAlbum(
+                                  context, _controller.text);
                             }
                             _controller.clear();
                           }, formState);
@@ -238,7 +241,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
               opacity: isDark ? 0.12 : 0.30,
               image: const AssetImage("assets/images/Group 126.png"),
               fit: BoxFit.cover),
-          color: colorScheme.background,
+          color: colorScheme.surface,
         ),
         child: Center(
           child: Column(

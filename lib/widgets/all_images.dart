@@ -4,7 +4,6 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:regiment8112/services/images_manager.dart';
 import 'package:share_plus/share_plus.dart';
@@ -57,12 +56,14 @@ class _AllImagesState extends ConsumerState<AllImages>
       flightShuttleBuilder: (flightContext, animation, flightDirection,
           fromHeroContext, toHeroContext) {
         return CachedNetworkImage(
+          useOldImageOnUrlChange: true,
           maxHeightDiskCache: 350,
           fit: BoxFit.fitWidth,
           imageUrl: image.imageUrl,
         );
       },
       child: CachedNetworkImage(
+        useOldImageOnUrlChange: true,
         maxHeightDiskCache: widget.itemCount == 1
             ? 1200
             : widget.itemCount == 3
@@ -90,152 +91,155 @@ class _AllImagesState extends ConsumerState<AllImages>
     final colorScheme = Theme.of(context).colorScheme;
     final ImagesService imagesService = ImagesService();
 
-    return Material(
-      child: FirestoreQueryBuilder(
-        query: _photosQuery,
-        pageSize: 27,
-        builder: (context, snapshot, child) {
-          if (snapshot.hasData) {
-            var photos =
-                snapshot.docs.map((e) => Album.fromQuerySnapshot(e)).toList();
-            return photos.isEmpty
-                ? Center(
-                    child: CustomText(
-                        text: "אלבום ריק",
-                        textAlign: TextAlign.center,
-                        color: colorScheme.onBackground,
-                        fontSize: 16),
-                  )
-                : GridView.builder(
-                    controller: isIOS ? null : widget.scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisSpacing: 2,
-                        mainAxisSpacing: 2,
-                        crossAxisCount: widget.itemCount!),
-                    itemCount: photos.length,
-                    itemBuilder: (context, index) {
-                      if (snapshot.hasMore &&
-                          index + 1 != snapshot.docs.length) {
-                        snapshot.fetchMore();
-                      }
-                      var color = Theme.of(context).colorScheme;
-                      return isIOS
-                          ? CupertinoContextMenu(
-                              actions: [
-                                  CupertinoContextMenuAction(
-                                      isDefaultAction: true,
-                                      trailingIcon: const IconData(0xf4ca,
-                                          fontFamily: CupertinoIcons.iconFont,
-                                          fontPackage:
-                                              CupertinoIcons.iconFontPackage),
-                                      child: Text(
-                                        "שתף",
-                                        style: TextStyle(
-                                            color: color.onBackground),
-                                      ),
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        List<XFile> photo = await imagesService
-                                            .shareImages(photos[index]);
-                                        await Share.shareXFiles(photo,
-                                            text: photo[0].name,
-                                            subject: "שתף תמונה");
-                                      }),
-                                  CupertinoContextMenuAction(
-                                    isDestructiveAction: true,
-                                    trailingIcon: const IconData(0xf4c4,
-                                        fontPackage:
-                                            CupertinoIcons.iconFontPackage,
-                                        fontFamily: CupertinoIcons.iconFont),
-                                    child: const Text(
-                                      "מחיקת התמונה",
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      showCupertinoModalPopup(
-                                        context: context,
-                                        builder: (context) =>
-                                            CupertinoActionSheet(
-                                          message: const Text(
-                                            "פעולה זו תמחוק את התמונה לצמיתות",
+    return Column(
+      children: [
+        Expanded(
+          child: FirestoreQueryBuilder(
+            query: _photosQuery,
+            pageSize: 27,
+            builder: (context, snapshot, child) {
+              if (snapshot.hasData) {
+                var photos =
+                    snapshot.docs.map((e) => Album.fromQuerySnapshot(e)).toList();
+                return photos.isEmpty
+                    ? Center(
+                        child: CustomText(
+                            text: "אלבום ריק",
+                            textAlign: TextAlign.center,
+                            color: colorScheme.onSurface,
+                            fontSize: 16),
+                      )
+                    : GridView.builder(
+                        controller: isIOS ? null : widget.scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2,
+                            crossAxisCount: widget.itemCount!),
+                        itemCount: photos.length,
+                        itemBuilder: (context, index) {
+                          if (snapshot.hasMore &&
+                              index + 1 != snapshot.docs.length) {
+                            snapshot.fetchMore();
+                          }
+                          var color = Theme.of(context).colorScheme;
+                          return isIOS
+                              ? CupertinoContextMenu(
+                                  actions: [
+                                      CupertinoContextMenuAction(
+                                          isDefaultAction: true,
+                                          trailingIcon: const IconData(0xf4ca,
+                                              fontFamily: CupertinoIcons.iconFont,
+                                              fontPackage:
+                                                  CupertinoIcons.iconFontPackage),
+                                          child: Text(
+                                            "שתף",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.w400),
+                                                color: color.onSurface),
                                           ),
-                                          cancelButton:
-                                              CupertinoActionSheetAction(
-                                                  child: const Text(
-                                                    "ביטול",
-                                                    style: TextStyle(
-                                                        // fontWeight: FontWeight.w500,
-                                                        color: CupertinoColors
-                                                            .activeBlue),
-                                                  ),
-                                                  onPressed: () {
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                            List<XFile> photo = await imagesService
+                                                .shareImages(photos[index]);
+                                            await Share.shareXFiles(photo, subject: 'שתף תמונה', text: 'תמונה מאלבום ${widget.title}');
+                                          }),
+                                      CupertinoContextMenuAction(
+                                        isDestructiveAction: true,
+                                        trailingIcon: const IconData(0xf4c4,
+                                            fontPackage:
+                                                CupertinoIcons.iconFontPackage,
+                                            fontFamily: CupertinoIcons.iconFont),
+                                        child: const Text(
+                                          "מחיקת התמונה",
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          showCupertinoModalPopup(
+                                            context: context,
+                                            builder: (context) =>
+                                                CupertinoActionSheet(
+                                              message: const Text(
+                                                "פעולה זו תמחוק את התמונה לצמיתות",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w400),
+                                              ),
+                                              cancelButton:
+                                                  CupertinoActionSheetAction(
+                                                      child: const Text(
+                                                        "ביטול",
+                                                        style: TextStyle(
+                                                            // fontWeight: FontWeight.w500,
+                                                            color: CupertinoColors
+                                                                .activeBlue),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      }),
+                                              actions: [
+                                                CupertinoActionSheetAction(
+                                                  isDestructiveAction: true,
+                                                  child: const Text("מחיקת התמונה"),
+                                                  onPressed: () async {
+                                                    await _storageService
+                                                        .deleteDocument(
+                                                            widget.title,
+                                                            photos[index].id);
                                                     Navigator.pop(context);
-                                                  }),
-                                          actions: [
-                                            CupertinoActionSheetAction(
-                                              isDestructiveAction: true,
-                                              child: const Text("מחיקת התמונה"),
-                                              onPressed: () async {
-                                                await _storageService
-                                                    .deleteDocument(
-                                                        widget.title,
-                                                        photos[index].id);
-                                                Navigator.pop(context);
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              child: Material(
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => CupertinoScaffold(
-                                          body: ImageGallery(
-                                              images: photos,
-                                              index: index,
-                                              title: widget.title),
-                                        ),
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    );
-                                  },
-                                  child: buildImage(photos[index]),
-                                ),
-                              ))
-                          : Material(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ImageGallery(
+                                    ],
+                                  child: Material(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
                                             title: widget.title,
-                                            images: photos,
-                                            index: index),
-                                      ));
-                                },
-                                child: buildImage(photos[index]),
-                              ),
-                            );
-                    },
-                  );
-          }
-          if (snapshot.isFetching) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return Container();
-        },
-      ),
+                                            builder: (context) => CupertinoScaffold(
+                                              body: ImageGallery(
+                                                  images: photos,
+                                                  index: index,
+                                                  title: widget.title),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: buildImage(photos[index]),
+                                    ),
+                                  ))
+                              : Material(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ImageGallery(
+                                                title: widget.title,
+                                                images: photos,
+                                                index: index),
+                                          ));
+                                    },
+                                    child: buildImage(photos[index]),
+                                  ),
+                                );
+                        },
+                      );
+              }
+              if (snapshot.isFetching) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Container();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

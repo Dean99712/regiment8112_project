@@ -11,8 +11,6 @@ class MyThemeData {
       onSecondary: white,
       error: Colors.red.shade400,
       onError: white,
-      background: background,
-      onBackground: white,
       surface: greyShade700,
       onSurface: white,
     ),
@@ -28,10 +26,8 @@ class MyThemeData {
       onSecondary: white,
       error: Colors.red.shade400,
       onError: white,
-      background: white,
-      onBackground: greyShade700,
-      surface: greyShade700,
-      onSurface: white,
+      surface: white,
+      onSurface: greyShade700,
     ),
   );
 }

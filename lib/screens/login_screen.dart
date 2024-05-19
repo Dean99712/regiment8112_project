@@ -41,7 +41,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       phoneNumber: '+972$phone',
       timeout: const Duration(seconds: 60),
       verificationCompleted: (credential) async {
-        await _auth.signInWithCredential(credential);
+        await _auth.signInAnonymously();
       },
       verificationFailed: (e) {
         setState(() => state = ButtonState.init);
@@ -105,11 +105,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Image.asset("assets/svg/logo.png", height: 210, width: 210),
                 Text(
                   'חרמ"ש מסייעת',
-                  style: GoogleFonts.rubikDirt(fontSize: 32, color: primaryColor),
+                  style:
+                      GoogleFonts.rubikDirt(fontSize: 32, color: primaryColor),
                 ),
                 Text(
                   "8112",
-                  style: GoogleFonts.rubikDirt(fontSize: 90, color: primaryColor),
+                  style:
+                      GoogleFonts.rubikDirt(fontSize: 90, color: primaryColor),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 25.0),
@@ -121,7 +123,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         child: CustomTextField(
                             type: TextInputType.phone,
                             controller: null,
-                            color: colorScheme.onBackground,
+                            color: colorScheme.onSurface,
                             text: "מספר טלפון",
                             validator: (value) {
                               return validateProvider.validator(
@@ -130,7 +132,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   "מספר טלפון אינו תקין",
                                   phoneValidator);
                             },
-                            onChanged: (value) {
+                            onChanged: (value) async {
                               phone = value;
                             }),
                       ),
@@ -162,7 +164,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           style: GoogleFonts.heebo(
                               color: isDark
                                   ? greyShade200
-                                  : colorScheme.onBackground,
+                                  : colorScheme.onSurface,
                               fontSize: 12),
                         ),
                         Text(
@@ -170,12 +172,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           style: GoogleFonts.heebo(
                               color: isDark
                                   ? greyShade200
-                                  : colorScheme.onBackground,
+                                  : colorScheme.onSurface,
                               fontSize: 12),
                         ),
                         Icon(
                           FontAwesomeIcons.whatsapp,
-                          color: isDark ? greyShade200 : colorScheme.onBackground,
+                          color:
+                              isDark ? greyShade200 : colorScheme.onSurface,
                         ),
                       ],
                     ),

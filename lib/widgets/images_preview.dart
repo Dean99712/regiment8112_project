@@ -41,26 +41,30 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
         .collectionGroup("album")
         .where("title", isEqualTo: childName)
         .orderBy("createdAt", descending: true);
-      setState(() {
-        _imagesList = collection;
-      });
+    setState(() {
+      _imagesList = collection;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     final isIos = Theme.of(context).platform == TargetPlatform.iOS;
     final colorScheme = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return FirestoreQueryBuilder(
         query: _imagesList,
         builder: (context, snapshot, child) {
           var date = DateTime.fromMillisecondsSinceEpoch(
               widget.date.millisecondsSinceEpoch);
+
           var formattedDate = intl.DateFormat('yMMM').format(date);
+
           if (snapshot.hasData) {
-            List<Album> imagesList = snapshot.docs.map((e) => Album.fromQuerySnapshot(e)).toList();
+            List<Album> imagesList =
+                snapshot.docs.map((e) => Album.fromQuerySnapshot(e)).toList();
+
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0)
                   .add(const EdgeInsets.only(bottom: 30.0)),
@@ -79,21 +83,25 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                             CustomText(
                               text: widget.text,
                               fontSize: 16,
-                              color: colorScheme.onBackground,
+                              color: colorScheme.onSurface,
                               fontWeight: FontWeight.w500,
                             ),
                             CustomText(
                               text: formattedDate,
                               fontSize: 16,
-                              color: colorScheme.onBackground,
+                              color: colorScheme.onSurface,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 15.0),
                               child: Container(
                                 color: snapshot.docs.isEmpty
-                                    ? isDark ? Colors.black.withOpacity(0.2) : greyShade400
+                                    ? isDark
+                                        ? Colors.black.withOpacity(0.2)
+                                        : greyShade400
                                     : null,
-                                height: snapshot.docs.length == 2 ? size.height * 0.2 : size.height / 3.75,
+                                height: snapshot.docs.length == 2
+                                    ? size.height * 0.2
+                                    : size.height / 3.75,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: snapshot.docs.isEmpty
@@ -151,7 +159,6 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                                   1, 1),
                                                               QuiltedGridTile(
                                                                   1, 1),
-                                                              // QuiltedGridTile(1, 1),
                                                             ]
                                                           : const [
                                                               QuiltedGridTile(
@@ -161,32 +168,38 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                                               QuiltedGridTile(
                                                                   1, 1),
                                                             ]),
-                                          itemBuilder: (BuildContext context, int index) {
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
                                             return InkWell(
                                               onTap: () {
                                                 Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ImageSliderPreview(
-                                                              images:
-                                                                  imagesList,
-                                                              index: index,
-                                                            )));
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ImageSliderPreview(
+                                                      images: imagesList,
+                                                      index: index,
+                                                    ),
+                                                  ),
+                                                );
                                               },
                                               child: CachedNetworkImage(
-                                                imageUrl: imagesList[index].imageUrl,
+                                                imageUrl:
+                                                    imagesList[index].imageUrl,
                                                 maxHeightDiskCache:
                                                     imagesList.length == 1
                                                         ? 1200
                                                         : 500,
                                                 fadeInDuration: const Duration(
                                                     milliseconds: 150),
-                                                fit: BoxFit.fill,
-                                                progressIndicatorBuilder: (context, url, progress) {
+                                                fit: BoxFit.cover,
+                                                progressIndicatorBuilder:
+                                                    (context, url, progress) {
                                                   return BlurHash(
-                                                    hash: imagesList[index].hash,
-                                                    image: imagesList[index].imageUrl,
+                                                    hash:
+                                                        imagesList[index].hash,
+                                                    image: imagesList[index]
+                                                        .imageUrl,
                                                   );
                                                 },
                                               ),
@@ -207,10 +220,16 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                       onTap: () {
                         Navigator.push(
                             context,
-                            isIos ? CupertinoPageRoute(builder: (context) => CupertinoScaffold(body: ImagesScreen(title: widget.text))) : MaterialPageRoute(
-                              builder: (context) =>
-                                  ImagesScreen(title: widget.text),
-                            ));
+                            isIos
+                                ? CupertinoPageRoute(
+                                    builder: (context) => CupertinoScaffold(
+                                      body: ImagesScreen(title: widget.text),
+                                    ),
+                                  )
+                                : MaterialPageRoute(
+                                    builder: (context) =>
+                                        ImagesScreen(title: widget.text),
+                                  ));
                       },
                       child: const Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

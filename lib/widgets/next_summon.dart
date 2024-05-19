@@ -41,12 +41,12 @@ class NextSummon extends StatelessWidget {
                 children: [
                   Text(
                     "הזימון הבא",
-                    style: GoogleFonts.heebo(color: colorScheme.onBackground, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.heebo(color: colorScheme.onSurface, fontWeight: FontWeight.w500),
                   ),
                   Text(
                     "18.09 - 25.09",
                     style: GoogleFonts.rubikDirt(
-                        color: colorScheme.onBackground, fontSize: 24),
+                        color: colorScheme.onSurface, fontSize: 24),
                   ),
                 ],
               ),

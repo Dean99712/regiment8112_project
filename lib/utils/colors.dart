@@ -13,4 +13,5 @@ const greyShade400 = Color.fromRGBO(122, 121, 121, 1);
 const greyShade200 = Color.fromRGBO(190, 190, 190, 1);
 const greyShade100 = Color.fromRGBO(222, 222, 222, 1);
 const greyShade10 = Color.fromRGBO(235, 235, 235, 1);
+const greyShade5 = Color.fromRGBO(246, 246, 246, 0.5);
 const white = Colors.white;

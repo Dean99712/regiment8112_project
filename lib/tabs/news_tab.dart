@@ -15,32 +15,11 @@ class NewsTab extends StatefulWidget {
 
 class _NewsTabState extends State<NewsTab> {
   final NewsService _service = NewsService();
-  List<News> newsList = [];
 
   bool isLoading = false;
 
-  @override
-  void initState() {
-    getNewsFromDatabase();
-    super.initState();
-  }
-
   Future onRefresh() async {
-    await _service.getAllNews();
-  }
-
-  Future getNewsFromDatabase() async {
-    setState(() {
-      isLoading = true;
-    });
-    var collection = await _service.getAllNews();
-    var documents =
-        collection.docs.map((doc) => News.fromSnapshot(doc)).toList();
-
-    setState(() {
-      isLoading = false;
-      newsList = documents;
-    });
+    return await _service.getAllNews();
   }
 
   @override
@@ -55,29 +34,43 @@ class _NewsTabState extends State<NewsTab> {
               child: !isLoading
                   ? RefreshIndicator(
                       onRefresh: onRefresh,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        primary: false,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: newsList.length,
-                        itemBuilder: (context, index) {
-                          var timestamp =
-                              newsList[index].createdAt.millisecondsSinceEpoch;
-                          final date =
-                              DateTime.fromMillisecondsSinceEpoch(timestamp);
-                          final newDate =
-                              intl.DateFormat('yMd', 'en-US').format(date);
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
-                            child: Bubble(
-                              date: newDate,
-                              text: newsList[index].news,
-                            ),
+                      child: StreamBuilder<List<News>>(
+                        stream: _service.streamNews(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<News>> snapshot) {
+                          List<News> newsList = snapshot.data ?? [];
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: newsList.length,
+                            itemBuilder: (context, index) {
+                              var timestamp = newsList[index]
+                                  .createdAt
+                                  .millisecondsSinceEpoch;
+                              final date = DateTime.fromMillisecondsSinceEpoch(
+                                  timestamp);
+                              final localDate =
+                              intl.DateFormat('yMd', 'es-ES').format(date);
+                              final news = newsList[index];
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 8),
+                                child: Bubble(
+                                  date: localDate,
+                                  text: news.news,
+                                  deleteFunction: () async {
+                                    await _service.removeNews(news.id);
+                                  },
+                                  editFunction: () async {
+                                    await _service.editeNews(news.id, 'new text');
+                                  },
+                                ),
+                              );
+                            },
                           );
                         },
-                      ),
-                    )
+                      ))
                   : Center(
                       child: PlatformCircularProgressIndicator(
                         cupertino: (_, __) => CupertinoProgressIndicatorData(
@@ -94,7 +87,7 @@ class _NewsTabState extends State<NewsTab> {
           top: 0,
           right: 0,
           child: SizedBox(
-            height: 50,
+            height: 35,
             // width: double.infinity,
             child: Container(
               decoration: BoxDecoration(
@@ -103,10 +96,10 @@ class _NewsTabState extends State<NewsTab> {
                   end: Alignment.bottomCenter,
                   colors: theme.brightness == Brightness.dark
                       ? [
-                          theme.colorScheme.background,
-                          theme.colorScheme.background.withOpacity(0)
+                          theme.colorScheme.surface,
+                          theme.colorScheme.surface.withOpacity(0)
                         ]
-                      : [greyShade100, greyShade100.withOpacity(0)],
+                      : [greyShade5, greyShade5.withOpacity(0)],
                 ),
               ),
             ),

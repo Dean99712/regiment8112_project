@@ -107,7 +107,7 @@ class _AddContactState extends ConsumerState<AddContact> {
                   opacity: 0.12,
                   image: AssetImage("assets/images/Group 126.png"),
                   fit: BoxFit.cover),
-              color: colorScheme.background),
+              color: colorScheme.surface),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 30.0, vertical: 50.0),
@@ -149,14 +149,14 @@ class _AddContactState extends ConsumerState<AddContact> {
                         child: Directionality(
                           textDirection: TextDirection.rtl,
                           child: ElevatedButton.icon(
-                            icon: Icon(Icons.adaptive.arrow_back, color: colorScheme.background,),
+                            icon: Icon(Icons.adaptive.arrow_back, color: colorScheme.surface,),
                             label: CustomText(
                               fontSize: 16,
                               text: "המשך לאפליקציה",
-                              color: colorScheme.background,
+                              color: colorScheme.surface,
                             ),
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
+                                backgroundColor: WidgetStateProperty.all(
                                     isDark ? primaryColor : secondaryColor)),
                             onPressed: () {
                               if (Theme.of(context).platform ==

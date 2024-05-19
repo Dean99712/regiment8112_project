@@ -66,7 +66,7 @@ class _ContactsState extends ConsumerState<Contacts> {
         builder: (context) => AlertDialog(
           title: CustomText(
               fontSize: 16,
-              color: colorScheme.onBackground,
+              color: colorScheme.onSurface,
               text: "מצטערים, המכשיר שברשותך אינו נתמך"),
         ),
       );
@@ -111,7 +111,7 @@ class _ContactsState extends ConsumerState<Contacts> {
               ? Center(
                   child: CustomText(
                     text: "הרשימה ריקה",
-                    color: colorScheme.onBackground,
+                    color: colorScheme.onSurface,
                   ),
                 )
               : isGrouped
@@ -149,7 +149,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                             fontSize: 16,
                                             color: isDark
                                                 ? greyShade100
-                                                : colorScheme.onBackground,
+                                                : colorScheme.onSurface,
                                             text: users[index].name),
                                       ),
                                       SizedBox(
@@ -160,7 +160,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                             fontSize: 16,
                                             color: isDark
                                                 ? greyShade100
-                                                : colorScheme.onBackground,
+                                                : colorScheme.onSurface,
                                             text: users[index].lastName),
                                       ),
                                       SizedBox(
@@ -171,7 +171,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                             fontSize: 16,
                                             color: isDark
                                                 ? greyShade100
-                                                : colorScheme.onBackground,
+                                                : colorScheme.onSurface,
                                             text: users[index].city),
                                       ),
                                       GestureDetector(
@@ -226,7 +226,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomText(
-                                  color: colorScheme.onBackground,
+                                  color: colorScheme.onSurface,
                                   fontSize: 16,
                                   text: value,
                                   fontWeight: FontWeight.w600,
@@ -250,7 +250,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                     fontWeight: FontWeight.w500,
                                     color: isDark
                                         ? greyShade100
-                                        : colorScheme.onBackground,
+                                        : colorScheme.onSurface,
                                     text: element['name']),
                               ),
                               SizedBox(
@@ -261,7 +261,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                     fontWeight: FontWeight.w500,
                                     color: isDark
                                         ? greyShade100
-                                        : colorScheme.onBackground,
+                                        : colorScheme.onSurface,
                                     text: element['lastName']),
                               ),
                               SizedBox(
@@ -272,7 +272,7 @@ class _ContactsState extends ConsumerState<Contacts> {
                                     fontWeight: FontWeight.w500,
                                     color: isDark
                                         ? greyShade100
-                                        : colorScheme.onBackground,
+                                        : colorScheme.onSurface,
                                     text: element['city']),
                               ),
                               GestureDetector(

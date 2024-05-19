@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,18 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCVHQzqlNboZFwRAGAnWSQ_WcMjtm7mSjI',
-    appId: '1:898801329724:web:a1938f000cbaeef0b5c539',
-    messagingSenderId: '898801329724',
-    projectId: 'regiment-8112-2748f',
-    authDomain: 'regiment-8112-2748f.firebaseapp.com',
-    storageBucket: 'regiment-8112-2748f.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD71kBI7UZFKFqnvDnGmGtHVmK8pfCHtFY',
-    appId: '1:898801329724:android:108a6ee6beb81fecb5c539',
+    apiKey: 'AIzaSyD10jdaE6y_fVgYyQHzsH_MZt2fmvDONDA',
+    appId: '1:898801329724:android:34a5f9afbc9c350bb5c539',
     messagingSenderId: '898801329724',
     projectId: 'regiment-8112-2748f',
     storageBucket: 'regiment-8112-2748f.appspot.com',
@@ -66,19 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '898801329724',
     projectId: 'regiment-8112-2748f',
     storageBucket: 'regiment-8112-2748f.appspot.com',
-    androidClientId: '898801329724-kf1ipelbvcq9l26i4286csocpoj8hopr.apps.googleusercontent.com',
+    androidClientId: '898801329724-5f73seqvoa7m9a21b0og16qvlqvtkctj.apps.googleusercontent.com',
     iosClientId: '898801329724-d97fe82f14v52jgpq157g3k1j5ml2brd.apps.googleusercontent.com',
     iosBundleId: 'com.mesayahat.regiment8112',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDL7I6cxVSyixNZvfnLMQkh3YGR7aUDnhc',
-    appId: '1:898801329724:ios:1d35ec9e46395e3cb5c539',
-    messagingSenderId: '898801329724',
-    projectId: 'regiment-8112-2748f',
-    storageBucket: 'regiment-8112-2748f.appspot.com',
-    androidClientId: '898801329724-kf1ipelbvcq9l26i4286csocpoj8hopr.apps.googleusercontent.com',
-    iosClientId: '898801329724-76ut7s1duhojlothievp1voihke5a406.apps.googleusercontent.com',
-    iosBundleId: 'com.regiment-project.project-regiment8112',
   );
 }

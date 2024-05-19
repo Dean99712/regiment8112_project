@@ -120,7 +120,7 @@ class PlatformSearchField extends ConsumerWidget {
                 ? IconButton(
                     icon: Icon(
                       Icons.close,
-                      color: colorScheme.onBackground,
+                      color: colorScheme.onSurface,
                     ),
                     onPressed: () {
                       controller.clear();
@@ -129,8 +129,8 @@ class PlatformSearchField extends ConsumerWidget {
                 : const SizedBox()
           ],
           onChanged: onChanged,
-          backgroundColor: MaterialStateProperty.all(isDark
-              ? colorScheme.onBackground.withOpacity(0.5)
+          backgroundColor: WidgetStateProperty.all(isDark
+              ? colorScheme.onSurface.withOpacity(0.5)
               : greyShade10),
           leading: Icon(
             Icons.search,
@@ -139,10 +139,10 @@ class PlatformSearchField extends ConsumerWidget {
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width / 1.3,
           ),
-          elevation: MaterialStateProperty.all(elevation),
-          textStyle: MaterialStateProperty.all(GoogleFonts.heebo()),
+          elevation: WidgetStateProperty.all(elevation),
+          textStyle: WidgetStateProperty.all(GoogleFonts.heebo()),
           hintText: 'חפש...',
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
               Radius.circular(radius!),

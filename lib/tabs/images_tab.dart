@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 import '../services/firebase_storage_service.dart';
 import '../widgets/images_preview.dart';
@@ -34,32 +35,42 @@ class _ImagesTabState extends State<ImagesTab> {
     }
   }
 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future onRefresh() async {
     return getDocuments();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return FirestoreQueryBuilder(
       query: _query,
       builder: (context, snapshot, child) {
         if (snapshot.hasData) {
-          return RefreshIndicator(
-            onRefresh: onRefresh,
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
+          return ListView.builder(
               itemCount: snapshot.docs.length,
               itemBuilder: (context, index) {
                 return ImagesPreview(
                     text: snapshot.docs[index].get("albumName"),
                     date: snapshot.docs[index].get("createdAt"));
-              },
-            ),
+              }
           );
         }
         if (snapshot.isFetching || snapshot.isFetchingMore) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: PlatformCircularProgressIndicator(
+              cupertino: (context, platform) => CupertinoProgressIndicatorData(
+                color: colorScheme.primary
+              ),
+              material: (context, platform) => MaterialProgressIndicatorData(
+                color: colorScheme.primary
+              ),
+            ),
           );
         }
         return Container();

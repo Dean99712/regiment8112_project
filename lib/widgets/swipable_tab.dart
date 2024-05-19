@@ -34,6 +34,7 @@ class _SwipeableTabState extends State<SwipeableTab> {
               labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               padding: const EdgeInsets.only(top: 20),
               unselectedLabelColor: theme.primary,
+              dividerColor: Colors.transparent,
               indicatorColor: theme.secondary,
               labelColor: theme.secondary,
               tabs: widget.tabs),

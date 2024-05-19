@@ -44,10 +44,10 @@ class _ImageGalleryState extends State<ImageGallery> {
         barrierColor: Colors.black26,
         builder: (context) => SizedBox(
           child: AlertDialog(
-            backgroundColor: theme.background,
+            backgroundColor: theme.surface,
             title: Text(title,
                 textAlign: TextAlign.right,
-                style: TextStyle(color: theme.onBackground, fontSize: 16)),
+                style: TextStyle(color: theme.onSurface, fontSize: 16)),
             actions: [
               TextButton(
                   onPressed: function,
@@ -70,6 +70,7 @@ class _ImageGalleryState extends State<ImageGallery> {
 
   @override
   Widget build(BuildContext context) {
+
     final PageController pageController =
         PageController(initialPage: widget.index);
     String title = widget.title;
@@ -79,18 +80,11 @@ class _ImageGalleryState extends State<ImageGallery> {
     return PlatformScaffold(
       cupertino: (_, __) => CupertinoPageScaffoldData(
         navigationBar: CupertinoNavigationBar(
+          automaticallyImplyLeading: true,
+          previousPageTitle: title,
           padding: EdgeInsetsDirectional.zero,
           trailing: pullDownButton(context, title, images, index),
-          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.3),
-          leading: CupertinoButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              CupertinoIcons.chevron_back,
-              color: white,
-            ),
-          ),
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
         ),
         body: ImageSlider(
           images: images,
@@ -109,7 +103,7 @@ class _ImageGalleryState extends State<ImageGallery> {
                           List<XFile> photo =
                               await _imagesService.shareImages(images[index]);
                           await Share.shareXFiles(photo,
-                              text: photo[0].name, subject: "שתף תמונה");
+                              text: '', subject: "שתף תמונה");
                         },
                         child: const Text("שתף/ שתפי תמונה"),
                       ),

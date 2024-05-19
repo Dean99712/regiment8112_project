@@ -16,35 +16,9 @@ class UpdatesTab extends StatefulWidget {
 class _UpdatesTabState extends State<UpdatesTab> {
   bool isLoading = false;
   final NewsService _service = NewsService();
-  late List<Updates> _updates;
-
-  @override
-  void initState() {
-    getUpdates();
-    super.initState();
-  }
-
-  Future getUpdates() async {
-    setState(() {
-      isLoading = true;
-    });
-    var collection = await _service.getAllUpdates();
-    final updates =
-        collection.docs.map((e) => Updates.fromSnapshot(e)).toList();
-    setState(() {
-      isLoading = false;
-      _updates = updates;
-    });
-  }
 
   Future onRefresh() async {
-
-    var collection = await _service.getAllUpdates();
-    final updates =
-    collection.docs.map((e) => Updates.fromSnapshot(e)).toList();
-    setState(() {
-      _updates = updates;
-    });
+    return await _service.getAllUpdates();
   }
 
   @override
@@ -56,41 +30,58 @@ class _UpdatesTabState extends State<UpdatesTab> {
           direction: Axis.vertical,
           children: [
             Expanded(
-              child: RefreshIndicator(
-                onRefresh: onRefresh,
-                child: !isLoading
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        primary: false,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: _updates.length,
-                        itemBuilder: (context, index) {
-                          var timestamp =
-                              _updates[index].createdAt.millisecondsSinceEpoch;
-                          final date =
-                              DateTime.fromMillisecondsSinceEpoch(timestamp);
-                          final localDate =
-                              intl.DateFormat('yMd', 'en-US').format(date);
-                          final update = _updates[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
-                            child: Bubble(
-                              date: localDate,
-                              text: update.update,
-                            ),
+              child: !isLoading
+                  ? RefreshIndicator(
+                      onRefresh: () {
+                        return onRefresh();
+                      },
+                      child: StreamBuilder<List<Updates>>(
+                        stream: _service.streamUpdates(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          List<Updates> updates = snapshot.data ?? [];
+
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: updates.length,
+                            itemBuilder: (context, index) {
+                              var timestamp = updates[index]
+                                  .createdAt
+                                  .millisecondsSinceEpoch;
+                              final date = DateTime.fromMillisecondsSinceEpoch(
+                                  timestamp);
+                              final localDate =
+                                  intl.DateFormat('yMd', 'es-ES').format(date);
+                              final update = updates[index];
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 8),
+                                child: Bubble(
+                                  date: localDate,
+                                  text: update.update,
+                                  deleteFunction: () async{
+                                    await _service.removeUpdate(update.id);
+                                  },
+                                  editFunction: () async {
+                                    await _service.editUpdate(update.id, 'new text');
+                                  },
+                                ),
+                              );
+                            },
                           );
                         },
-                      )
-                    : Center(
-                        child: PlatformCircularProgressIndicator(
-                          cupertino: (_, __) => CupertinoProgressIndicatorData(
-                              radius: 15.0, color: primaryColor),
-                          material: (_, __) => MaterialProgressIndicatorData(
-                              color: secondaryColor),
-                        ),
                       ),
-              ),
+                    )
+                  : Center(
+                      child: PlatformCircularProgressIndicator(
+                        cupertino: (_, __) => CupertinoProgressIndicatorData(
+                            radius: 15.0, color: primaryColor),
+                        material: (_, __) => MaterialProgressIndicatorData(
+                            color: secondaryColor),
+                      ),
+                    ),
             )
           ],
         ),
@@ -99,7 +90,7 @@ class _UpdatesTabState extends State<UpdatesTab> {
           top: 0,
           right: 0,
           child: SizedBox(
-            height: 45,
+            height: 35,
             // width: double.infinity,
             child: Container(
               decoration: BoxDecoration(
@@ -108,10 +99,10 @@ class _UpdatesTabState extends State<UpdatesTab> {
                 end: Alignment.bottomCenter,
                 colors: theme.brightness == Brightness.dark
                     ? [
-                        theme.colorScheme.background,
-                        theme.colorScheme.background.withOpacity(0)
+                        theme.colorScheme.surface,
+                        theme.colorScheme.surface.withOpacity(0)
                       ]
-                    : [greyShade100, greyShade100.withOpacity(0)],
+                    : [greyShade5, greyShade5.withOpacity(0)],
               )),
             ),
           ),
