@@ -17,9 +17,18 @@ class _NewsTabState extends State<NewsTab> {
   final NewsService _service = NewsService();
 
   bool isLoading = false;
+  bool isEditing = false;
+  late TextEditingController _controller;
+  String editingMessageId = "";
 
   Future onRefresh() async {
     return await _service.getAllNews();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
   }
 
   @override
@@ -51,19 +60,27 @@ class _NewsTabState extends State<NewsTab> {
                               final date = DateTime.fromMillisecondsSinceEpoch(
                                   timestamp);
                               final localDate =
-                              intl.DateFormat('yMd', 'es-ES').format(date);
+                                  intl.DateFormat('yMd', 'es-ES').format(date);
                               final news = newsList[index];
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 8),
                                 child: Bubble(
+                                  key: ValueKey(news.id),
+                                  editingId: editingMessageId,
+                                  id: news.id,
+                                  textEditingController: _controller,
                                   date: localDate,
                                   text: news.news,
                                   deleteFunction: () async {
                                     await _service.removeNews(news.id);
                                   },
-                                  editFunction: () async {
-                                    await _service.editeNews(news.id, 'new text');
+                                  editFunction: (id) async {
+                                    setState(() {
+                                      editingMessageId = id;
+                                    });
+                                    await _service.editeNews(
+                                        news.id, _controller.text);
                                   },
                                 ),
                               );

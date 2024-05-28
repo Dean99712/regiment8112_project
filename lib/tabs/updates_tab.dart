@@ -14,11 +14,20 @@ class UpdatesTab extends StatefulWidget {
 }
 
 class _UpdatesTabState extends State<UpdatesTab> {
+  bool isEditing = false;
+  late TextEditingController _controller;
   bool isLoading = false;
+  String editingMessageId = "";
   final NewsService _service = NewsService();
 
   Future onRefresh() async {
     return await _service.getAllUpdates();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
   }
 
   @override
@@ -59,13 +68,22 @@ class _UpdatesTabState extends State<UpdatesTab> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 8),
                                 child: Bubble(
+                                  key: ValueKey(update.id),
+                                  editingId: editingMessageId,
+                                  id: update.id,
+                                  textEditingController: _controller,
                                   date: localDate,
                                   text: update.update,
-                                  deleteFunction: () async{
+                                  deleteFunction: () async {
                                     await _service.removeUpdate(update.id);
                                   },
-                                  editFunction: () async {
-                                    await _service.editUpdate(update.id, 'new text');
+                                  editFunction: (id) async {
+                                    print(id);
+                                    setState(() {
+                                      editingMessageId = id;
+                                    });
+                                    await _service.editUpdate(
+                                        update.id, _controller.text);
                                   },
                                 ),
                               );

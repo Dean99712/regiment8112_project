@@ -63,17 +63,9 @@ class ImageSliderPreview extends StatelessWidget {
     return PlatformScaffold(
       cupertino: (_, __) =>
           CupertinoPageScaffoldData(
-            navigationBar: CupertinoNavigationBar(
-              backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
-              leading: CupertinoButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  CupertinoIcons.chevron_back,
-                  color: white,
-                ),
-              ),
+            navigationBar: const CupertinoNavigationBar(
+              automaticallyImplyLeading: true,
+              backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
             ),
             body: renderBody(context),
           ),

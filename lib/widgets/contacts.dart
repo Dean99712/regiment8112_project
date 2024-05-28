@@ -41,6 +41,7 @@ class _ContactsState extends ConsumerState<Contacts> {
   }
 
   Future call(String phoneNumber, bool platform) async {
+    const text = "מצטערים, המכשיר שברשותך אינו נתמך";
     final colorScheme = Theme.of(context).colorScheme;
     final phone = phoneNumber.substring(1);
     String url =
@@ -52,7 +53,7 @@ class _ContactsState extends ConsumerState<Contacts> {
         context: context,
         cupertino: CupertinoDialogData(
           builder: (context) => CupertinoAlertDialog(
-              title: const Text("מצטערים, המכשיר שברשותך אינו נתמך"),
+              title: const Text(text),
               actions: [
                 CupertinoDialogAction(
                   isDestructiveAction: true,
@@ -67,7 +68,7 @@ class _ContactsState extends ConsumerState<Contacts> {
           title: CustomText(
               fontSize: 16,
               color: colorScheme.onSurface,
-              text: "מצטערים, המכשיר שברשותך אינו נתמך"),
+              text: text),
         ),
       );
     }
@@ -86,9 +87,8 @@ class _ContactsState extends ConsumerState<Contacts> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/svg/boot.png'),
-            opacity: 0.3),
-            // opacity: isDark ? 0.5 : 0.75),
+            image: AssetImage('assets/svg/boot.png'), opacity: 0.3),
+        // opacity: isDark ? 0.5 : 0.75),
       ),
       child: FutureBuilder(
         future: userList,
@@ -118,6 +118,8 @@ class _ContactsState extends ConsumerState<Contacts> {
                   ? Directionality(
                       textDirection: TextDirection.rtl,
                       child: ListView.builder(
+                          controller: widget.scrollController,
+                          physics: const BouncingScrollPhysics(),
                           itemCount: users.length,
                           itemBuilder: (context, index) {
                             final oddColor = (index % 2 == 0)
@@ -179,11 +181,6 @@ class _ContactsState extends ConsumerState<Contacts> {
                                           if (isIos) {
                                             call(users[index].phoneNumber,
                                                 isIos);
-                                            // showCupertinoModalPopup(
-                                            //   context: context,
-                                            //   builder: (context) =>
-                                            //       caller(users[index].lastName),
-                                            // );
                                           } else {
                                             call(users[index].phoneNumber,
                                                 isIos);
@@ -279,11 +276,6 @@ class _ContactsState extends ConsumerState<Contacts> {
                                 onTap: () async {
                                   if (isIos) {
                                     call(element['phoneNumber'], isIos);
-                                    // showCupertinoModalPopup(
-                                    //   context: context,
-                                    //   builder: (context) =>
-                                    //       caller(element['phoneNumber']),
-                                    // );
                                   } else {
                                     call(element['phoneNumber'], isIos);
                                   }
@@ -306,28 +298,4 @@ class _ContactsState extends ConsumerState<Contacts> {
       ),
     );
   }
-
-  // Widget caller(String phone) {
-  //   bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-  //   return CupertinoActionSheet(
-  //       cancelButton: CupertinoButton(
-  //         onPressed: () => Navigator.pop(context),
-  //         child: const Text(
-  //           "ביטוללל",
-  //           style: TextStyle(color: CupertinoColors.destructiveRed),
-  //         ),
-  //       ),
-  //       actions: [
-  //         CupertinoActionSheetAction(
-  //           onPressed: () async {
-  //             call(phone, isIos);
-  //           },
-  //           child: Text(
-  //             'התקשר $phone',
-  //             style: const TextStyle(
-  //                 fontSize: 16, color: CupertinoColors.activeBlue),
-  //           ),
-  //         )
-  //       ]);
-  // }
 }

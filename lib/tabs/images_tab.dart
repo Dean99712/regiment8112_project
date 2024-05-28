@@ -35,16 +35,6 @@ class _ImagesTabState extends State<ImagesTab> {
     }
   }
 
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future onRefresh() async {
-    return getDocuments();
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -55,7 +45,9 @@ class _ImagesTabState extends State<ImagesTab> {
           return ListView.builder(
               itemCount: snapshot.docs.length,
               itemBuilder: (context, index) {
+                final id = snapshot.docs[index].get("id");
                 return ImagesPreview(
+                  key: ValueKey(id),
                     text: snapshot.docs[index].get("albumName"),
                     date: snapshot.docs[index].get("createdAt"));
               }

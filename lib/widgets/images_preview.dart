@@ -102,110 +102,132 @@ class _ImagesPreviewState extends ConsumerState<ImagesPreview> {
                                 height: snapshot.docs.length == 2
                                     ? size.height * 0.2
                                     : size.height / 3.75,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: snapshot.docs.isEmpty
-                                      ? Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              const CustomText(
-                                                  text: "האלבום ריק,",
-                                                  fontSize: 20,
-                                                  color: white),
-                                              CustomText(
-                                                text:
-                                                    "היכנס על מנת להוסיף תמונות",
-                                                fontSize: 12,
-                                                color: white.withOpacity(0.5),
-                                              ),
-                                            ],
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        isIos
+                                            ? CupertinoPageRoute(
+                                          builder: (context) => CupertinoScaffold(
+                                            body: ImagesScreen(title: widget.text),
                                           ),
                                         )
-                                      : GridView.builder(
-                                          itemCount: snapshot.docs.isEmpty
-                                              ? 0
-                                              : snapshot.docs.length == 2
-                                                  ? 2
-                                                  : 3,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          gridDelegate:
-                                              SliverQuiltedGridDelegate(
-                                                  mainAxisSpacing: 5,
-                                                  crossAxisSpacing: 5,
-                                                  crossAxisCount: snapshot.docs
-                                                                  .length ==
-                                                              1 &&
-                                                          snapshot.docs.isEmpty
-                                                      ? 1
-                                                      : snapshot.docs.length ==
-                                                              2
-                                                          ? 2
-                                                          : 3,
-                                                  pattern: snapshot
-                                                              .docs.length ==
-                                                          1
-                                                      ? const [
-                                                          QuiltedGridTile(3, 3),
-                                                        ]
-                                                      : snapshot.docs.length ==
-                                                              2
-                                                          ? const [
-                                                              QuiltedGridTile(
-                                                                  1, 1),
-                                                              QuiltedGridTile(
-                                                                  1, 1),
-                                                            ]
-                                                          : const [
-                                                              QuiltedGridTile(
-                                                                  2, 2),
-                                                              QuiltedGridTile(
-                                                                  1, 1),
-                                                              QuiltedGridTile(
-                                                                  1, 1),
-                                                            ]),
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ImageSliderPreview(
-                                                      images: imagesList,
-                                                      index: index,
+                                            : MaterialPageRoute(
+                                          builder: (context) =>
+                                              ImagesScreen(title: widget.text),
+                                        ));
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: snapshot.docs.isEmpty
+                                        ? Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                const CustomText(
+                                                    text: "האלבום ריק,",
+                                                    fontSize: 20,
+                                                    color: white),
+                                                CustomText(
+                                                  text:
+                                                      "היכנס על מנת להוסיף תמונות",
+                                                  fontSize: 12,
+                                                  color: white.withOpacity(0.5),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : GridView.builder(
+                                            itemCount: snapshot.docs.isEmpty
+                                                ? 0
+                                                : snapshot.docs.length == 2
+                                                    ? 2
+                                                    : 3,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                SliverQuiltedGridDelegate(
+                                                    mainAxisSpacing: 5,
+                                                    crossAxisSpacing: 5,
+                                                    crossAxisCount: snapshot
+                                                                    .docs
+                                                                    .length ==
+                                                                1 &&
+                                                            snapshot
+                                                                .docs.isEmpty
+                                                        ? 1
+                                                        : snapshot.docs
+                                                                    .length ==
+                                                                2
+                                                            ? 2
+                                                            : 3,
+                                                    pattern: snapshot
+                                                                .docs.length ==
+                                                            1
+                                                        ? const [
+                                                            QuiltedGridTile(
+                                                                3, 3),
+                                                          ]
+                                                        : snapshot.docs
+                                                                    .length ==
+                                                                2
+                                                            ? const [
+                                                                QuiltedGridTile(
+                                                                    1, 1),
+                                                                QuiltedGridTile(
+                                                                    1, 1),
+                                                              ]
+                                                            : const [
+                                                                QuiltedGridTile(
+                                                                    2, 2),
+                                                                QuiltedGridTile(
+                                                                    1, 1),
+                                                                QuiltedGridTile(
+                                                                    1, 1),
+                                                              ]),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ImageSliderPreview(
+                                                        images: imagesList,
+                                                        index: index,
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    imagesList[index].imageUrl,
-                                                maxHeightDiskCache:
-                                                    imagesList.length == 1
-                                                        ? 1200
-                                                        : 500,
-                                                fadeInDuration: const Duration(
-                                                    milliseconds: 150),
-                                                fit: BoxFit.cover,
-                                                progressIndicatorBuilder:
-                                                    (context, url, progress) {
-                                                  return BlurHash(
-                                                    hash:
-                                                        imagesList[index].hash,
-                                                    image: imagesList[index]
-                                                        .imageUrl,
                                                   );
                                                 },
-                                              ),
-                                            );
-                                          },
-                                        ),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: imagesList[index]
+                                                      .imageUrl,
+                                                  maxHeightDiskCache:
+                                                      imagesList.length == 1
+                                                          ? 1200
+                                                          : 500,
+                                                  fadeInDuration:
+                                                      const Duration(
+                                                          milliseconds: 150),
+                                                  fit: BoxFit.cover,
+                                                  progressIndicatorBuilder:
+                                                      (context, url, progress) {
+                                                    return BlurHash(
+                                                      hash: imagesList[index]
+                                                          .hash,
+                                                      image: imagesList[index]
+                                                          .imageUrl,
+                                                    );
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                  ),
                                 ),
                               ),
                             ),

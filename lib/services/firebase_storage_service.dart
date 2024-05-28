@@ -39,9 +39,9 @@ class StorageService {
 
   Future addPhotosToAlbum(String childName, String url, String hash) async {
     var parentCollection = _firestore.collection("albums").doc(childName);
-
+    final auid = const Uuid().v4().replaceAll("-", "").substring(0, 20);
     if (!parentCollection.id.contains(childName)) {
-      final data = {"albumName": childName, "createdAt": Timestamp.now()};
+      final data = {"id": auid,"albumName": childName, "createdAt": Timestamp.now()};
       parentCollection.set(data);
     }
 
@@ -77,7 +77,8 @@ class StorageService {
 
   Future createAlbum( BuildContext context, String childName) async {
     var collection = _firestore.collection("albums").doc(childName);
-    final data = {"albumName": childName, "createdAt": Timestamp.now()};
+    final auid = const Uuid().v4().replaceAll("-", "").substring(0, 20);
+    final data = {"id": auid,"albumName": childName, "createdAt": Timestamp.now()};
     if(collection.collection("albums").where(childName) == childName) {
       var snackBar = const SnackBar(content: Text("שם של אלבום זה כבר קיים, אנא בחר שם חדש"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

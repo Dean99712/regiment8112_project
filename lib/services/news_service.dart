@@ -75,6 +75,16 @@ class NewsService {
     final data = {"update": text};
     return await collection.doc(id).update(data);
   }
+
+  Future getUpdateById(String id) async {
+    var collection = _firestore.collection("updates");
+    return await collection.doc(id).get();
+  }
+
+  Future getNewsById(String id) async {
+    var collection = _firestore.collection("news");
+    return await collection.doc(id).get();
+  }
 }
 
 

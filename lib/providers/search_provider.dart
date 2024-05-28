@@ -9,6 +9,11 @@ class SearchNotifier extends StateNotifier<String> {
 
   Future updateQuery(String query) async {
     var value = state = query;
+    var fullNameCollection = await _firestore
+        .collection("users")
+        .where("name", isLessThan: '$valueת')
+        .where('name' 'lastName', isGreaterThanOrEqualTo: value)
+        .get();
     var nameCollection = await _firestore
         .collection("users")
         .orderBy("name")
@@ -35,13 +40,25 @@ class SearchNotifier extends StateNotifier<String> {
         .get();
 
     if (nameCollection.docs.isNotEmpty) {
-      return nameCollection.docs.map((doc) => MyUser.fromSnapshot(doc)).toList();
+      return nameCollection.docs
+          .map((doc) => MyUser.fromSnapshot(doc))
+          .toList();
     } else if (phoneCollection.docs.isNotEmpty) {
-      return phoneCollection.docs.map((doc) => MyUser.fromSnapshot(doc)).toList();
-    } else if(lastNameCollection.docs.isNotEmpty){
-      return lastNameCollection.docs.map((doc) => MyUser.fromSnapshot(doc)).toList();
+      return phoneCollection.docs
+          .map((doc) => MyUser.fromSnapshot(doc))
+          .toList();
+    } else if (lastNameCollection.docs.isNotEmpty) {
+      return lastNameCollection.docs
+          .map((doc) => MyUser.fromSnapshot(doc))
+          .toList();
+    } else if (fullNameCollection.docs.isNotEmpty) {
+      return fullNameCollection.docs
+          .map((doc) => MyUser.fromSnapshot(doc))
+          .toList();
     } else {
-      return citiesCollection.docs.map((doc) => MyUser.fromSnapshot(doc)).toList();
+      return citiesCollection.docs
+          .map((doc) => MyUser.fromSnapshot(doc))
+          .toList();
     }
   }
 }

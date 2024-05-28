@@ -9,7 +9,7 @@ class MyUser {
   String platoon;
   String role;
 
-  MyUser(this.id, this.name, this.lastName, this.phoneNumber, this.city, this.platoon, this.role);
+  MyUser(this.id,this.name, this.lastName, this.phoneNumber, this.city, this.platoon, this.role);
 
   factory MyUser.fromJson(Map<String, dynamic> json) {
     return MyUser(json['name'], json['lastName'], json['phoneNumber'],
